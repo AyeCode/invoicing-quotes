@@ -100,14 +100,61 @@ class Wpinv_Quotes_Public {
 
 	}
         
-        public function quote_actions(){
-            global $wpi_session;
-            $qid = wpinv_get_invoice_cart_id(); 
-            $post = get_post($qid);
-            if($post->post_type == 'wpi_quote'){
-                if($_GET['action'] == 'accept') die('Accepted');
-                elseif($_GET['action'] == 'decline') die('Rejected');
+        public function quote_left_buttons($invoice){
+            if ($invoice->post_type == 'wpi_quote' and $invoice->post_status != 'cancelled'){
+                remove_query_arg('wpi_action');
+                add_query_arg( array( 'wpi_action' => 'process_quote' ));
+                ?>
+                    <button class="btn btn-success btn-sm accept-quote" title="<?php esc_attr_e( 'Accept This Quotation', 'invoicing' ); ?>" onclick="showAlert('accept')" ><?php _e( 'Accept Quotation', 'invoicing' ); ?></button> &nbsp;
+                    <button class="btn btn-danger btn-sm decline-quote" title="<?php esc_attr_e( 'Decline This Quotation', 'invoicing' ); ?>" onclick="showAlert('decline')" ><?php _e( 'Decline Quotation', 'invoicing' ); ?></button>
+                    <p id="accept-alert" class="alert alert-success"><?php _e('An invoice will be generated on acceptance. ') ?> <a class="btn btn-success btn-xs accept-quote" title="<?php esc_attr_e( 'Accept This Quotation', 'invoicing' ); ?>" href="<?php echo esc_url( wpinv_get_checkout_uri()); ?>?wpi_action=quote_action&action=accept&invoice_key=<?php echo $invoice->get_key() ?>&qid=<?php echo $invoice->ID ?>"><?php _e( 'Continue', 'invoicing' ); ?></a></p>
+                    <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to reject this quote. ') ?> <a class="btn btn-danger btn-xs decline-quote" title="<?php esc_attr_e( 'Decline This Quotation', 'invoicing' ); ?>" href="<?php echo esc_url( wpinv_get_checkout_uri() ); ?>?wpi_action=quote_action&action=decline&qid=<?php echo $invoice->ID ?>"><?php _e( 'Continue', 'invoicing' ); ?></a>
+                    <script>
+                        function showAlert(action) {
+                            var x = document.getElementById('accept-alert');
+                            var y = document.getElementById('decline-alert');
+                            if(action == 'accept'){
+                                y.style.display = 'none';
+                                x.style.display = 'block';
+                            } else{
+                                x.style.display = 'none';
+                                y.style.display = 'block';
+                            }
+                        } 
+                    </script>
+                <?php
             }
+        }
+        
+        public function quote_right_buttons($invoice){
+            if($invoice->post_type == 'wpi_quote'){
+                $user_id = (int)$invoice->get_user_id();
+                $current_user_id = (int)get_current_user_id();
+
+                if ( $user_id > 0 && $user_id == $current_user_id ) {
+                ?>
+                    <a class="btn btn-primary btn-sm" onclick="window.print();" href="javascript:void(0)"><?php _e( 'Print Quote', 'invoicing' ); ?></a> &nbsp;
+                    <a class="btn btn-warning btn-sm" href="<?php echo esc_url( wpinv_get_history_page_uri() ); ?>"><?php _e( 'History', 'invoicing' ); ?></a>
+                <?php } 
+            }
+        }
+
+
+        public function quote_actions($request){
+            if($request['action'] ==  'accept') {
+                $status = 'accepted';
+
+            }
+            elseif($request['action'] ==  'decline') {
+                $status = 'cancelled';
+            }
+            $invoice = wp_update_post(array(
+                    'ID' => $request['qid'],
+                    'post_status' => $status,
+            ));
+            
+            wp_redirect(get_post_permalink($request['qid']));
+            exit();
         }
 
 }
