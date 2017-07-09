@@ -1,8 +1,0 @@
-.idea/
-
-# Vendor
-vendor/
-
-# Composer
-composer.phar
-composer.lock
