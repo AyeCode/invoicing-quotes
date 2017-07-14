@@ -30,7 +30,8 @@ class Wpinv_Quotes_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+            register_post_type('wpi_quote', array('has_archive' => true));
+            flush_rewrite_rules();
 	}
 
 }

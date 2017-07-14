@@ -128,6 +128,97 @@ class Wpinv_Quotes_Admin {
             return $statuses;
         }
         
+        function wpinv_metabox_mail_notice(){
+            return __('This will send a copy of the quote to the user&#8217;s email address.', 'invoicing');
+        }
+        
+        function wpinv_send_quote_after_save( $post_id ) { 
+            // If this is just a revision, don't send the email.
+            if ( wp_is_post_revision( $post_id ) ) {
+                return;
+            }
+
+            if ( !current_user_can( 'manage_options' ) || !(get_post_type( $post_id ) == 'wpi_invoice' || get_post_type( $post_id ) == 'wpi_quote')  ) {
+                return;
+            }
+
+            if ( !empty( $_POST['wpi_save_send'] ) ) { 
+                $this->wpinv_user_quote_notification( $post_id );
+            }
+        }
+        
+        function wpinv_user_quote_notification( $invoice_id ) {
+            global $wpinv_email_search, $wpinv_email_replace;
+            
+            $email_type = 'user_invoice'; // alias of user_quote.
+            if ( !wpinv_email_is_enabled( $email_type ) ) {
+                return false;
+            }
+
+            $invoice = wpinv_get_invoice( $invoice_id );
+            if ( empty( $invoice ) ) {
+                return false;
+            }
+
+            $recipient      = wpinv_email_get_recipient( $email_type, $invoice_id, $invoice );
+            if ( !is_email( $recipient ) ) {
+                return false;
+            }
+
+            $search                     = array();
+            $search['invoice_number']   = '{invoice_number}';
+            $search['invoice_date']     = '{invoice_date}';
+            $search['name']             = '{name}';
+
+            $replace                    = array();
+            $replace['invoice_number']  = $invoice->get_number();
+            $replace['invoice_date']    = $invoice->get_invoice_date();
+            $replace['name']            = $invoice->get_user_full_name();
+
+            $wpinv_email_search     = $search;
+            $wpinv_email_replace    = $replace;
+            
+            //$email_type = 'user_quote'; // alias of user_invoice.
+            
+            $subject        = wpinv_email_get_subject( $email_type, $invoice_id, $invoice );
+            $email_heading  = wpinv_email_get_heading( $email_type, $invoice_id, $invoice );
+            $headers        = wpinv_email_get_headers( $email_type, $invoice_id, $invoice );
+            $attachments    = wpinv_email_get_attachments( $email_type, $invoice_id, $invoice );
+            
+            $subject = '['.get_bloginfo('name').'] Your quote from '.$invoice->get_invoice_date();
+            $email_heading = wpinv_email_format_text('Your quote '.$invoice->title.' details');
+
+            $content        = wpinv_get_template_html( 'emails/wpinv-email-' . $email_type . '.php', array(
+                    'invoice'       => $invoice,
+                    'email_type'    => $email_type,
+                    'email_heading' => $email_heading,
+                    'sent_to_admin' => false,
+                    'plain_text'    => false,
+                ) );
+
+            $sent = wpinv_mail_send( $recipient, $subject, $content, $headers, $attachments );
+
+            if ( $sent ) {
+                $note = __( 'Quote has been emailed to the user.', 'invoicing' );
+            } else {
+                $note = __( 'Fail to send quote to the user!', 'invoicing' );
+            }
+            $invoice->add_note( $note ); // Add private note.
+
+            if ( wpinv_mail_admin_bcc_active( $email_type ) ) {
+                $recipient  = wpinv_get_admin_email();
+                $subject    .= ' - ADMIN BCC COPY';
+                wpinv_mail_send( $recipient, $subject, $content, $headers, $attachments );
+            }
+
+            return $sent;
+        }
+        
+        function wpinv_get_template($located, $template_name, $args, $template_path){
+            $located = WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-user_quote.php';
+            return $located;
+        }
+        
         function wpinv_after_quote_accepted( $post_id, $post, $update = false ) {
             // unhook this function so it doesn't loop infinitely
             remove_action( 'save_post', 'wpinv_after_quote_accepted' );

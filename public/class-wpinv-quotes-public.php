@@ -153,7 +153,7 @@ class Wpinv_Quotes_Public {
                     'post_status' => $status,
             ));
             
-            wp_redirect(get_permalink($request['qid']));
+            wp_redirect(get_post_permalink($request['qid']));
             exit();
         }
 
