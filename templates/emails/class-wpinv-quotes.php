@@ -76,6 +76,7 @@ class Wpinv_Quotes {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
                 add_action( 'init', array($this, 'wpinv_register_post_types'), 1 );
+                add_filter('wpinv_get_emails', array($this, 'wpinv_get_emails'));
 	}
 
 	/**
@@ -153,22 +154,17 @@ class Wpinv_Quotes {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-                $this->loader->add_filter('wpinv_get_emails', $plugin_admin, 'wpinv_quote_mail_settings'); //Adding new settings section under Emails tab.
-                $this->loader->add_filter('wpinv_resend_invoice_metabox_text', $plugin_admin, 'resend_quote_metabox_text');
-                $this->loader->add_filter('wpinv_resend_invoice_email_actions', $plugin_admin, 'resend_quote_email_actions', 10, 2);
+                $this->loader->add_filter('resend_invoice_metabox_text', $plugin_admin, 'resend_invoice_metabox_text');
                 $this->loader->add_filter('wpinv_details_metabox_titles', $plugin_admin, 'invoice_detail_metabox_titles', 10, 2);
-                $this->loader->add_filter('wpinv_statuses', $plugin_admin, 'quote_statuses');
+                $this->loader->add_filter('wpinv_invoice_statuses', $plugin_admin, 'wpinv_quote_statuses', 10, 2);
                 $this->loader->add_filter('wpinv_metabox_mail_notice', $plugin_admin, 'wpinv_metabox_mail_notice', 10, 2);
                 $this->loader->add_action('save_post', $plugin_admin, 'wpinv_after_quote_accepted', 10, 3);
                 add_filter( 'manage_wpi_quote_posts_columns', 'wpinv_columns');
                 add_filter( 'bulk_actions-edit-wpi_quote', 'wpinv_bulk_actions');
                 add_filter( 'manage_edit-wpi_quote_sortable_columns', 'wpinv_sortable_columns' );
                 add_action( 'manage_wpi_quote_posts_custom_column', 'wpinv_posts_custom_column');
-                $this->loader->add_filter( 'wpinv_payments_table_column', $plugin_admin, 'quotes_custom_column_values', 10, 3 );
-                $this->loader->add_action( 'save_post_wpi_quote', $plugin_admin, 'wpinv_send_quote_after_save', 100 );
-                add_action( 'admin_enqueue_scripts', array( &$plugin_admin, 'admin_enqueue_scripts' ) );
-                $this->loader->add_filter( 'wpinv_get_template', $plugin_admin, 'wpinv_get_template', 10, 4 );
-                $this->loader->add_filter( 'wpinv_send_quote', $plugin_admin, 'wpinv_send_customer_quote' );
+                $this->loader->add_action( 'save_post_wpi_quote', $plugin_admin, 'wpinv_send_quote_after_save', 100, 1 );
+                $this->loader->add_filter( 'wpinv_get_template', $plugin_admin, 'wpinv_get_template', 10, 4 ); 
 	}   
 
 	/**
@@ -187,7 +183,6 @@ class Wpinv_Quotes {
                 $this->loader->add_action( 'wpinv_invoice_display_left_actions', $plugin_public, 'quote_left_buttons' );
                 $this->loader->add_action( 'wpinv_invoice_display_right_actions', $plugin_public, 'quote_right_buttons' );
                 $this->loader->add_action( 'wpinv_quote_action', $plugin_public, 'quote_actions');
-                $this->loader->add_filter( 'wpinv_statuses', $plugin_public, 'quote_statuses' );
 	}
 
 	/**
@@ -273,6 +268,51 @@ class Wpinv_Quotes {
 
             register_post_type( 'wpi_quote', $args );
         }
+        
+        function wpinv_get_emails($emails){
+            $user_quote = array(
+                'email_user_quote_header' => array(
+                    'id'   => 'email_user_invoice_header',
+                    'name' => '<h3>' . __( 'Customer Quote', 'invoicing' ) . '</h3>',
+                    'desc' => __( 'Quote emails can be sent to customers containing their quote information.', 'invoicing' ),
+                    'type' => 'header',
+                ),
+                'email_user_quote_active' => array(
+                    'id'   => 'email_user_invoice_active',
+                    'name' => __( 'Enable/Disable', 'invoicing' ),
+                    'desc' => __( 'Enable this email notification', 'invoicing' ),
+                    'type' => 'checkbox',
+                    'std'  => 1
+                ),
+                'email_user_quote_subject' => array(
+                    'id'   => 'email_user_invoice_subject',
+                    'name' => __( 'Subject', 'invoicing' ),
+                    'desc' => __( 'Enter the subject line for the quote receipt email.', 'invoicing' ),
+                    'type' => 'text',
+                    'std'  => __( '[{site_title}] Your quote from {invoice_date}', 'invoicing' ),
+                    'size' => 'large'
+                ),
+                'email_user_quote_heading' => array(
+                    'id'   => 'email_user_invoice_heading',
+                    'name' => __( 'Email Heading', 'invoicing' ),
+                    'desc' => __( 'Enter the the main heading contained within the email notification for the quote receipt email.', 'invoicing' ),
+                    'type' => 'text',
+                    'std'  => __( 'Your quote {invoice_number} details', 'invoicing' ),
+                    'size' => 'large'
+                ),
+                'email_user_quote_admin_bcc' => array(
+                    'id'   => 'email_user_invoice_admin_bcc',
+                    'name' => __( 'Enable Admin BCC', 'invoicing' ),
+                    'desc' => __( 'Check if you want to send this notification email to site Admin.', 'invoicing' ),
+                    'type' => 'checkbox',
+                    'std'  => 1
+                ),
+            );
+                    
+            $emails['user_quote'] = $user_quote;
+            
+            return $emails;
+        }
 }
 
 function wpinv_get_quote( $invoice_id = 0, $cart = false ) {
@@ -282,14 +322,4 @@ function wpinv_get_quote( $invoice_id = 0, $cart = false ) {
 
     $invoice = new WPInv_Invoice( $invoice_id );
     return $invoice;
-}
-
-function wpi_quote_statuses(){
-    $statuses = array(
-        'pending'       => __( 'Pending Approval', 'invoicing' ),
-        'wpi-cancelled'     => __( 'Cancelled', 'invoicing' ),
-        'wpi-accepted'       => __( 'Accepted', 'invoicing' )
-    );
-    
-    return apply_filters('wpi_quote_statuses', $statuses);
 }

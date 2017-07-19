@@ -100,6 +100,13 @@ class Wpinv_Quotes_Public {
 
 	}
         
+        function quote_statuses($invoice_statuses){
+            if(is_singular('wpi_quote')){
+                wpi_quote_statuses();
+            }
+            return $invoice_statuses;
+        }
+        
         public function quote_left_buttons($invoice){
             if ($invoice->post_type == 'wpi_quote' and $invoice->post_status != 'cancelled'){
                 remove_query_arg('wpi_action');
