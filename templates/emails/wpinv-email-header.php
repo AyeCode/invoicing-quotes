@@ -3,9 +3,7 @@
 if ( !defined('ABSPATH') )
     die('-1');
 
-if ( !isset( $email_heading ) ) {
-    global $email_heading;
-}
+$email_heading = wpinv_email_get_heading( 'user_quote' );
 ?>
 <!DOCTYPE html>
 <html dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">

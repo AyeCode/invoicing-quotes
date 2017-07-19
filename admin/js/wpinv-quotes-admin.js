@@ -28,5 +28,14 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+        $(document).ready(function(){
+            var invDetails = $('#gdmbx2-metabox-wpinv_details').html();
+            if (invDetails) {
+                $('#submitpost', $('.wpinv')).detach().appendTo($('#wpinv-details'));
+                $('#submitdiv', $('.wpinv')).hide();
+                $('#major-publishing-actions', '.post-type-wpi_quote').find('input[type=submit]').attr('name', 'save_invoice').val(WPInv_Admin_Quote.save_quote);
+            }    
+        });
+        
 
 })( jQuery );
