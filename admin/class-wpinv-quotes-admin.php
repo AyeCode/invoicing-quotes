@@ -101,12 +101,94 @@ class Wpinv_Quotes_Admin {
 
 	}
         
-        function resend_invoice_metabox_text($text){
-            $text = array(
-                'message'       => esc_attr__( 'This will send a copy of the quote to the user&#8217;s email address.', 'invoicing' ),
-                'button_text'   =>  __( 'Resend Quote', 'invoicing' ),
+        function admin_enqueue_scripts($localize){
+            global $post;
+            
+            wp_enqueue_script( 'wpinv-admin-script' );
+            $localize = array();
+            $localize['save_quote'] = __( 'Save Quote', 'invoicing' );
+            if(isset($post->ID) and $post->post_type == 'wpi_quote') wp_localize_script( 'wpinv-admin-script', 'WPInv_Admin_Quote', $localize );
+        }
+        
+        /*
+         * This function corrects the url of email icons.
+         */
+        function quotes_custom_column_values($value, $post_id, $column_name){
+            global $post; $wpi_invoice;
+            if(!isset($wpi_invoice)) $wpi_invoice = new WPInv_Invoice( $post->ID );
+            if(get_post_type($post->ID) == 'wpi_quote' and $column_name == 'wpi_actions'){
+                $value = '';
+                if ( !empty( $post->post_name ) ) {
+                    $value .= '<a title="' . esc_attr__( 'Print invoice', 'invoicing' ) . '" href="' . esc_url( get_permalink( $post->ID ) ) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fa fa-print"></i></span></a>';
+                }
+                
+                if ( $email = $wpi_invoice->get_email() ) {
+                    $value .= '<a title="' . esc_attr__( 'Send invoice to customer', 'invoicing' ) . '" href="' . esc_url( add_query_arg( array( 'wpi_action' => 'send_quote', 'invoice_id' => $post->ID ) ) ) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
+                }
+            }
+            return $value;
+        }
+        
+        function wpinv_quote_mail_settings($emails){
+            $user_quote = array(
+                'email_user_quote_header' => array(
+                    'id'   => 'email_user_quote_header',
+                    'name' => '<h3>' . __( 'Customer Quote', 'invoicing' ) . '</h3>',
+                    'desc' => __( 'Quote emails can be sent to customers containing their quote information.', 'invoicing' ),
+                    'type' => 'header',
+                ),
+                'email_user_quote_active' => array(
+                    'id'   => 'email_user_quote_active',
+                    'name' => __( 'Enable/Disable', 'invoicing' ),
+                    'desc' => __( 'Enable this email notification', 'invoicing' ),
+                    'type' => 'checkbox',
+                    'std'  => 1
+                ),
+                'email_user_quote_subject' => array(
+                    'id'   => 'email_user_quote_subject',
+                    'name' => __( 'Subject', 'invoicing' ),
+                    'desc' => __( 'Enter the subject line for the quote receipt email.', 'invoicing' ),
+                    'type' => 'text',
+                    'std'  => __( '[{site_title}] Your quote from {invoice_date}', 'invoicing' ),
+                    'size' => 'large'
+                ),
+                'email_user_quote_heading' => array(
+                    'id'   => 'email_user_quote_heading',
+                    'name' => __( 'Email Heading', 'invoicing' ),
+                    'desc' => __( 'Enter the the main heading contained within the email notification for the quote receipt email.', 'invoicing' ),
+                    'type' => 'text',
+                    'std'  => __( 'Your quote {invoice_number} details', 'invoicing' ),
+                    'size' => 'large'
+                ),
+                'email_user_quote_admin_bcc' => array(
+                    'id'   => 'email_user_quote_admin_bcc',
+                    'name' => __( 'Enable Admin BCC', 'invoicing' ),
+                    'desc' => __( 'Check if you want to send this notification email to site Admin.', 'invoicing' ),
+                    'type' => 'checkbox',
+                    'std'  => 1
+                ),
             );
+                    
+            $emails['user_quote'] = $user_quote;
+            
+            return $emails;
+        }
+        
+        function resend_quote_metabox_text($text){
+            global $post;
+            if($post->post_type == 'wpi_quote'){
+                $text = array(
+                    'message'       => esc_attr__( 'This will send a copy of the quote to the customer&#8217;s email address.', 'invoicing' ),
+                    'button_text'   =>  __( 'Resend Quote', 'invoicing' ),
+                );
+            }
             return $text;
+        }
+        
+        function resend_quote_email_actions($email_actions){
+            global $post;
+            if($post->post_type == 'wpi_quote') $email_actions['email_url'] = add_query_arg( array( 'wpi_action' => 'send_quote', 'invoice_id' => $post->ID ) );
+            return $email_actions;
         }
         
         function invoice_detail_metabox_titles($title, $invoice){
@@ -117,32 +199,30 @@ class Wpinv_Quotes_Admin {
             return $title;
         }
         
-        function wpinv_quote_statuses($statuses, $invoice){
-            if($invoice->post_type == 'wpi_quote'){
-                    $statuses = array(
-                        'pending'       => __( 'Waiting approval', 'invoicing' ),
-                        'cancelled'     => __( 'Cancelled', 'invoicing' ),
-                        'accepted'       => __( 'Accepted', 'invoicing' )
-                    );
+        function quote_statuses($invoice_statuses){
+            global $post;
+            
+            if(isset($post) and $post->post_type == 'wpi_quote'){
+                $invoice_statuses = wpi_quote_statuses();
             }
-            return $statuses;
+            return $invoice_statuses;
         }
         
         function wpinv_metabox_mail_notice(){
             return __('This will send a copy of the quote to the user&#8217;s email address.', 'invoicing');
         }
         
-        function wpinv_send_quote_after_save( $post_id ) { 
+        function wpinv_send_quote_after_save( $post_id ) {
             // If this is just a revision, don't send the email.
             if ( wp_is_post_revision( $post_id ) ) {
                 return;
             }
 
-            if ( !current_user_can( 'manage_options' ) || !(get_post_type( $post_id ) == 'wpi_invoice' || get_post_type( $post_id ) == 'wpi_quote')  ) {
+            if ( !current_user_can( 'manage_options' ) || get_post_type( $post_id ) != 'wpi_quote'  ) {
                 return;
             }
 
-            if ( !empty( $_POST['wpi_save_send'] ) ) { 
+            if ( !empty( $_POST['wpi_save_send'] ) ) {
                 $this->wpinv_user_quote_notification( $post_id );
             }
         }
@@ -150,10 +230,7 @@ class Wpinv_Quotes_Admin {
         function wpinv_user_quote_notification( $invoice_id ) {
             global $wpinv_email_search, $wpinv_email_replace;
             
-            $email_type = 'user_invoice'; // alias of user_quote.
-            if ( !wpinv_email_is_enabled( $email_type ) ) {
-                return false;
-            }
+            $email_type = 'user_quote'; // alias of user_invoice.
 
             $invoice = wpinv_get_invoice( $invoice_id );
             if ( empty( $invoice ) ) {
@@ -177,24 +254,25 @@ class Wpinv_Quotes_Admin {
 
             $wpinv_email_search     = $search;
             $wpinv_email_replace    = $replace;
-            
-            //$email_type = 'user_quote'; // alias of user_invoice.
-            
+                        
             $subject        = wpinv_email_get_subject( $email_type, $invoice_id, $invoice );
             $email_heading  = wpinv_email_get_heading( $email_type, $invoice_id, $invoice );
             $headers        = wpinv_email_get_headers( $email_type, $invoice_id, $invoice );
             $attachments    = wpinv_email_get_attachments( $email_type, $invoice_id, $invoice );
             
-            $subject = '['.get_bloginfo('name').'] Your quote from '.$invoice->get_invoice_date();
-            $email_heading = wpinv_email_format_text('Your quote '.$invoice->title.' details');
-
-            $content        = wpinv_get_template_html( 'emails/wpinv-email-' . $email_type . '.php', array(
-                    'invoice'       => $invoice,
-                    'email_type'    => $email_type,
-                    'email_heading' => $email_heading,
-                    'sent_to_admin' => false,
-                    'plain_text'    => false,
-                ) );
+            $args = array(
+                        'invoice'       => $invoice,
+                        'email_type'    => $email_type,
+                        'email_heading' => $email_heading,
+                        'sent_to_admin' => false,
+                        'plain_text'    => false,
+                    );
+            $content = wpinv_get_template_html( 
+                        'emails/wpinv-email-user_quote.php', 
+                        $args,
+                        'wpinv-quotes/',
+                        WP_PLUGIN_DIR.'/wpinv-quotes/templates/'
+                    );
 
             $sent = wpinv_mail_send( $recipient, $subject, $content, $headers, $attachments );
 
@@ -215,8 +293,29 @@ class Wpinv_Quotes_Admin {
         }
         
         function wpinv_get_template($located, $template_name, $args, $template_path){
-            $located = WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-user_quote.php';
+            $invoice = $args['invoice'];
+            if($invoice->post_type == 'wpi_quote') $located = WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-user_quote.php';
             return $located;
+        }
+        
+        function wpinv_send_customer_quote( $data = array() ) {
+            $invoice_id = !empty( $data['invoice_id'] ) ? absint( $data['invoice_id'] ) : NULL;
+
+            if ( empty( $invoice_id ) ) {
+                return;
+            }
+
+            if ( !current_user_can( 'manage_options' ) ) {
+                wp_die( __( 'You do not have permission to send invoice notification', 'invoicing' ), __( 'Error', 'invoicing' ), array( 'response' => 403 ) );
+            }
+
+            $sent = $this->wpinv_user_quote_notification( $invoice_id );
+
+            $status = $sent ? 'email_sent' : 'email_fail';
+
+            $redirect = add_query_arg( array( 'wpinv-message' => $status, 'wpi_action' => false, 'invoice_id' => false ) );
+            wp_redirect( $redirect );
+            exit;
         }
         
         function wpinv_after_quote_accepted( $post_id, $post, $update = false ) {
@@ -238,14 +337,14 @@ class Wpinv_Quotes_Admin {
                 
                 $invoice = new WPInv_Invoice( $post_id );
                 
-                $invoice->add_note( __('Quote approved as an invoice.', 'invoicing') );
+                $invoice->add_note( __('Quote accepted and converted to invoice.', 'invoicing') );
                 
                 wpinv_user_invoice_notification( $post_id ); //Send email for new invoice.
             }
             
             // re-hook this function
             add_action( 'save_post', 'wpinv_after_quote_accepted' );
-        }
+        }        
 }
 
 class Wpinv_Quotes_Admin_Metaboxes{
