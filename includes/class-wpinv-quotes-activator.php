@@ -20,18 +20,19 @@
  * @subpackage Wpinv_Quotes/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Wpinv_Quotes_Activator {
+class Wpinv_Quotes_Activator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function activate() {
-            register_post_type('wpi_quote', array('has_archive' => true));
-            flush_rewrite_rules();
-	}
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function activate()
+    {
+        flush_rewrite_rules();
+    }
 
 }

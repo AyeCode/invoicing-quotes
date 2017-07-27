@@ -26,36 +26,42 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if (!defined('WPINC')) {
+    die;
 }
+
+define('WPINV_QUOTES_VERSION', '1.0.0');
+define('WPINV_QUOTES_PATH', plugin_dir_path(__FILE__));
+define('WPINV_QUOTES_URL', plugin_dir_url(__FILE__));
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-wpinv-quotes-activator.php
  */
-function activate_wpinv_quotes() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpinv-quotes-activator.php';
-	Wpinv_Quotes_Activator::activate();
+function activate_wpinv_quotes()
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes-activator.php';
+    Wpinv_Quotes_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-wpinv-quotes-deactivator.php
  */
-function deactivate_wpinv_quotes() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpinv-quotes-deactivator.php';
-	Wpinv_Quotes_Deactivator::deactivate();
+function deactivate_wpinv_quotes()
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes-deactivator.php';
+    Wpinv_Quotes_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_wpinv_quotes' );
-register_deactivation_hook( __FILE__, 'deactivate_wpinv_quotes' );
+register_activation_hook(__FILE__, 'activate_wpinv_quotes');
+register_deactivation_hook(__FILE__, 'deactivate_wpinv_quotes');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wpinv-quotes.php';
+require plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes.php';
 
 /**
  * Begins execution of the plugin.
@@ -66,10 +72,12 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wpinv-quotes.php';
  *
  * @since    1.0.0
  */
-function run_wpinv_quotes() {
+function run_wpinv_quotes()
+{
 
-	$plugin = new Wpinv_Quotes();
-	$plugin->run();
+    $plugin = new Wpinv_Quotes();
+    $plugin->run();
 
 }
-run_wpinv_quotes();
+
+add_action('plugins_loaded', 'run_wpinv_quotes'); // wait until 'plugins_loaded' hook fires, for WP Multisite compatibility

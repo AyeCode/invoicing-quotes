@@ -1,41 +1,13 @@
-(function( $ ) {
-	'use strict';
+(function ($) {
+    'use strict';
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
-        $(document).ready(function(){
-            var invDetails = $('#gdmbx2-metabox-wpinv_details').html();
-            if (invDetails) {
-                $('#submitpost', $('.wpinv')).detach().appendTo($('#wpinv-details'));
-                $('#submitdiv', $('.wpinv')).hide();
-                $('#major-publishing-actions', '.post-type-wpi_quote').find('input[type=submit]').attr('name', 'save_invoice').val(WPInv_Admin_Quote.save_quote);
-            }    
-        });
-        
+    $(document).ready(function () {
+        var invDetails = jQuery('#gdmbx2-metabox-wpinv_details').html();
+        if (invDetails) {
+            jQuery('#submitpost', jQuery('.wpinv')).detach().appendTo(jQuery('#wpinv-details'));
+            jQuery('#submitdiv', jQuery('.wpinv')).hide();
+            jQuery('.post-type-wpi_quote #major-publishing-actions').find('input[type=submit]').attr('name', 'save_invoice').val(wpinv_quotes_admin.save_quote);
+        }
+    });
 
-})( jQuery );
+})(jQuery);
