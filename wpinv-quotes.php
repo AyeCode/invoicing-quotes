@@ -64,6 +64,15 @@ register_deactivation_hook(__FILE__, 'deactivate_wpinv_quotes');
 require plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes.php';
 
 /**
+ * The code that runs during plugin deactivation.
+ * This action is documented in includes/class-wpinv-quotes-deactivator.php
+ */
+function wpinv_invoice_plugin_notice()
+{
+    echo '<div class="error"><p>Quote Plugin requires the invoicing plugin to be installed and active.</p></div>';
+}
+
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,
@@ -74,7 +83,10 @@ require plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes.php';
  */
 function run_wpinv_quotes()
 {
-
+    if ( is_admin() && current_user_can( 'activate_plugins' ) &&  !class_exists( 'WPInv_Plugin' ) ) {
+        add_action( 'admin_notices', 'wpinv_invoice_plugin_notice' ) ;
+        return;
+    }
     $plugin = new Wpinv_Quotes();
     $plugin->run();
 

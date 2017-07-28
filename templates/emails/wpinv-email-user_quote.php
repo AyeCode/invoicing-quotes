@@ -1,17 +1,18 @@
 <?php
 // don't load directly
-if ( !defined('ABSPATH') )
+if (!defined('ABSPATH'))
     die('-1');
 
-?>
-<p><?php printf( __( 'A quote has been created for you on %s.', 'invoicing' ), wpinv_get_business_name()); ?></p> <?php
+do_action('wpinv_email_header', $email_heading, $quote, $email_type, $sent_to_admin);
 
-require_once WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-header.php';
+do_action('wpinv_email_before_quote_details', $quote, $email_type, $sent_to_admin);
 
-require_once WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-quote-details.php';
+do_action('wpinv_email_invoice_details', $quote, $email_type, $sent_to_admin);
 
-require_once WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-quote-items.php';
+do_action('wpinv_email_invoice_items', $quote, $email_type, $sent_to_admin);
 
-require_once WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-billing-details.php';
+do_action('wpinv_email_billing_details', $quote, $email_type, $sent_to_admin);
 
-require_once WP_PLUGIN_DIR.'/wpinv-quotes/templates/emails/wpinv-email-header.php';
+do_action('wpinv_email_after_quote_details', $quote, $email_type, $sent_to_admin);
+
+do_action('wpinv_email_footer', $quote, $email_type, $sent_to_admin);

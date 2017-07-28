@@ -185,7 +185,12 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_statuses', $plugin_admin, 'wpinv_quote_statuses');
         $this->loader->add_filter('post_row_actions', $plugin_admin, 'wpinv_quote_post_row_actions', 10, 2);
         $this->loader->add_filter('wpinv_get_emails', $plugin_admin, 'wpinv_quote_mail_settings');
-        $this->loader->add_action('save_post_wpi_quote', $plugin_admin, 'wpinv_send_quote_after_save', 100);
+        $this->loader->add_filter('wpinv_email_recipient', $plugin_admin, 'wpinv_quote_email_recipient', 10, 4);
+        $this->loader->add_filter('wpinv_email_before_quote_details', $plugin_admin, 'wpinv_email_before_quote_details', 10, 2);
+        $this->loader->add_action('save_post_wpi_quote', $plugin_admin, 'wpinv_send_quote_after_save', 100, 1);
+        $this->loader->add_action('wpinv_should_update_invoice_status', $plugin_admin, 'wpinv_quote_should_update_quote_status', 100, 4);
+        $this->loader->add_action('init', $plugin_admin, 'wpinv_quote_init_transactional_emails', 10);
+        $this->loader->add_filter('wpinv_send_quote', $plugin_admin, 'wpinv_send_customer_quote', 10, 1);
     }
 
     /**

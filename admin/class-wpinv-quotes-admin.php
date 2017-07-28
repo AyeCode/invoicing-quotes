@@ -145,8 +145,8 @@ class Wpinv_Quotes_Admin
         $opts['show_in_menu'] = "wpinv";
         $opts['show_in_nav_menu'] = TRUE;
         $opts['show_ui'] = TRUE;
-        $opts['supports'] = array('title', 'comments');
-        $opts['taxonomies'] = array('quote_status');
+        $opts['supports'] = array('title');
+        $opts['taxonomies'] = array('');
 
         $opts['capabilities']['delete_others_posts'] = "delete_others_{$cap_type}s";
         $opts['capabilities']['delete_post'] = "delete_{$cap_type}";
@@ -334,7 +334,7 @@ class Wpinv_Quotes_Admin
             add_meta_box('wpinv-address', __('Billing Details', 'invoicing'), 'WPInv_Meta_Box_Billing_Details::output', 'wpi_quote', 'normal', 'high');
             add_meta_box('wpinv-items', __('Quote Items', 'invoicing'), 'WPInv_Meta_Box_Items::output', 'wpi_quote', 'normal', 'high');
             add_meta_box('wpinv-notes', __('Quote Notes', 'invoicing'), 'WPInv_Meta_Box_Notes::output', 'wpi_quote', 'normal', 'high');
-            if (!empty($wpi_mb_invoice) && !$wpi_mb_invoice->has_status(array('draft', 'auto-draft'))) {
+            if (!empty($wpi_mb_invoice) && !$wpi_mb_invoice->has_status(array('auto-draft'))) {
                 add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'invoicing'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
             }
         }
@@ -366,7 +366,7 @@ class Wpinv_Quotes_Admin
     {
         global $post;
         if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
-            $email_actions['email_url'] = add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID));
+            $email_actions['email_url'] = add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID, 'wpi_action_type' => 'resend_quote'));
         }
         return $email_actions;
     }
@@ -442,7 +442,7 @@ class Wpinv_Quotes_Admin
         global $post;
         if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
             $quote_statuses = array(
-                'pending' => __('Draft', 'invoicing'),
+                'draft' => __('Draft', 'invoicing'),
                 'publish' => __('Accepted', 'invoicing'),
                 'wpi-quote-declined' => __('Declined', 'invoicing'),
                 'wpi-quote-cancelled' => __('Cancelled', 'invoicing'),
@@ -516,7 +516,7 @@ class Wpinv_Quotes_Admin
             return;
         }
 
-        if (!current_user_can('manage_options') || get_post_type($post_id) != 'wpi_quote') {
+        if (!current_user_can('manage_options') || 'wpi_quote' != get_post_type($post_id)) {
             return;
         }
 
@@ -536,19 +536,21 @@ class Wpinv_Quotes_Admin
 
         $email_type = 'user_quote';
 
-        $quote = wpinv_get_invoice($quote_id);
+        $quote = new WPInv_Invoice($quote_id);
+
         if (empty($quote)) {
             return false;
         }
 
         $recipient = wpinv_email_get_recipient($email_type, $quote_id, $quote);
+
         if (!is_email($recipient)) {
             return false;
         }
 
         $search = array();
-        $search['invoice_number'] = '{invoice_number}';
-        $search['invoice_date'] = '{invoice_date}';
+        $search['invoice_number'] = '{quote_number}';
+        $search['invoice_date'] = '{quote_date}';
         $search['name'] = '{name}';
 
         $replace = array();
@@ -564,28 +566,26 @@ class Wpinv_Quotes_Admin
         $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
         $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
 
-        $args = array(
+        //add_filter('wpinv_template_path', array($this, 'wpinv_quote_template_path_cb'), 10, 1);
+
+        $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
             'invoice' => $quote,
             'email_type' => $email_type,
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
-        );
-        $content = wpinv_get_template_html(
-            'emails/wpinv-email-user_quote.php',
-            $args,
-            'wpinv-quotes/',
-            WP_PLUGIN_DIR . '/wpinv-quotes/templates/'
-        );
+        ), 'wpinv-quotes-old/', WP_PLUGIN_DIR . '/wpinv-quotes/templates/');
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
+
+        //remove_filter('wpinv_template_path', array($this, 'wpinv_quote_template_path_cb'));
 
         if ($sent) {
             $note = __('Quote has been emailed to the user.', 'invoicing');
         } else {
             $note = __('Fail to send quote to the user!', 'invoicing');
         }
-        $quote->add_note($note); // Add private note.
+        $quote->add_note($note, '', '', true); // Add system note.
 
         if (wpinv_mail_admin_bcc_active($email_type)) {
             $recipient = wpinv_get_admin_email();
@@ -595,5 +595,123 @@ class Wpinv_Quotes_Admin
 
         return $sent;
     }
+
+    /**
+     * Apply filter to change the recipient for quotes
+     *
+     * @since    1.0.0
+     */
+    function wpinv_quote_email_recipient($recipient, $email_type, $quoute_id, $quoute)
+    {
+        if ($quoute->post_type == 'wpi_quote' && !empty($quoute_id)) {
+            switch ($email_type) {
+                case 'user_quote':
+                default:
+                    $quoute = !empty($quoute) && is_object($quoute) ? $quoute : ($quoute_id > 0 ? wpinv_get_invoice($quoute_id) : NULL);
+                    $recipient = !empty($quoute) ? $quoute->get_email() : '';
+                    break;
+            }
+        }
+
+        return $recipient;
+    }
+
+    /**
+     * Load all actions for email notifications
+     *
+     * @since    1.0.0
+     */
+    function wpinv_quote_template_path_cb($path)
+    {
+        return '';
+    }
+
+    /**
+     * Load all actions for email notifications
+     *
+     * @since    1.0.0
+     */
+    function wpinv_quote_init_transactional_emails()
+    {
+        $email_actions = apply_filters('wpinv_quote_email_actions', array(
+            'wpinv_status_pending_to_processing',
+            'wpinv_status_pending_to_publish',
+            'wpinv_status_pending_to_cancelled',
+            'wpinv_status_pending_to_failed',
+            'wpinv_status_pending_to_onhold',
+            'wpinv_status_failed_to_processing',
+            'wpinv_status_failed_to_publish',
+            'wpinv_status_failed_to_onhold',
+            'wpinv_status_onhold_to_processing',
+            'wpinv_status_onhold_to_cancelled',
+            'wpinv_status_onhold_to_failed',
+            'wpinv_status_publish',
+            'wpinv_new_invoice_note'
+        ));
+
+        foreach ($email_actions as $action) {
+            add_action($action, 'wpinv_quote_send_transactional_email', 10, 10);
+        }
+    }
+
+    /**
+     * Call current actions for email notifications
+     *
+     * @since    1.0.0
+     */
+    function wpinv_quote_send_transactional_email()
+    {
+        $args = func_get_args();
+        $function = current_filter() . '_notification';
+        do_action_ref_array($function, $args);
+    }
+
+    /**
+     * Provide the filter for updating quote status
+     *
+     * @since    1.0.0
+     */
+    function wpinv_quote_should_update_quote_status($update, $quote_id, $new_status, $old_status)
+    {
+        $update = apply_filters('wpinv_should_update_quote_status', true, $quote_id, $new_status, $old_status);
+        return $update;
+    }
+
+    /**
+     * Send customer quote
+     *
+     * @since    1.0.0
+     */
+    function wpinv_send_customer_quote($data = array())
+    {
+        $quote_id = !empty($data['quote_id']) ? absint($data['quote_id']) : NULL;
+
+        if (empty($quote_id)) {
+            return;
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have permission to send quote notification', 'invoicing'), __('Error', 'invoicing'), array('response' => 403));
+        }
+
+        $sent = $this->wpinv_user_quote_notification($quote_id);
+
+        $status = $sent ? 'email_sent' : 'email_fail';
+
+        $redirect = add_query_arg(array('wpinv-message' => $status, 'wpi_action' => false, 'quote_id' => false));
+        wp_redirect($redirect);
+        exit;
+    }
+
+    /**
+     * Add information before quote email
+     *
+     * @since    1.0.0
+     */
+    function wpinv_email_before_quote_details($quote, $email_type)
+    {
+        printf(__("<p>Hi there. Your recent quote on %s has been created. Your quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
+    }
+
 
 }
