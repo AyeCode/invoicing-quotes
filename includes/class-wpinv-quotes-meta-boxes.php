@@ -19,4 +19,5 @@ class WPInv_Quote_Meta_Box
         echo '<p><a id="wpinv_convert_quote" title="Convert Quote to Invoice" class="button ui-tip" href="'.$action_url.'"><span class="dashicons dashicons-controls-repeat"></span> Convert to Invoice</a></p>';
         do_action( 'wpinv_metabox_quote_to_invoice_after', $post );
     }
+
 }
