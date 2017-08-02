@@ -117,16 +117,21 @@ class Wpinv_Quotes_Public
 
     public function wpinv_quote_display_left_actions($quote)
     {
-        if (!$quote->post_type == 'wpi_quote' || empty($quote->ID)) {
+        if ('wpi_quote' != $quote->post_type || empty($quote->ID)) {
             return;
         }
 
         $accept_msg  = wpinv_get_option( 'accepted_quote_message' );
         $decline_msg = wpinv_get_option( 'declined_quote_message' );
+        $user_id = (int)$quote->get_user_id();
+        $current_user_id = (int)get_current_user_id();
+
+        if ($user_id > 0 && $user_id != $current_user_id) {
+            return;
+        }
         if($quote->post_status == 'wpi-quote-sent'){
             remove_query_arg('wpi_action');
             $quote_id = $quote->ID;
-            $nonce = wp_create_nonce( 'wpinv_client_accept_quote_nonce' );
             ?>
             <button class="btn btn-success btn-sm accept-quote"
                     title="<?php esc_attr_e('Accept This Quotation', 'invoicing'); ?>"
@@ -137,12 +142,12 @@ class Wpinv_Quotes_Public
             <p id="accept-alert" class="alert alert-success"><?php _e('An invoice will be generated on acceptance. ') ?>
                 <a class="btn btn-success btn-xs accept-quote"
                    title="<?php esc_attr_e('Accept This Quotation', 'invoicing'); ?>"
-                   href="<?php echo esc_url(wpinv_get_checkout_uri()); ?>?wpi_action=quote_action&action=accept&qid=<?php echo $quote_id; ?>&_wpnonce=<?php echo $nonce; ?>"><?php _e('Continue', 'invoicing'); ?></a>
+                   href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
             </p>
             <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to reject this quote. ') ?> <a
                     class="btn btn-danger btn-xs decline-quote"
                     title="<?php esc_attr_e('Decline This Quotation', 'invoicing'); ?>"
-                    href="<?php echo esc_url(wpinv_get_checkout_uri()); ?>?wpi_action=quote_action&action=decline&qid=<?php echo $quote_id; ?>&_wpnonce=<?php echo $nonce; ?>"><?php _e('Continue', 'invoicing'); ?></a>
+                    href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
             <script>
                 function showAlert(action) {
                     var x = document.getElementById('accept-alert');
@@ -179,6 +184,11 @@ class Wpinv_Quotes_Public
                    href="<?php echo esc_url(wpinv_get_history_page_uri()); ?>"><?php _e('History', 'invoicing'); ?></a>
             <?php }
         }
+    }
+
+    public function wpinv_quote_before_user_invoices_template($current_page)
+    {
+        wpinv_get_template( 'wpinv-quote-history.php', '', 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/' );
     }
 
 }

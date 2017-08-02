@@ -203,12 +203,10 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_email_details_date', $plugin_admin, 'wpinv_quote_email_details_date', 10, 2);
         $this->loader->add_filter('wpinv_email_details_status', $plugin_admin, 'wpinv_quote_email_details_status', 10, 2);
         $this->loader->add_filter('wpinv_status_pending_to_wpi-quote-sent', $plugin_admin, 'wpinv_user_quote_notification', 10, 1);
-        $this->loader->add_filter('wpinv_status_wpi-quote-sent_to_publish', $plugin_admin, 'wpinv_user_quote_accepted_notification', 10, 1);
-        $this->loader->add_filter('wpinv_status_wpi-quote-sent_to_wpi-quote-declined', $plugin_admin, 'wpinv_user_quote_declined_notification', 10, 1);
         $this->loader->add_filter('wpinv_status_wpi-quote-sent_to_wpi-quote-cancelled', $plugin_admin, 'wpinv_user_quote_cancelled_notification', 10, 1);
 
         $this->loader->add_filter('wpinv_quote_action', $plugin_admin, 'wpinv_front_quote_actions', 10, 3);
-        //$this->loader->add_filter('wpinv_front_quote_actions', $plugin_admin, 'wpinv_front_quote_actions', 10, 3);
+
     }
 
     /**
@@ -239,6 +237,7 @@ class Wpinv_Quotes
         $this->loader->add_action('wpinv_invoice_display_left_actions', $plugin_public, 'wpinv_quote_display_left_actions');
         $this->loader->add_action( 'wpinv_invoice_display_right_actions', $plugin_public, 'wpinv_quote_display_right_actions', 10, 1 );
         $this->loader->add_action( 'wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles' );
+        $this->loader->add_action( 'wpinv_before_user_invoices_template', $plugin_public, 'wpinv_quote_before_user_invoices_template', 10, 1 );
     }
 
     /**
