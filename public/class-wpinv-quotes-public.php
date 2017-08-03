@@ -111,25 +111,31 @@ class Wpinv_Quotes_Public
      */
     public function wpinv_quote_print_head_styles()
     {
-        wp_register_style( 'wpinv-quotes-single-style',  plugin_dir_url(__FILE__) . 'css/wpinv-quotes-public.css', array(), $this->version, 'all');
+        wp_register_style('wpinv-quotes-single-style', plugin_dir_url(__FILE__) . 'css/wpinv-quotes-public.css', array(), $this->version, 'all');
         wp_print_styles('wpinv-quotes-single-style');
     }
 
+    /**
+     * Display accept and decline buttons in top left corner of receipt
+     *
+     * @since    1.0.0
+     * @param object $quote quote object
+     */
     public function wpinv_quote_display_left_actions($quote)
     {
         if ('wpi_quote' != $quote->post_type || empty($quote->ID)) {
             return;
         }
 
-        $accept_msg  = wpinv_get_option( 'accepted_quote_message' );
-        $decline_msg = wpinv_get_option( 'declined_quote_message' );
+        $accept_msg = wpinv_get_option('accepted_quote_message');
+        $decline_msg = wpinv_get_option('declined_quote_message');
         $user_id = (int)$quote->get_user_id();
         $current_user_id = (int)get_current_user_id();
 
         if ($user_id > 0 && $user_id != $current_user_id) {
             return;
         }
-        if($quote->post_status == 'wpi-quote-sent'){
+        if ($quote->post_status == 'wpi-quote-sent') {
             remove_query_arg('wpi_action');
             $quote_id = $quote->ID;
             ?>
@@ -162,14 +168,20 @@ class Wpinv_Quotes_Public
                 }
             </script>
             <?php
-        } elseif ($quote->post_status == 'publish'){ ?>
+        } elseif ($quote->post_status == 'wpi-quote-accepted' && !empty($accept_msg)) { ?>
             <p class="btn-success btn-sm quote-front-msg"><?php _e($accept_msg, 'invoicing'); ?></p>
-        <?php } elseif ($quote->post_status == 'wpi-quote-declined'){ ?>
+        <?php } elseif ($quote->post_status == 'wpi-quote-declined' && !empty($decline_msg)) { ?>
             <p class="btn-danger btn-sm quote-front-msg"><?php _e($decline_msg, 'invoicing'); ?></p>
-       <?php
+            <?php
         }
     }
 
+    /**
+     * Display print quote and history buttons in top right corner of receipt
+     *
+     * @since    1.0.0
+     * @param object $quote quote object
+     */
     public function wpinv_quote_display_right_actions($quote)
     {
         if ($quote->post_type == 'wpi_quote') {
@@ -186,9 +198,14 @@ class Wpinv_Quotes_Public
         }
     }
 
-    public function wpinv_quote_before_user_invoices_template($current_page)
+    /**
+     * Template to display quotes in history
+     *
+     * @since    1.0.0
+     */
+    public function wpinv_quote_before_user_invoices_template()
     {
-        wpinv_get_template( 'wpinv-quote-history.php', '', 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/' );
+        wpinv_get_template('wpinv-quote-history.php', '', 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
     }
 
 }

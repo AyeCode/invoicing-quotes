@@ -24,9 +24,7 @@ class Wpinv_Quotes_Deactivator
 {
 
     /**
-     * Short Description. (use period)
-     *
-     * Long Description.
+     * Actions on add-on deactivated.
      *
      * @since    1.0.0
      */

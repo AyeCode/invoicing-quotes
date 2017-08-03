@@ -33,7 +33,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
         <?php foreach ($user_quotes->quotes as $quote) {
             $quote_id = $quote->ID;
             ?>
-            <tr class="wpinv-item wpinv-item-<?php echo $quote_status = $quote->get_status(); ?>">
+            <tr class="wpinv-item wpinv-item-<?php echo $quote_status = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($quote->post_status); ?>">
                 <?php foreach (Wpinv_Quotes_Shared::wpinv_get_user_quote_columns() as $column_id => $column_name) : ?>
                     <td class="<?php echo esc_attr($column_id); ?> <?php echo(!empty($column_name['class']) ? $column_name['class'] : ''); ?>"
                         data-title="<?php echo esc_attr($column_name['title']); ?>">
@@ -67,7 +67,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                                 )
                             );
 
-                            if($quote->post_status == 'wpi-quote-sent'){
+                            if ($quote->post_status == 'wpi-quote-sent') {
                                 $quote_actions = array(
                                     'accept' => array(
                                         'url' => Wpinv_Quotes_Shared::get_accept_quote_url($quote_id),

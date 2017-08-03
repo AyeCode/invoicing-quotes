@@ -94,6 +94,8 @@ class Wpinv_Quotes_Admin
      * Filter the JavaScript for the admin area of invoicing plugin.
      *
      * @since    1.0.0
+     * @param array $localize localize array of main invoicing plugin
+     * @return array $localize
      */
     public function wpinv_quote_admin_js_localize($localize)
     {
@@ -112,7 +114,7 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Creates a new custom post type
+     * Creates a quote custom post type
      *
      * @since    1.0.0
      */
@@ -186,9 +188,11 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Display columns in admin side quote listing
+     * Return columns for admin side quote listing
      *
      * @since    1.0.0
+     * @param array $columns get post columns
+     * @return array $columns new columns for quotes listing
      */
     function wpinv_quote_columns($columns)
     {
@@ -210,6 +214,8 @@ class Wpinv_Quotes_Admin
      * Remove bulk edit option from admin side quote listing
      *
      * @since    1.0.0
+     * @param array $actions post actions
+     * @return array $actions actions without edit option
      */
     function wpinv_quote_bulk_actions($actions)
     {
@@ -220,6 +226,13 @@ class Wpinv_Quotes_Admin
         return $actions;
     }
 
+    /**
+     * Return sortable columns for quote listing
+     *
+     * @since    1.0.0
+     * @param array $columns post columns
+     * @return array $columns new columns for quote listing
+     */
     function wpinv_quote_sortable_columns($columns)
     {
         $columns = array(
@@ -237,8 +250,10 @@ class Wpinv_Quotes_Admin
      * Display custom columns for admin side quote listing
      *
      * @since    1.0.0
+     * @param string $column_name current column name in quote listing
+     * @return string $value value for current column
      */
-    function wpinv_quote_posts_custom_column($column_name, $post_id = 0)
+    function wpinv_quote_posts_custom_column($column_name)
     {
         global $post, $wpi_invoice;
 
@@ -275,7 +290,7 @@ class Wpinv_Quotes_Admin
                 $value = '<abbr title="' . $t_time . '">' . $h_time . '</abbr>';
                 break;
             case 'status' :
-                $value = $wpi_invoice->get_status(true) . ($wpi_invoice->is_recurring() && $wpi_invoice->is_parent() ? ' <span class="wpi-suffix">' . __('(r)', 'invoicing') . '</span>' : '');
+                $value = $wpi_invoice->get_status(true);
                 break;
             case 'details' :
                 $edit_link = get_edit_post_link($post->ID);
@@ -291,7 +306,7 @@ class Wpinv_Quotes_Admin
                     $value .= '<a title="' . esc_attr__('Send quote to customer', 'invoicing') . '" href="' . esc_url(add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID))) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
                 }
 
-                if ("wpi_quote" === $wpi_invoice->post_type) {
+                if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('pending', 'wpi-quote-sent'))) {
                     $action_url = add_query_arg(array('wpi_action' => 'convert_quote_to_invoice', 'quote_id' => $post->ID));
                     $action_url = esc_url(wp_nonce_url($action_url, 'convert', 'wpinv_convert_quote'));
                     $value .= '<a title="' . esc_attr__('Convert quote to invoice', 'invoicing') . '" href="' . $action_url . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-controls-repeat"></span></a>';
@@ -314,6 +329,9 @@ class Wpinv_Quotes_Admin
      * Remove all post row actions for quote post type
      *
      * @since    1.0.0
+     * @param array $actions row actions
+     * @param $post object of post
+     * @return array $actions empty all actions for quote
      */
     function wpinv_quote_post_row_actions($actions, $post)
     {
@@ -326,7 +344,9 @@ class Wpinv_Quotes_Admin
     /**
      * Add metaboxes for quote post type
      *
-     * @since    1.0.0
+     * @since 1.0.0
+     * @param string $post_type current post type
+     * @param $post current post
      */
     function wpinv_quoute_add_meta_boxes($post_type, $post)
     {
@@ -349,9 +369,9 @@ class Wpinv_Quotes_Admin
     /**
      * Change resend quote metabox params text values
      *
-     * @since    1.0.0
-     * @param $text string old text displayed in metabox
-     * @return $text string new text to display in metabox
+     * @since 1.0.0
+     * @param string $text old text displayed in metabox
+     * @return string $text new text to display in metabox
      */
     function wpinv_quote_resend_quote_metabox_text($text)
     {
@@ -366,9 +386,11 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Change resend quote button url
+     * Change resend quote button url using filter
      *
      * @since    1.0.0
+     * @param array $email_actions old email URL
+     * @return array $email_actions new email URL
      */
     function wpinv_quote_resend_quote_email_actions($email_actions)
     {
@@ -383,6 +405,9 @@ class Wpinv_Quotes_Admin
      * Change quote details metabox input labels
      *
      * @since    1.0.0
+     * @param array $title labels of form fields
+     * @param object $post current post object
+     * @return array $title new labels of form fields
      */
     function wpinv_quote_detail_metabox_titles($title, $post)
     {
@@ -397,11 +422,14 @@ class Wpinv_Quotes_Admin
      * Change quote details metabox mail notice
      *
      * @since    1.0.0
+     * @param string $mail_notice
+     * @param object $post
+     * @return string $mail_notice notice to display after Send Quote field
      */
     function wpinv_quote_metabox_mail_notice($mail_notice, $post)
     {
         if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
-            $mail_notice = __('After saveing quote this will send a copy of the quote to the user&#8217;s email address.', 'invoicing');
+            $mail_notice = __('After saving quote, this will send a copy of the quote to the user&#8217;s email address.', 'invoicing');
         }
         return $mail_notice;
 
@@ -414,6 +442,14 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_register_post_status()
     {
+        register_post_status('wpi-quote-accepted', array(
+            'label' => _x('Accepted', 'Quote status', 'invoicing'),
+            'public' => true,
+            'exclude_from_search' => true,
+            'show_in_admin_all_list' => true,
+            'show_in_admin_status_list' => true,
+            'label_count' => _n_noop('Accepted <span class="count">(%s)</span>', 'Accepted <span class="count">(%s)</span>', 'invoicing')
+        ));
         register_post_status('wpi-quote-sent', array(
             'label' => _x('Sent', 'Quote status', 'invoicing'),
             'public' => true,
@@ -444,6 +480,8 @@ class Wpinv_Quotes_Admin
      * Add quote settings tab
      *
      * @since    1.0.0
+     * @param array $tabs all tabs of invoicing settings
+     * @return array $tabs add with quote tab
      */
     function wpinv_quote_settings_tabs($tabs)
     {
@@ -456,6 +494,8 @@ class Wpinv_Quotes_Admin
      * Add quote settings tab main
      *
      * @since    1.0.0
+     * @param array $sections all sections of invoicing settings
+     * @return array $sections add quote main sections
      */
     function wpinv_quote_settings_sections($sections)
     {
@@ -475,6 +515,8 @@ class Wpinv_Quotes_Admin
      * Add quote settings tab
      *
      * @since    1.0.0
+     * @param array $wpinv_settings all settings fields of invoicing settings
+     * @return array $sections add quote settings
      */
     function wpinv_quote_registered_settings($wpinv_settings)
     {
@@ -522,13 +564,6 @@ class Wpinv_Quotes_Admin
                             'name' => '<h3>' . __('Accept Quote', 'invoicing') . '</h3>',
                             'type' => 'header',
                         ),
-                        'accept_quote' => array(
-                            'id' => 'accept_quote',
-                            'name' => __('Accept Quote Button', 'invoicing'),
-                            'desc' => __('Yes, show the \'Accept Quote\' button on quotes.', 'invoicing'),
-                            'type' => 'checkbox',
-                            'std' => ''
-                        ),
                         'accepted_quote_action' => array(
                             'name' => __('Accepted Quote Action', 'invoicing'),
                             'desc' => __('Actions to perform automatically when client accepts quote.', 'invoicing'),
@@ -573,6 +608,8 @@ class Wpinv_Quotes_Admin
      * Add customer quote email settings
      *
      * @since    1.0.0
+     * @param array $emails all email settings fields of invoicing settings
+     * @return array $sections add quote email settings
      */
     function wpinv_quote_mail_settings($emails)
     {
@@ -719,6 +756,9 @@ class Wpinv_Quotes_Admin
      * Send customer quote email notification if Send Quote is selected "yes"
      *
      * @since    1.0.0
+     * @param string $formatted_number formatted number for invoice
+     * @param int $number quote id
+     * @return string $formatted_number change formatted number of quote
      */
     function wpinv_format_quote_number($formatted_number, $number)
     {
@@ -752,6 +792,7 @@ class Wpinv_Quotes_Admin
      * Send customer quote email notification if Send Quote is selected "yes"
      *
      * @since    1.0.0
+     * @param int ID of post/quote
      */
     function wpinv_send_quote_after_save($post_id)
     {
@@ -772,7 +813,9 @@ class Wpinv_Quotes_Admin
     /**
      * Function to send customer quote email notification to customer
      *
-     * @since    1.0.0
+     * @since  1.0.0
+     * @param int $quote_id ID of post/quote
+     * @return bool $sent email sent or not
      */
     function wpinv_user_quote_notification($quote_id)
     {
@@ -847,7 +890,12 @@ class Wpinv_Quotes_Admin
     /**
      * Apply filter to change the recipient for quotes
      *
-     * @since    1.0.0
+     * @since 1.0.0
+     * @param string $recipient recepient of email
+     * @param string $email_type type of email
+     * @param int $quote_id ID of post/quote
+     * @param object $quote post/quote object
+     * @return bool $sent email sent or not
      */
     function wpinv_quote_email_recipient($recipient, $email_type, $quote_id, $quote)
     {
@@ -874,6 +922,9 @@ class Wpinv_Quotes_Admin
      * Add quote status change note
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
+     * @param string $new_status new status of quote
+     * @param string $old_status old status of quote
      */
     function wpinv_quote_record_status_change($quote_id, $new_status, $old_status)
     {
@@ -893,7 +944,7 @@ class Wpinv_Quotes_Admin
 
         if (is_admin()) { // Actions for quote status change from admin side
             switch ($new_status) {
-                case 'publish':
+                case 'wpi-quote-accepted':
                     $this->process_quote_published($quote_id);
                     break;
                 case 'wpi-quote-declined':
@@ -912,6 +963,7 @@ class Wpinv_Quotes_Admin
      * process when quote accepted
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
      */
     function process_quote_published($quote_id)
     {
@@ -940,6 +992,10 @@ class Wpinv_Quotes_Admin
             if ($accepted_action === 'convert_send') {
                 wpinv_new_invoice_notification($quote_id);
             }
+
+            $this->wpinv_user_quote_accepted_notification($quote_id);
+
+            do_action('wpinv_quote_status_update', $quote_id, 'Accepted');
 
         } elseif ($accepted_action === 'duplicate' || $accepted_action === 'duplicate_send') {
             //create new invoice from quote
@@ -994,14 +1050,15 @@ class Wpinv_Quotes_Admin
 
             update_post_meta($new_invoice_id, '_wpinv_number', $number);
             update_post_meta($new_invoice_id, '_wpinv_gateway', $gateway);
-            update_post_meta($new_invoice_id, '_wpinv_quote_reference', $quote_id);
+            update_post_meta($new_invoice_id, '_wpinv_quote_reference_id', $quote_id);
 
             // make the quote as accepted
             wp_update_post(array(
                 'ID' => $quote_id,
-                'post_status' => 'publish',
+                'post_status' => 'wpi-quote-accepted',
             ));
 
+            delete_post_meta($quote_id, '_wpinv_key');
             $quote = wpinv_get_invoice($quote_id);
             $quote->add_note(__('Converted from Quote to Invoice.', 'invoicing'), false, false, true);
 
@@ -1009,25 +1066,94 @@ class Wpinv_Quotes_Admin
                 wpinv_new_invoice_notification($new_invoice_id);
             }
 
+            $this->wpinv_user_quote_accepted_notification($quote_id);
+
             do_action('wpinv_quote_status_update', $quote_id, 'Accepted');
 
         } else {
             // make the quote as accepted
             wp_update_post(array(
                 'ID' => $quote_id,
-                'post_status' => 'publish',
+                'post_status' => 'wpi-quote-accepted',
             ));
+
+            $this->wpinv_user_quote_accepted_notification($quote_id);
 
             do_action('wpinv_quote_status_update', $quote_id, 'Accepted');
         }
 
-        do_action('wpinv_quote_after_process_published', $quote_id);
+        do_action('wpinv_quote_after_process_published', $quote_id, $new_invoice_id);
+    }
+
+    /**
+     * Notify when quote accepted
+     *
+     * @since    1.0.0
+     * @param int $quote_id ID of post/quote
+     * @return bool $sent is mail sent or not
+     */
+    function wpinv_user_quote_accepted_notification($quote_id)
+    {
+        global $wpinv_email_search, $wpinv_email_replace;
+
+        $email_type = 'user_quote_accepted';
+
+        if (!wpinv_email_is_enabled($email_type)) {
+            return false;
+        }
+
+        $quote = new WPInv_Invoice($quote_id);
+
+        if (empty($quote)) {
+            return false;
+        }
+
+        if (!("wpi_quote" === $quote->post_type)) {
+            return false;
+        }
+
+        $recipient = wpinv_email_get_recipient($email_type, $quote_id, $quote);
+
+        if (!is_email($recipient)) {
+            return false;
+        }
+
+        $search = array();
+        $search['invoice_number'] = '{quote_number}';
+        $search['invoice_date'] = '{quote_date}';
+        $search['name'] = '{name}';
+
+        $replace = array();
+        $replace['invoice_number'] = $quote->get_number();
+        $replace['invoice_date'] = $quote->get_invoice_date();
+        $replace['name'] = $quote->get_user_full_name();
+
+        $wpinv_email_search = $search;
+        $wpinv_email_replace = $replace;
+
+        $subject = wpinv_email_get_subject($email_type, $quote_id, $quote);
+        $email_heading = wpinv_email_get_heading($email_type, $quote_id, $quote);
+        $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
+        $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
+
+        $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
+            'quote' => $quote,
+            'email_type' => $email_type,
+            'email_heading' => $email_heading,
+            'sent_to_admin' => false,
+            'plain_text' => false,
+        ), 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
+
+        $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
+
+        return $sent;
     }
 
     /**
      * process when quote declined
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
      */
     function process_quote_declined($quote_id = 0)
     {
@@ -1047,6 +1173,7 @@ class Wpinv_Quotes_Admin
      * Function to decrease the discount if quote cancelled or declined
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
      */
     private function wpinv_quote_decrease_the_discounts($quote_id = 0)
     {
@@ -1068,8 +1195,10 @@ class Wpinv_Quotes_Admin
      * Notify when quote declined
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
+     * @return bool $sent is mail sent or not
      */
-    function wpinv_user_quote_declined_notification($quote_id, $new_status = '')
+    function wpinv_user_quote_declined_notification($quote_id)
     {
         global $wpinv_email_search, $wpinv_email_replace;
 
@@ -1123,9 +1252,6 @@ class Wpinv_Quotes_Admin
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
-        $note = sprintf(__('Quote has been declined!', 'invoicing'));
-        $quote->add_note($note, '', '', true); // Add system note.
-
         return $sent;
     }
 
@@ -1133,6 +1259,7 @@ class Wpinv_Quotes_Admin
      * process when quote cancelled
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
      */
     function process_quote_cancelled($quote_id = 0)
     {
@@ -1142,8 +1269,8 @@ class Wpinv_Quotes_Admin
             'ID' => $quote_id,
             'post_status' => 'wpi-quote-cancelled',
         ));
-        $this->wpinv_user_quote_cancelled_notification($quote_id);
         $this->wpinv_quote_decrease_the_discounts($quote_id);
+        $this->wpinv_user_quote_cancelled_notification($quote_id);
         do_action('wpinv_quote_after_process_cancelled', $quote_id);
     }
 
@@ -1151,8 +1278,10 @@ class Wpinv_Quotes_Admin
      * Notify when quote cancelled
      *
      * @since    1.0.0
+     * @param int $quote_id ID of post/quote
+     * @return bool $sent is mail sent or not
      */
-    function wpinv_user_quote_cancelled_notification($quote_id, $new_status = '')
+    function wpinv_user_quote_cancelled_notification($quote_id)
     {
         global $wpinv_email_search, $wpinv_email_replace;
 
@@ -1216,6 +1345,7 @@ class Wpinv_Quotes_Admin
      * Add quote status change note
      *
      * @since    1.0.0
+     * @param array $data url data
      */
     function wpinv_front_quote_actions($data)
     {
@@ -1232,7 +1362,7 @@ class Wpinv_Quotes_Admin
         $old_status = 'wpi-quote-sent';
 
         if ($data['action'] == 'accept') {
-            $new_status = 'publish';
+            $new_status = 'wpi-quote-accepted';
             $check_nonce = 'wpinv_client_accept_quote_nonce';
 
         } elseif ($data['action'] == 'decline') {
@@ -1256,7 +1386,7 @@ class Wpinv_Quotes_Admin
         $quote->add_note($status_change, false, false, true);// Add note
 
         switch ($new_status) {
-            case 'publish':
+            case 'wpi-quote-accepted':
                 $this->process_quote_published($quote_id);
                 break;
             case 'wpi-quote-declined':
@@ -1271,74 +1401,14 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Notify when quote accepted
-     *
-     * @since    1.0.0
-     */
-    function wpinv_user_quote_accepted_notification($quote_id, $new_status = '')
-    {
-        global $wpinv_email_search, $wpinv_email_replace;
-
-        $email_type = 'user_quote_accepted';
-
-        if (!wpinv_email_is_enabled($email_type)) {
-            return false;
-        }
-
-        $quote = new WPInv_Invoice($quote_id);
-
-        if (empty($quote)) {
-            return false;
-        }
-
-        if (!("wpi_quote" === $quote->post_type)) {
-            return false;
-        }
-
-        $recipient = wpinv_email_get_recipient($email_type, $quote_id, $quote);
-
-        if (!is_email($recipient)) {
-            return false;
-        }
-
-        $search = array();
-        $search['invoice_number'] = '{quote_number}';
-        $search['invoice_date'] = '{quote_date}';
-        $search['name'] = '{name}';
-
-        $replace = array();
-        $replace['invoice_number'] = $quote->get_number();
-        $replace['invoice_date'] = $quote->get_invoice_date();
-        $replace['name'] = $quote->get_user_full_name();
-
-        $wpinv_email_search = $search;
-        $wpinv_email_replace = $replace;
-
-        $subject = wpinv_email_get_subject($email_type, $quote_id, $quote);
-        $email_heading = wpinv_email_get_heading($email_type, $quote_id, $quote);
-        $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
-        $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
-
-        $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
-            'quote' => $quote,
-            'email_type' => $email_type,
-            'email_heading' => $email_heading,
-            'sent_to_admin' => false,
-            'plain_text' => false,
-        ), 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
-
-        $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
-
-        $note = sprintf(__('Quote has been accepted!', 'invoicing'));
-        $quote->add_note($note, '', '', true); // Add system note.
-
-        return $sent;
-    }
-
-    /**
      * Provide the filter for updating quote status
      *
      * @since    1.0.0
+     * @param bool $update should update quote or not
+     * @param int $quote_id ID of post/quote
+     * @param string $new_status new status of quote
+     * @param string $old_status old status of quote
+     * @return bool $update allow quote update
      */
     function wpinv_quote_should_update_quote_status($update, $quote_id, $new_status, $old_status)
     {
@@ -1350,6 +1420,7 @@ class Wpinv_Quotes_Admin
      * Send customer quote
      *
      * @since    1.0.0
+     * @param array $data quote data for sending in mail
      */
     function wpinv_send_customer_quote($data = array())
     {
@@ -1376,6 +1447,8 @@ class Wpinv_Quotes_Admin
      * Add information before quote email
      *
      * @since    1.0.0
+     * @param object $quote quote object
+     * @param string $email_type type of email
      */
     function wpinv_email_before_quote_details($quote, $email_type)
     {
@@ -1407,10 +1480,14 @@ class Wpinv_Quotes_Admin
      * Add information before quote note email
      *
      * @since    1.0.0
+     * @param object $quote label of email field
+     * @param string $email_type type of email
+     * @param bool $sent_to_admin if sent to admin
+     * @param string $customer_note customer note to send
      */
-    function wpinv_quote_email_before_note_details($invoice, $email_type, $sent_to_admin, $customer_note)
+    function wpinv_quote_email_before_note_details($quote, $email_type, $sent_to_admin, $customer_note)
     {
-        if ("wpi_quote" === $invoice->post_type && !empty($customer_note)) {
+        if ("wpi_quote" === $quote->post_type && !empty($customer_note)) {
             $before_note = '';
             $before_note .= __('Hello, a note has just been added to your quote:', 'invoicing');
             $before_note .= '<blockquote class="wpinv-note">' . wpautop(wptexturize($customer_note)) . '</blockquote>';
@@ -1423,6 +1500,9 @@ class Wpinv_Quotes_Admin
      * Change quote details title in email template
      *
      * @since    1.0.0
+     * @param string $title label of email field
+     * @param object $quote quote object
+     * @return string $title new label of email field
      */
     function wpinv_quote_email_details_title($title, $quote)
     {
@@ -1436,6 +1516,9 @@ class Wpinv_Quotes_Admin
      * Change quote number title in email template
      *
      * @since    1.0.0
+     * @param string $title label of number field
+     * @param object $quote quote object
+     * @return string $title new label of number field
      */
     function wpinv_quote_email_details_number($title, $quote)
     {
@@ -1449,6 +1532,9 @@ class Wpinv_Quotes_Admin
      * Change quote date title in email template
      *
      * @since    1.0.0
+     * @param string $title label of date field
+     * @param object $quote quote object
+     * @return string $title new label of date field
      */
     function wpinv_quote_email_details_date($title, $quote)
     {
@@ -1462,6 +1548,9 @@ class Wpinv_Quotes_Admin
      * Change quote status title in email template
      *
      * @since    1.0.0
+     * @param string $title label of status field
+     * @param object $quote quote object
+     * @return string $title new label of status field
      */
     function wpinv_quote_email_details_status($title, $quote)
     {
