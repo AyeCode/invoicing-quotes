@@ -20,17 +20,17 @@
  * @subpackage Wpinv_Quotes/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Wpinv_Quotes_Deactivator {
+class Wpinv_Quotes_Deactivator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function deactivate() {
-
-	}
+    /**
+     * Actions on add-on deactivated.
+     *
+     * @since    1.0.0
+     */
+    public static function deactivate()
+    {
+        flush_rewrite_rules();
+    }
 
 }
