@@ -33,7 +33,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
         <?php foreach ($user_quotes->quotes as $quote) {
             $quote_id = $quote->ID;
             ?>
-            <tr class="wpinv-item wpinv-item-<?php echo $quote_status = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($quote->post_status); ?>">
+            <tr class="wpinv-item wpinv-item-<?php echo $quote_status = $quote->post_status; ?>">
                 <?php foreach (Wpinv_Quotes_Shared::wpinv_get_user_quote_columns() as $column_id => $column_name) : ?>
                     <td class="<?php echo esc_attr($column_id); ?> <?php echo(!empty($column_name['class']) ? $column_name['class'] : ''); ?>"
                         data-title="<?php echo esc_attr($column_name['title']); ?>">
@@ -51,7 +51,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                                   title="<?php echo $dateYMD; ?>"><?php echo $date; ?></time>
 
                         <?php elseif ('quote-status' === $column_id) : ?>
-                            <?php echo wpinv_invoice_status_label($quote_status, $quote->get_status(true)); ?>
+                            <?php echo Wpinv_Quotes_Shared::wpinv_quote_invoice_status_label($quote_status, Wpinv_Quotes_Shared::wpinv_quote_status_nicename($quote->post_status)); ?>
 
                         <?php elseif ('quote-total' === $column_id) : ?>
                             <?php echo $quote->get_total(true); ?>
@@ -104,10 +104,19 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
         <div class="invoicing-Pagination">
             <?php
             $big = 999999;
+            $wpinv_cpt = $_REQUEST['wpinv-cpt'];
+
+            if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
+                $current_page = get_query_var('paged');
+            elseif (get_query_var('page') && 'wpi_quote' == $wpinv_cpt)
+                $current_page = get_query_var('page');
+            else
+                $current_page = 1;
+
             echo paginate_links(array(
                 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
                 'format' => '?paged=%#%',
-                'current' => max(1, get_query_var('paged')),
+                'current' => max(1, $current_page),
                 'total' => $user_quotes->max_num_pages,
                 'add_args' => array(
                     'wpinv-cpt' => 'wpi_quote',

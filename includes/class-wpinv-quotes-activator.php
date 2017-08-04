@@ -96,6 +96,8 @@ class Wpinv_Quotes_Activator
 
         flush_rewrite_rules();
 
+        add_option( 'activated_quotes', 'wpinv-quotes' );
+
         do_action( 'wpinv_quote_activated' );
     }
 

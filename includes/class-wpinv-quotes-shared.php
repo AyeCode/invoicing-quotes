@@ -46,6 +46,7 @@ class Wpinv_Quotes_Shared
     {
 
         add_action('wpinv_statuses', array($this, 'wpinv_quote_statuses'), 99);
+        add_action('wpinv_get_status', array($this, 'wpinv_quote_get_status'), 99, 4);
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'pending' => __('Pending', 'invoicing'),
@@ -93,6 +94,24 @@ class Wpinv_Quotes_Shared
     }
 
     /**
+     * Add statuses to the dropdown in quote details metabox
+     *
+     * @since    1.0.0
+     *
+     */
+    public function wpinv_quote_get_status($status, $nicename, $quote_id, $quote)
+    {
+        if ('wpi_quote' === $quote->post_type && !empty($quote->ID)) {
+            if($nicename){
+                return self::wpinv_quote_status_nicename($status);
+            } else {
+                return $status;
+            }
+        }
+        return $status;
+    }
+
+    /**
      * Get quote status nicename
      *
      * @since    1.0.0
@@ -105,6 +124,46 @@ class Wpinv_Quotes_Shared
         $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'invoicing');
 
         return $status;
+    }
+
+    /**
+     * Get quote status label for history page
+     *
+     * @since    1.0.0
+     * @param string $status status to get label for
+     * @param string $status_display status nicename
+     * @return string $label label with status name and class
+     */
+    function wpinv_quote_invoice_status_label( $status, $status_display)
+    {
+        if ( empty( $status_display ) ) {
+            $status_display = $this->wpinv_quote_status_nicename( $status );
+        }
+
+        switch ( $status ) {
+            case 'wpi-quote-accepted' :
+                $class = 'label-success';
+                break;
+            case 'pending' :
+                $class = 'label-primary';
+                break;
+            case 'wpi-quote-sent' :
+                $class = 'label-info';
+                break;
+            case 'wpi-quote-declined' :
+                $class = 'label-danger';
+                break;
+            case 'wpi-quote-cancelled' :
+                $class = 'label-warning';
+                break;
+            default:
+                $class = 'label-default';
+                break;
+        }
+
+        $label = '<span class="label label-inv-' . $status . ' ' . $class . '">' . $status_display . '</span>';
+
+        return $label;
     }
 
     /**
