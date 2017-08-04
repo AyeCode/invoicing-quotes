@@ -91,6 +91,53 @@ class Wpinv_Quotes_Admin
     }
 
     /**
+     * add quote settings in wpinv_settings
+     *
+     * @since    1.0.0
+     */
+    public function wpinv_quote_update_settings()
+    {
+        if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) {
+
+            global $wpinv_options;
+
+            // Pull options from WP, not GD Invoice's global
+            $current_options = get_option( 'wpinv_settings', array() );
+            $options = array();
+
+            // Populate some default values
+            foreach( wpinv_get_registered_settings() as $tab => $sections ) {
+                foreach( $sections as $section => $settings) {
+                    // Check for backwards compatibility
+                    $tab_sections = wpinv_get_settings_tab_sections( $tab );
+                    if( ! is_array( $tab_sections ) || ! array_key_exists( $section, $tab_sections ) ) {
+                        $section = 'main';
+                        $settings = $sections;
+                    }
+
+                    foreach ( $settings as $option ) {
+                        if ( !empty( $option['id'] ) && !isset( $wpinv_options[ $option['id'] ] ) ) {
+                            if ( 'checkbox' == $option['type'] && !empty( $option['std'] ) ) {
+                                $options[ $option['id'] ] = '1';
+                            } else if ( !empty( $option['std'] ) ) {
+                                $options[ $option['id'] ] = $option['std'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            $merged_options_current     = array_merge( $wpinv_options, $options );
+            $merged_options     = array_merge( $merged_options_current, $current_options );
+            $wpinv_options      = $merged_options;
+
+            update_option( 'wpinv_settings', $merged_options );
+
+            delete_option( 'activated_quotes' );
+        }
+    }
+
+    /**
      * Filter the JavaScript for the admin area of invoicing plugin.
      *
      * @since    1.0.0
@@ -577,6 +624,7 @@ class Wpinv_Quotes_Admin
                                 'duplicate_send' => __('Create invoice and send to client, but keep quote', 'invoicing'),
                                 'do_nothing' => __('Do nothing', 'invoicing'),
                             ),
+                            'std' => 'convert',
                         ),
                         'accepted_quote_message' => array(
                             'name' => __('Accepted Quote Message', 'invoicing'),
@@ -584,7 +632,7 @@ class Wpinv_Quotes_Admin
                             'id' => 'accepted_quote_message',
                             'type' => 'text',
                             'size' => 'regular',
-                            'std' => __('Success, You have accepted the Quote.', 'invoicing'),
+                            'std' => __('You have accepted the Quote.', 'invoicing'),
                         ),
                         'declined_quote_message' => array(
                             'name' => __('Declined Quote Message', 'invoicing'),
@@ -726,7 +774,7 @@ class Wpinv_Quotes_Admin
                     'name' => __('Enable/Disable', 'invoicing'),
                     'desc' => __('Enable this email notification', 'invoicing'),
                     'type' => 'checkbox',
-                    'std' => 1
+                    'std' => 0
                 ),
                 'email_user_quote_cancelled_subject' => array(
                     'id' => 'email_user_quote_cancelled_subject',
@@ -990,7 +1038,7 @@ class Wpinv_Quotes_Admin
             $quote->add_note(__('Converted from Quote to Invoice.', 'invoicing'), false, false, true);
 
             if ($accepted_action === 'convert_send') {
-                wpinv_new_invoice_notification($quote_id);
+                wpinv_user_invoice_notification($quote_id);
             }
 
             $this->wpinv_user_quote_accepted_notification($quote_id);
@@ -1063,7 +1111,7 @@ class Wpinv_Quotes_Admin
             $quote->add_note(__('Converted from Quote to Invoice.', 'invoicing'), false, false, true);
 
             if ($accepted_action === 'duplicate_send') {
-                wpinv_new_invoice_notification($new_invoice_id);
+                wpinv_user_invoice_notification($new_invoice_id);
             }
 
             $this->wpinv_user_quote_accepted_notification($quote_id);
