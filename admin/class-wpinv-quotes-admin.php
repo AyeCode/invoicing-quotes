@@ -1021,7 +1021,11 @@ class Wpinv_Quotes_Admin
 
         $accepted_action = wpinv_get_option('accepted_quote_action');
         $gateway = wpinv_get_default_gateway();
+
         if ($accepted_action === 'convert' || $accepted_action === 'convert_send' || empty($accepted_action)) {
+
+            $this->wpinv_user_quote_accepted_notification($quote_id);
+
             //convert quote to invoice
             set_post_type($quote_id, 'wpi_invoice');
 
@@ -1035,13 +1039,11 @@ class Wpinv_Quotes_Admin
             update_post_meta($quote_id, '_wpinv_gateway', $gateway);
 
             $quote = wpinv_get_invoice($quote_id);
-            $quote->add_note(__('Converted from Quote to Invoice.', 'invoicing'), false, false, true);
+            $quote->add_note(sprintf(__('Converted from Quote #%s to Invoice.', 'invoicing'), $quote_id), false, false, true);
 
             if ($accepted_action === 'convert_send') {
                 wpinv_user_invoice_notification($quote_id);
             }
-
-            $this->wpinv_user_quote_accepted_notification($quote_id);
 
             do_action('wpinv_quote_status_update', $quote_id, 'Accepted');
 
@@ -1087,7 +1089,7 @@ class Wpinv_Quotes_Admin
             $post_name = sanitize_title($number);
 
             $quote = wpinv_get_invoice($new_invoice_id);
-            $quote->add_note(__('Created Invoice from Quote.', 'invoicing'), false, false, true);
+            $quote->add_note(sprintf(__('Created Invoice from Quote #%s.', 'invoicing'), $quote_id), false, false, true);
 
             // Update post title and date
             wp_update_post(array(
@@ -1108,7 +1110,7 @@ class Wpinv_Quotes_Admin
 
             delete_post_meta($quote_id, '_wpinv_key');
             $quote = wpinv_get_invoice($quote_id);
-            $quote->add_note(__('Converted from Quote to Invoice.', 'invoicing'), false, false, true);
+            $quote->add_note(sprintf(__('Converted from Quote to Invoice #%s.', 'invoicing'), $new_invoice_id), false, false, true);
 
             if ($accepted_action === 'duplicate_send') {
                 wpinv_user_invoice_notification($new_invoice_id);
