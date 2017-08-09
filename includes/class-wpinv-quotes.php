@@ -174,6 +174,7 @@ class Wpinv_Quotes
         $this->loader->add_action('init', $plugin_admin, 'wpinv_quote_register_post_status', 10);
         $this->loader->add_action('wpinv_quotes_loaded', $plugin_admin, 'wpinv_quote_on_activation', 10);
         $this->loader->add_filter('manage_wpi_quote_posts_columns', $plugin_admin, 'wpinv_quote_columns', 10, 3);
+        $this->loader->add_filter('request', $plugin_admin, 'wpinv_quote_request', 10, 3);
         $this->loader->add_filter('bulk_actions-edit-wpi_quote', $plugin_admin, 'wpinv_quote_bulk_actions', 10, 3);
         $this->loader->add_filter('manage_wpi_quote_posts_custom_column', $plugin_admin, 'wpinv_quote_posts_custom_column', 10, 1);
         $this->loader->add_filter('manage_edit-wpi_quote_sortable_columns', $plugin_admin, 'wpinv_quote_sortable_columns', 10, 3);
