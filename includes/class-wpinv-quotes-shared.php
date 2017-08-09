@@ -72,7 +72,7 @@ class Wpinv_Quotes_Shared
      * @since    1.0.0
      * @return array quote statuses
      */
-    public function wpinv_get_quote_statuses()
+    public static function wpinv_get_quote_statuses()
     {
         return self::$quote_statuses;
     }
@@ -83,7 +83,7 @@ class Wpinv_Quotes_Shared
      * @since    1.0.0
      *
      */
-    public function wpinv_quote_statuses($quote_statuses)
+    public static function wpinv_quote_statuses($quote_statuses)
     {
         global $post;
         if (!empty($post->ID) && $post->post_type == 'wpi_quote') {
@@ -98,7 +98,7 @@ class Wpinv_Quotes_Shared
      * @since    1.0.0
      *
      */
-    public function wpinv_quote_get_status($status, $nicename, $quote_id, $quote)
+    public static function wpinv_quote_get_status($status, $nicename, $quote_id, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' === $quote->post_type) {
             if($nicename){
@@ -117,7 +117,7 @@ class Wpinv_Quotes_Shared
      * @param string $status status to get nice name of
      * @return string $status nicename of status
      */
-    function wpinv_quote_status_nicename($status)
+    public static function wpinv_quote_status_nicename($status)
     {
         $statuses = self::$quote_statuses;
         $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'invoicing');
@@ -133,10 +133,10 @@ class Wpinv_Quotes_Shared
      * @param string $status_display status nicename
      * @return string $label label with status name and class
      */
-    function wpinv_quote_invoice_status_label( $status, $status_display)
+    public static function wpinv_quote_invoice_status_label( $status, $status_display)
     {
         if ( empty( $status_display ) ) {
-            $status_display = $this->wpinv_quote_status_nicename( $status );
+            $status_display = self::wpinv_quote_status_nicename( $status );
         }
 
         switch ( $status ) {
@@ -171,7 +171,7 @@ class Wpinv_Quotes_Shared
      * @since    1.0.0
      * @return array $columns columns for displaying in quote history page
      */
-    function wpinv_get_user_quote_columns()
+    public static function wpinv_get_user_quote_columns()
     {
         $columns = array(
             'quote-number' => array('title' => __('ID', 'invoicing'), 'class' => 'text-left'),
@@ -191,7 +191,7 @@ class Wpinv_Quotes_Shared
      * @param array $args to retrive quotes
      * @return object post object of all matching quotes
      */
-    function wpinv_get_quotes($args)
+    public static function wpinv_get_quotes($args)
     {
         $args = wp_parse_args($args, array(
             'status' => array_keys(self::$quote_statuses),
@@ -303,7 +303,7 @@ class Wpinv_Quotes_Shared
      * @param int $quote_id ID of quote
      * @return string $url url for accept quote button
      */
-    function get_accept_quote_url($quote_id)
+    public static function get_accept_quote_url($quote_id)
     {
         $nonce = wp_create_nonce('wpinv_client_accept_quote_nonce');
         $url = get_permalink($quote_id) . '?wpi_action=quote_action&action=accept&qid=' . $quote_id . '&_wpnonce=' . $nonce;
@@ -317,7 +317,7 @@ class Wpinv_Quotes_Shared
      * @param int $quote_id ID of quote
      * @return string $url url for decline quote button
      */
-    function get_decline_quote_url($quote_id)
+    public static function get_decline_quote_url($quote_id)
     {
         $nonce = wp_create_nonce('wpinv_client_decline_quote_nonce');
         $url = get_permalink($quote_id) . '?wpi_action=quote_action&action=decline&qid=' . $quote_id . '&_wpnonce=' . $nonce;
