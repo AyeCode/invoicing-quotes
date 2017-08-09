@@ -1,3 +1,5 @@
-.post-type-wpi_quote #commentsdiv.postbox, .post-type-wpi_quote #commentstatusdiv.postbox {
+.post-type-wpi_quote #commentsdiv.postbox,
+.post-type-wpi_quote #commentstatusdiv.postbox,
+.post-type-wpi_quote .subsubsub .mine{
     display: none !important;
 }
