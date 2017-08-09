@@ -86,10 +86,9 @@ class Wpinv_Quotes_Shared
     public function wpinv_quote_statuses($quote_statuses)
     {
         global $post;
-        if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
+        if (!empty($post->ID) && $post->post_type == 'wpi_quote') {
             return self::$quote_statuses;
         }
-        //return array_merge($quote_statuses,self::$quote_statuses);
         return $quote_statuses;
     }
 
@@ -101,7 +100,7 @@ class Wpinv_Quotes_Shared
      */
     public function wpinv_quote_get_status($status, $nicename, $quote_id, $quote)
     {
-        if ('wpi_quote' === $quote->post_type && !empty($quote->ID)) {
+        if (!empty($quote->ID) && 'wpi_quote' === $quote->post_type) {
             if($nicename){
                 return self::wpinv_quote_status_nicename($status);
             } else {

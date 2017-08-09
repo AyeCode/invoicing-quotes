@@ -382,7 +382,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_post_row_actions($actions, $post)
     {
-        if ('wpi_quote' == $post->post_type && !empty($post->ID)) {
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type ) {
             $actions = array();
         }
         return $actions;
@@ -398,7 +398,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quoute_add_meta_boxes($post_type, $post)
     {
         global $wpi_mb_invoice;
-        if ($post_type == 'wpi_quote' && !empty($post->ID)) {
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $wpi_mb_invoice = wpinv_get_invoice($post->ID);
             add_meta_box('wpinv-details', __('Quote Details', 'invoicing'), 'WPInv_Meta_Box_Details::output', 'wpi_quote', 'side', 'default');
             add_meta_box('wpinv-address', __('Billing Details', 'invoicing'), 'WPInv_Meta_Box_Billing_Details::output', 'wpi_quote', 'normal', 'high');
@@ -423,7 +423,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_resend_quote_metabox_text($text)
     {
         global $post;
-        if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $text = array(
                 'message' => esc_attr__('This will send a copy of the quote to the customer&#8217;s email address.', 'invoicing'),
                 'button_text' => __('Resend Quote', 'invoicing'),
@@ -442,7 +442,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_resend_quote_email_actions($email_actions)
     {
         global $post;
-        if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $email_actions['email_url'] = add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID, 'wpi_action_type' => 'resend_quote'));
         }
         return $email_actions;
@@ -458,7 +458,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_detail_metabox_titles($title, $post)
     {
-        if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $title['status'] = __('Quote Status:', 'invoicing');
             $title['number'] = __('Quote Number:', 'invoicing');
         }
@@ -475,7 +475,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_metabox_mail_notice($mail_notice, $post)
     {
-        if ($post->post_type == 'wpi_quote' && !empty($post->ID)) {
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $mail_notice = __('After saving quote, this will send a copy of the quote to the user&#8217;s email address.', 'invoicing');
         }
         return $mail_notice;
@@ -632,7 +632,7 @@ class Wpinv_Quotes_Admin
                             'id' => 'accepted_quote_message',
                             'type' => 'text',
                             'size' => 'regular',
-                            'std' => __('You have accepted the Quote.', 'invoicing'),
+                            'std' => __('You have accepted this quote.', 'invoicing'),
                         ),
                         'declined_quote_message' => array(
                             'name' => __('Declined Quote Message', 'invoicing'),
@@ -947,7 +947,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_email_recipient($recipient, $email_type, $quote_id, $quote)
     {
-        if ($quote->post_type == 'wpi_quote' && !empty($quote_id)) {
+        if (!empty($quote_id) &&'wpi_quote' == $quote->post_type ) {
             switch ($email_type) {
                 case 'user_quote_accepted':
                 case 'user_quote_declined':
@@ -1556,7 +1556,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_email_details_title($title, $quote)
     {
-        if ($quote->post_type == 'wpi_quote' && !empty($quote->ID)) {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Details:', 'invoicing');
         }
         return $title;
@@ -1572,7 +1572,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_email_details_number($title, $quote)
     {
-        if ($quote->post_type == 'wpi_quote' && !empty($quote->ID)) {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Number', 'invoicing');
         }
         return $title;
@@ -1588,7 +1588,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_email_details_date($title, $quote)
     {
-        if ($quote->post_type == 'wpi_quote' && !empty($quote->ID)) {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Date', 'invoicing');
         }
         return $title;
@@ -1604,7 +1604,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_email_details_status($title, $quote)
     {
-        if ($quote->post_type == 'wpi_quote' && !empty($quote->ID)) {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Status', 'invoicing');
         }
         return $title;
@@ -1652,4 +1652,26 @@ class Wpinv_Quotes_Admin
         }
     }
 
+    /**
+     * Allow all post with custom status in quote listing
+     *
+     * @since    1.0.0
+     */
+    function wpinv_quote_request( $vars ) {
+        global $typenow, $wp_post_statuses;
+
+        if ( 'wpi_quote' === $typenow ) {
+            $post_statuses = Wpinv_Quotes_Shared::wpinv_get_quote_statuses();
+
+            foreach ( $post_statuses as $status => $value ) {
+                if ( isset( $wp_post_statuses[ $status ] ) && false === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
+                    unset( $post_statuses[ $status ] );
+                }
+            }
+
+            $vars['post_status'] = array_keys( $post_statuses );
+        }
+
+        return $vars;
+    }
 }

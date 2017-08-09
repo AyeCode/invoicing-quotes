@@ -69,7 +69,7 @@ require plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes.php';
  */
 function wpinv_invoice_plugin_notice()
 {
-    echo '<div class="error"><p>Quote Plugin requires the invoicing plugin to be installed and active.</p></div>';
+    echo '<div class="error"><p>Quote Plugin requires the <a href="https://wordpress.org/plugins/invoicing/" target="_blank">invoicing</a> plugin to be installed and active.</p></div>';
 }
 
 /**
