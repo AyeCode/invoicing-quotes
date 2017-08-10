@@ -1025,12 +1025,15 @@ class Wpinv_Quotes_Admin
             //convert quote to invoice
             set_post_type($quote_id, 'wpi_invoice');
 
+            $number = wpinv_format_invoice_number($quote_id);
+
             wp_update_post(array(
                 'ID' => $quote_id,
                 'post_status' => 'pending',
+                'post_title' => $number,
             ));
+
             //update meta data
-            $number = wpinv_format_invoice_number($quote_id);
             update_post_meta($quote_id, '_wpinv_number', $number);
             update_post_meta($quote_id, '_wpinv_gateway', $gateway);
 
