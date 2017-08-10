@@ -51,9 +51,7 @@ class Wpinv_Quotes_Shared
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'pending' => __('Pending', 'invoicing'),
-            'wpi-quote-sent' => __('Sent', 'invoicing'),
             'wpi-quote-accepted' => __('Accepted', 'invoicing'),
-            'wpi-quote-cancelled' => __('Cancelled', 'invoicing'),
             'wpi-quote-declined' => __('Declined', 'invoicing'),
         ));
 
@@ -162,14 +160,8 @@ class Wpinv_Quotes_Shared
             case 'pending' :
                 $class = 'label-primary';
                 break;
-            case 'wpi-quote-sent' :
-                $class = 'label-info';
-                break;
             case 'wpi-quote-declined' :
                 $class = 'label-danger';
-                break;
-            case 'wpi-quote-cancelled' :
-                $class = 'label-warning';
                 break;
             default:
                 $class = 'label-default';

@@ -203,7 +203,6 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_email_details_number', $plugin_admin, 'wpinv_quote_email_details_number', 10, 2);
         $this->loader->add_filter('wpinv_email_details_date', $plugin_admin, 'wpinv_quote_email_details_date', 10, 2);
         $this->loader->add_filter('wpinv_email_details_status', $plugin_admin, 'wpinv_quote_email_details_status', 10, 2);
-        $this->loader->add_filter('wpinv_status_pending_to_wpi-quote-sent', $plugin_admin, 'wpinv_user_quote_notification', 10, 1);
         $this->loader->add_filter('wpinv_quote_action', $plugin_admin, 'wpinv_front_quote_actions', 10, 3);
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation

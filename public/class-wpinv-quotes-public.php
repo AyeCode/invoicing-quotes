@@ -135,7 +135,7 @@ class Wpinv_Quotes_Public
         if ($user_id > 0 && $user_id != $current_user_id) {
             return;
         }
-        if ($quote->post_status == 'wpi-quote-sent') {
+        if ($quote->post_status == 'pending') {
             remove_query_arg('wpi_action');
             $quote_id = $quote->ID;
             ?>
