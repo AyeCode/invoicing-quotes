@@ -38,10 +38,10 @@ define('WPINV_QUOTES_URL', plugin_dir_url(__FILE__));
  * The code that runs during plugin activation.
  * This action is documented in includes/class-wpinv-quotes-activator.php
  */
-function activate_wpinv_quotes()
+function activate_wpinv_quotes($network_wide = false)
 {
     require_once plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes-activator.php';
-    Wpinv_Quotes_Activator::activate();
+    Wpinv_Quotes_Activator::activate($network_wide);
 }
 
 /**
