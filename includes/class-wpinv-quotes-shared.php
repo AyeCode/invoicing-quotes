@@ -47,6 +47,7 @@ class Wpinv_Quotes_Shared
 
         add_action('wpinv_statuses', array($this, 'wpinv_quote_statuses'), 99);
         add_action('wpinv_get_status', array($this, 'wpinv_quote_get_status'), 99, 4);
+        add_action('wpinv_setup_invoice', array($this, 'wpinv_quote_setup_quote'), 10, 1);
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'pending' => __('Pending', 'invoicing'),
@@ -85,8 +86,8 @@ class Wpinv_Quotes_Shared
      */
     public static function wpinv_quote_statuses($quote_statuses)
     {
-        global $post;
-        if (!empty($post->ID) && $post->post_type == 'wpi_quote') {
+        global $wpinv_quote, $post;
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type || !empty($wpinv_quote->ID) && 'wpi_quote' == $wpinv_quote->post_type) {
             return self::$quote_statuses;
         }
         return $quote_statuses;
@@ -123,6 +124,21 @@ class Wpinv_Quotes_Shared
         $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'invoicing');
 
         return $status;
+    }
+
+    /**
+     * set global variable to use in add-on
+     *
+     * @since    1.0.0
+     * @param object $quote quote object
+     */
+    public static function wpinv_quote_setup_quote($quote)
+    {
+        global $wpinv_quote;
+        $wpinv_quote = $quote;
+        if('wpi_quote' == $wpinv_quote->post_type){
+            $wpinv_quote->status_nicename = self::wpinv_quote_status_nicename( $wpinv_quote->post_status );
+        }
     }
 
     /**
@@ -226,7 +242,7 @@ class Wpinv_Quotes_Shared
             }
         }
 
-        $wpinv_cpt = $_REQUEST['wpinv-cpt'];
+        $wpinv_cpt = isset( $_REQUEST[ 'wpinv-cpt' ] ) ? $_REQUEST[ 'wpinv-cpt' ] : '';
 
         if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
             $args['page'] = get_query_var('paged');

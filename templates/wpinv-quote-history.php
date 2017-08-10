@@ -104,7 +104,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
         <div class="invoicing-Pagination">
             <?php
             $big = 999999;
-            $wpinv_cpt = $_REQUEST['wpinv-cpt'];
+            $wpinv_cpt = isset( $_REQUEST[ 'wpinv-cpt' ] ) ? $_REQUEST[ 'wpinv-cpt' ] : '';
 
             if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
                 $current_page = get_query_var('paged');

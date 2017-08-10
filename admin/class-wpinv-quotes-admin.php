@@ -186,7 +186,7 @@ class Wpinv_Quotes_Admin
         $opts['publicly_querable'] = TRUE;
         $opts['query_var'] = TRUE;
         $opts['register_meta_box_cb'] = '';
-        $opts['rewrite'] = FALSE;
+        $opts['rewrite'] = TRUE;
         $opts['show_in_admin_bar'] = TRUE;
         $opts['show_in_menu'] = "wpinv";
         $opts['show_in_nav_menu'] = TRUE;
@@ -222,11 +222,6 @@ class Wpinv_Quotes_Admin
         $opts['labels']['search_items'] = __("Search {$plural}", 'invoicing');
         $opts['labels']['singular_name'] = __($single, 'invoicing');
         $opts['labels']['view_item'] = __("View {$single}", 'invoicing');
-
-        $opts['rewrite']['slug'] = FALSE;
-        $opts['rewrite']['with_front'] = FALSE;
-        $opts['rewrite']['feeds'] = FALSE;
-        $opts['rewrite']['pages'] = FALSE;
 
         $opts = apply_filters('wpinv_quote_params', $opts);
 
@@ -811,7 +806,7 @@ class Wpinv_Quotes_Admin
     function wpinv_format_quote_number($formatted_number, $number)
     {
         global $post;
-        if ('wpi_quote' == $post->post_type || 'wpi_quote' == get_post_type($number)) {
+        if (isset($post) && 'wpi_quote' == $post->post_type || isset($number) && 'wpi_quote' == get_post_type($number)) {
             $padd = wpinv_get_option('quote_number_padd');
 
             // TODO maintain old invoice numbers if invoice number settings not saved. Should be removed before stable release.
@@ -1021,6 +1016,7 @@ class Wpinv_Quotes_Admin
 
         $accepted_action = wpinv_get_option('accepted_quote_action');
         $gateway = wpinv_get_default_gateway();
+        $new_invoice_id = 0;
 
         if ($accepted_action === 'convert' || $accepted_action === 'convert_send' || empty($accepted_action)) {
 

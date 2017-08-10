@@ -184,7 +184,7 @@ class Wpinv_Quotes_Public
      */
     public function wpinv_quote_display_right_actions($quote)
     {
-        if ($quote->post_type == 'wpi_quote') {
+        if ('wpi_quote' == $quote->post_type) {
             $user_id = (int)$quote->get_user_id();
             $current_user_id = (int)get_current_user_id();
 
