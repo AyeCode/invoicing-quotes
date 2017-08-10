@@ -806,7 +806,7 @@ class Wpinv_Quotes_Admin
     function wpinv_format_quote_number($formatted_number, $number)
     {
         global $post;
-        if (isset($post) && 'wpi_quote' == $post->post_type || isset($number) && 'wpi_quote' == get_post_type($number)) {
+        if (isset($number) && 'wpi_quote' == get_post_type($number)) {
             $padd = wpinv_get_option('quote_number_padd');
 
             // TODO maintain old invoice numbers if invoice number settings not saved. Should be removed before stable release.
