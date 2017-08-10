@@ -314,7 +314,13 @@ class Wpinv_Quotes_Shared
     public static function get_accept_quote_url($quote_id)
     {
         $nonce = wp_create_nonce('wpinv_client_accept_quote_nonce');
-        $url = get_permalink($quote_id) . '?wpi_action=quote_action&action=accept&qid=' . $quote_id . '&_wpnonce=' . $nonce;
+        $url = get_permalink($quote_id);
+        $url = add_query_arg( array(
+            'wpi_action' => 'quote_action',
+            'action' => 'accept',
+            'qid' => $quote_id,
+            '_wpnonce' => $nonce,
+        ), $url );
         return $url;
     }
 
@@ -328,7 +334,13 @@ class Wpinv_Quotes_Shared
     public static function get_decline_quote_url($quote_id)
     {
         $nonce = wp_create_nonce('wpinv_client_decline_quote_nonce');
-        $url = get_permalink($quote_id) . '?wpi_action=quote_action&action=decline&qid=' . $quote_id . '&_wpnonce=' . $nonce;
+        $url = get_permalink($quote_id);
+        $url = add_query_arg( array(
+            'wpi_action' => 'quote_action',
+            'action' => 'decline',
+            'qid' => $quote_id,
+            '_wpnonce' => $nonce,
+        ), $url );
         return $url;
     }
 

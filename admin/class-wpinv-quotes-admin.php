@@ -967,6 +967,12 @@ class Wpinv_Quotes_Admin
 
         if ($accepted_action === 'convert' || $accepted_action === 'convert_send' || empty($accepted_action)) {
 
+            // make the quote as accepted
+            wp_update_post(array(
+                'ID' => $quote_id,
+                'post_status' => 'wpi-quote-accepted',
+            ));
+
             $this->wpinv_user_quote_accepted_notification($quote_id);
 
             //convert quote to invoice
