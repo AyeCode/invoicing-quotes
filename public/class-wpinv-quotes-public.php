@@ -135,7 +135,7 @@ class Wpinv_Quotes_Public
         if ($user_id > 0 && $user_id != $current_user_id) {
             return;
         }
-        if ($quote->post_status == 'wpi-quote-sent') {
+        if ($quote->post_status == 'pending') {
             remove_query_arg('wpi_action');
             $quote_id = $quote->ID;
             ?>
@@ -150,7 +150,7 @@ class Wpinv_Quotes_Public
                    title="<?php esc_attr_e('Accept This Quotation', 'invoicing'); ?>"
                    href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
             </p>
-            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to reject this quote. ') ?> <a
+            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quote. ') ?> <a
                     class="btn btn-danger btn-xs decline-quote"
                     title="<?php esc_attr_e('Decline This Quotation', 'invoicing'); ?>"
                     href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
@@ -184,7 +184,7 @@ class Wpinv_Quotes_Public
      */
     public function wpinv_quote_display_right_actions($quote)
     {
-        if ($quote->post_type == 'wpi_quote') {
+        if ('wpi_quote' == $quote->post_type) {
             $user_id = (int)$quote->get_user_id();
             $current_user_id = (int)get_current_user_id();
 
@@ -193,7 +193,7 @@ class Wpinv_Quotes_Public
                 <a class="btn btn-primary btn-sm" onclick="window.print();"
                    href="javascript:void(0)"><?php _e('Print Quote', 'invoicing'); ?></a> &nbsp;
                 <a class="btn btn-warning btn-sm"
-                   href="<?php echo esc_url(wpinv_get_history_page_uri()); ?>"><?php _e('History', 'invoicing'); ?></a>
+                   href="<?php echo esc_url(wpinv_get_history_page_uri()); ?>"><?php _e('Quote History', 'invoicing'); ?></a>
             <?php }
         }
     }

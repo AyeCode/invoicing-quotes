@@ -186,7 +186,7 @@ class Wpinv_Quotes_Admin
         $opts['publicly_querable'] = TRUE;
         $opts['query_var'] = TRUE;
         $opts['register_meta_box_cb'] = '';
-        $opts['rewrite'] = FALSE;
+        $opts['rewrite'] = TRUE;
         $opts['show_in_admin_bar'] = TRUE;
         $opts['show_in_menu'] = "wpinv";
         $opts['show_in_nav_menu'] = TRUE;
@@ -222,11 +222,6 @@ class Wpinv_Quotes_Admin
         $opts['labels']['search_items'] = __("Search {$plural}", 'invoicing');
         $opts['labels']['singular_name'] = __($single, 'invoicing');
         $opts['labels']['view_item'] = __("View {$single}", 'invoicing');
-
-        $opts['rewrite']['slug'] = FALSE;
-        $opts['rewrite']['with_front'] = FALSE;
-        $opts['rewrite']['feeds'] = FALSE;
-        $opts['rewrite']['pages'] = FALSE;
 
         $opts = apply_filters('wpinv_quote_params', $opts);
 
@@ -353,7 +348,7 @@ class Wpinv_Quotes_Admin
                     $value .= '<a title="' . esc_attr__('Send quote to customer', 'invoicing') . '" href="' . esc_url(add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID))) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
                 }
 
-                if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('pending', 'wpi-quote-sent'))) {
+                if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('pending'))) {
                     $action_url = add_query_arg(array('wpi_action' => 'convert_quote_to_invoice', 'quote_id' => $post->ID));
                     $action_url = esc_url(wp_nonce_url($action_url, 'convert', 'wpinv_convert_quote'));
                     $value .= '<a title="' . esc_attr__('Convert quote to invoice', 'invoicing') . '" href="' . $action_url . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-controls-repeat"></span></a>';
@@ -404,10 +399,8 @@ class Wpinv_Quotes_Admin
             add_meta_box('wpinv-address', __('Billing Details', 'invoicing'), 'WPInv_Meta_Box_Billing_Details::output', 'wpi_quote', 'normal', 'high');
             add_meta_box('wpinv-items', __('Quote Items', 'invoicing'), 'WPInv_Meta_Box_Items::output', 'wpi_quote', 'normal', 'high');
             add_meta_box('wpinv-notes', __('Quote Notes', 'invoicing'), 'WPInv_Meta_Box_Notes::output', 'wpi_quote', 'normal', 'high');
-            if (!empty($wpi_mb_invoice) && $wpi_mb_invoice->has_status(array('wpi-quote-sent', 'wpi-quote-declined'))) {
+            if (!empty($wpi_mb_invoice) && $wpi_mb_invoice->has_status(array('pending'))) {
                 add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'invoicing'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
-            }
-            if (!empty($wpi_mb_invoice) && $wpi_mb_invoice->has_status(array('pending', 'wpi-quote-sent'))) {
                 add_meta_box('wpinv-mb-convert-quote', __('Convert Quote', 'invoicing'), 'WPInv_Quote_Meta_Box::quote_to_invoice_output', 'wpi_quote', 'side', 'high');
             }
         }
@@ -466,6 +459,22 @@ class Wpinv_Quotes_Admin
     }
 
     /**
+     * Change quote details metabox input labels
+     *
+     * @since    1.0.0
+     * @param array $title labels of form fields
+     * @param object $post current post object
+     * @return array $title new labels of form fields
+     */
+    function wpinv_quote_items_total_label($title, $quote)
+    {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
+            $title = __('Quote Total:', 'invoicing');
+        }
+        return $title;
+    }
+
+    /**
      * Change quote details metabox mail notice
      *
      * @since    1.0.0
@@ -496,22 +505,6 @@ class Wpinv_Quotes_Admin
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
             'label_count' => _n_noop('Accepted <span class="count">(%s)</span>', 'Accepted <span class="count">(%s)</span>', 'invoicing')
-        ));
-        register_post_status('wpi-quote-sent', array(
-            'label' => _x('Sent', 'Quote status', 'invoicing'),
-            'public' => true,
-            'exclude_from_search' => true,
-            'show_in_admin_all_list' => true,
-            'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Sent <span class="count">(%s)</span>', 'Sent <span class="count">(%s)</span>', 'invoicing')
-        ));
-        register_post_status('wpi-quote-cancelled', array(
-            'label' => _x('Cancelled', 'Quote status', 'invoicing'),
-            'public' => true,
-            'exclude_from_search' => true,
-            'show_in_admin_all_list' => true,
-            'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'invoicing')
         ));
         register_post_status('wpi-quote-declined', array(
             'label' => _x('Declined', 'Quote status', 'invoicing'),
@@ -762,37 +755,6 @@ class Wpinv_Quotes_Admin
                     'size' => 'large'
                 ),
             ),
-            'user_quote_cancelled' => array(
-                'email_user_quote_cancelled_header' => array(
-                    'id' => 'email_user_quote_cancelled_header',
-                    'name' => '<h3>' . __('Quote Cancelled', 'invoicing') . '</h3>',
-                    'desc' => __('This email will be sent to user if admin has cancelled quote.', 'invoicing'),
-                    'type' => 'header',
-                ),
-                'email_user_quote_cancelled_active' => array(
-                    'id' => 'email_user_quote_cancelled_active',
-                    'name' => __('Enable/Disable', 'invoicing'),
-                    'desc' => __('Enable this email notification', 'invoicing'),
-                    'type' => 'checkbox',
-                    'std' => 0
-                ),
-                'email_user_quote_cancelled_subject' => array(
-                    'id' => 'email_user_quote_cancelled_subject',
-                    'name' => __('Subject', 'invoicing'),
-                    'desc' => __('Enter the subject line for the quote cancelled email.', 'invoicing'),
-                    'type' => 'text',
-                    'std' => __('[{site_title}] Admin has cancelled the quote {quote_number}', 'invoicing'),
-                    'size' => 'large'
-                ),
-                'email_user_quote_cancelled_heading' => array(
-                    'id' => 'email_user_quote_cancelled_heading',
-                    'name' => __('Email Heading', 'invoicing'),
-                    'desc' => __('Enter the main heading contained within the email notification for the quote cancelled email.', 'invoicing'),
-                    'type' => 'text',
-                    'std' => __('Quote {quote_number} Cancelled by admin', 'invoicing'),
-                    'size' => 'large'
-                ),
-            ),
         );
 
         $emails = array_merge($emails, $user_quote);
@@ -811,7 +773,7 @@ class Wpinv_Quotes_Admin
     function wpinv_format_quote_number($formatted_number, $number)
     {
         global $post;
-        if ('wpi_quote' == $post->post_type || 'wpi_quote' == get_post_type($number)) {
+        if (isset($number) && 'wpi_quote' == get_post_type($number)) {
             $padd = wpinv_get_option('quote_number_padd');
 
             // TODO maintain old invoice numbers if invoice number settings not saved. Should be removed before stable release.
@@ -954,7 +916,6 @@ class Wpinv_Quotes_Admin
                     $recipient = wpinv_get_admin_email();
                     break;
                 case 'user_quote':
-                case 'user_quote_cancelled':
                 default:
                     $quote = !empty($quote) && is_object($quote) ? $quote : ($quote_id > 0 ? wpinv_get_invoice($quote_id) : NULL);
                     $recipient = !empty($quote) ? $quote->get_email() : '';
@@ -998,9 +959,6 @@ class Wpinv_Quotes_Admin
                 case 'wpi-quote-declined':
                     $this->process_quote_declined($quote_id);
                     break;
-                case 'wpi-quote-cancelled':
-                    $this->process_quote_cancelled($quote_id);
-                    break;
             }
         }
 
@@ -1021,20 +979,30 @@ class Wpinv_Quotes_Admin
 
         $accepted_action = wpinv_get_option('accepted_quote_action');
         $gateway = wpinv_get_default_gateway();
+        $new_invoice_id = 0;
 
         if ($accepted_action === 'convert' || $accepted_action === 'convert_send' || empty($accepted_action)) {
+
+            // make the quote as accepted
+            wp_update_post(array(
+                'ID' => $quote_id,
+                'post_status' => 'wpi-quote-accepted',
+            ));
 
             $this->wpinv_user_quote_accepted_notification($quote_id);
 
             //convert quote to invoice
             set_post_type($quote_id, 'wpi_invoice');
 
+            $number = wpinv_format_invoice_number($quote_id);
+
             wp_update_post(array(
                 'ID' => $quote_id,
                 'post_status' => 'pending',
+                'post_title' => $number,
             ));
+
             //update meta data
-            $number = wpinv_format_invoice_number($quote_id);
             update_post_meta($quote_id, '_wpinv_number', $number);
             update_post_meta($quote_id, '_wpinv_gateway', $gateway);
 
@@ -1220,7 +1188,7 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Function to decrease the discount if quote cancelled or declined
+     * Function to decrease the discount if quote declined
      *
      * @since    1.0.0
      * @param int $quote_id ID of post/quote
@@ -1306,92 +1274,6 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * process when quote cancelled
-     *
-     * @since    1.0.0
-     * @param int $quote_id ID of post/quote
-     */
-    function process_quote_cancelled($quote_id = 0)
-    {
-        if (empty($quote_id)) return;
-        do_action('wpinv_quote_before_process_cancelled', $quote_id);
-        wp_update_post(array(
-            'ID' => $quote_id,
-            'post_status' => 'wpi-quote-cancelled',
-        ));
-        $this->wpinv_quote_decrease_the_discounts($quote_id);
-        $this->wpinv_user_quote_cancelled_notification($quote_id);
-        do_action('wpinv_quote_after_process_cancelled', $quote_id);
-    }
-
-    /**
-     * Notify when quote cancelled
-     *
-     * @since    1.0.0
-     * @param int $quote_id ID of post/quote
-     * @return bool $sent is mail sent or not
-     */
-    function wpinv_user_quote_cancelled_notification($quote_id)
-    {
-        global $wpinv_email_search, $wpinv_email_replace;
-
-        $email_type = 'user_quote_cancelled';
-
-        if (!wpinv_email_is_enabled($email_type)) {
-            return false;
-        }
-
-        $quote = new WPInv_Invoice($quote_id);
-
-        if (empty($quote)) {
-            return false;
-        }
-
-        if (!("wpi_quote" === $quote->post_type)) {
-            return false;
-        }
-
-        $recipient = wpinv_email_get_recipient($email_type, $quote_id, $quote);
-
-        if (!is_email($recipient)) {
-            return false;
-        }
-
-        $search = array();
-        $search['invoice_number'] = '{quote_number}';
-        $search['invoice_date'] = '{quote_date}';
-        $search['name'] = '{name}';
-
-        $replace = array();
-        $replace['invoice_number'] = $quote->get_number();
-        $replace['invoice_date'] = $quote->get_invoice_date();
-        $replace['name'] = $quote->get_user_full_name();
-
-        $wpinv_email_search = $search;
-        $wpinv_email_replace = $replace;
-
-        $subject = wpinv_email_get_subject($email_type, $quote_id, $quote);
-        $email_heading = wpinv_email_get_heading($email_type, $quote_id, $quote);
-        $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
-        $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
-
-        $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
-            'quote' => $quote,
-            'email_type' => $email_type,
-            'email_heading' => $email_heading,
-            'sent_to_admin' => false,
-            'plain_text' => false,
-        ), 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
-
-        $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
-
-        $note = sprintf(__('Quote has been cancelled!', 'invoicing'));
-        $quote->add_note($note, '', '', true); // Add system note.
-
-        return $sent;
-    }
-
-    /**
      * Add quote status change note
      *
      * @since    1.0.0
@@ -1409,7 +1291,7 @@ class Wpinv_Quotes_Admin
             return;
         }
 
-        $old_status = 'wpi-quote-sent';
+        $old_status = 'pending';
 
         if ($data['action'] == 'accept') {
             $new_status = 'wpi-quote-accepted';
@@ -1512,9 +1394,6 @@ class Wpinv_Quotes_Admin
                     break;
                 case 'user_quote_declined':
                     $email_output = sprintf(__("<p>Hi there. Quote on %s has been declined. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
-                    break;
-                case 'user_quote_cancelled':
-                    $email_output = sprintf(__("<p>Hi there. Quote on %s has been cancelled. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
                     break;
                 default:
                     $email_output = '';

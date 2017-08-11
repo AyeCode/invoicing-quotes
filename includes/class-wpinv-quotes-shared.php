@@ -47,12 +47,11 @@ class Wpinv_Quotes_Shared
 
         add_action('wpinv_statuses', array($this, 'wpinv_quote_statuses'), 99);
         add_action('wpinv_get_status', array($this, 'wpinv_quote_get_status'), 99, 4);
+        add_action('wpinv_setup_invoice', array($this, 'wpinv_quote_setup_quote'), 10, 1);
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'pending' => __('Pending', 'invoicing'),
-            'wpi-quote-sent' => __('Sent', 'invoicing'),
             'wpi-quote-accepted' => __('Accepted', 'invoicing'),
-            'wpi-quote-cancelled' => __('Cancelled', 'invoicing'),
             'wpi-quote-declined' => __('Declined', 'invoicing'),
         ));
 
@@ -85,8 +84,8 @@ class Wpinv_Quotes_Shared
      */
     public static function wpinv_quote_statuses($quote_statuses)
     {
-        global $post;
-        if (!empty($post->ID) && $post->post_type == 'wpi_quote') {
+        global $wpinv_quote, $post;
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type || !empty($wpinv_quote->ID) && 'wpi_quote' == $wpinv_quote->post_type) {
             return self::$quote_statuses;
         }
         return $quote_statuses;
@@ -126,6 +125,21 @@ class Wpinv_Quotes_Shared
     }
 
     /**
+     * set global variable to use in add-on
+     *
+     * @since    1.0.0
+     * @param object $quote quote object
+     */
+    public static function wpinv_quote_setup_quote($quote)
+    {
+        global $wpinv_quote;
+        $wpinv_quote = $quote;
+        if('wpi_quote' == $wpinv_quote->post_type){
+            $wpinv_quote->status_nicename = self::wpinv_quote_status_nicename( $wpinv_quote->post_status );
+        }
+    }
+
+    /**
      * Get quote status label for history page
      *
      * @since    1.0.0
@@ -146,14 +160,8 @@ class Wpinv_Quotes_Shared
             case 'pending' :
                 $class = 'label-primary';
                 break;
-            case 'wpi-quote-sent' :
-                $class = 'label-info';
-                break;
             case 'wpi-quote-declined' :
                 $class = 'label-danger';
-                break;
-            case 'wpi-quote-cancelled' :
-                $class = 'label-warning';
                 break;
             default:
                 $class = 'label-default';
@@ -226,7 +234,7 @@ class Wpinv_Quotes_Shared
             }
         }
 
-        $wpinv_cpt = $_REQUEST['wpinv-cpt'];
+        $wpinv_cpt = isset( $_REQUEST[ 'wpinv-cpt' ] ) ? $_REQUEST[ 'wpinv-cpt' ] : '';
 
         if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
             $args['page'] = get_query_var('paged');
@@ -306,7 +314,13 @@ class Wpinv_Quotes_Shared
     public static function get_accept_quote_url($quote_id)
     {
         $nonce = wp_create_nonce('wpinv_client_accept_quote_nonce');
-        $url = get_permalink($quote_id) . '?wpi_action=quote_action&action=accept&qid=' . $quote_id . '&_wpnonce=' . $nonce;
+        $url = get_permalink($quote_id);
+        $url = add_query_arg( array(
+            'wpi_action' => 'quote_action',
+            'action' => 'accept',
+            'qid' => $quote_id,
+            '_wpnonce' => $nonce,
+        ), $url );
         return $url;
     }
 
@@ -320,7 +334,13 @@ class Wpinv_Quotes_Shared
     public static function get_decline_quote_url($quote_id)
     {
         $nonce = wp_create_nonce('wpinv_client_decline_quote_nonce');
-        $url = get_permalink($quote_id) . '?wpi_action=quote_action&action=decline&qid=' . $quote_id . '&_wpnonce=' . $nonce;
+        $url = get_permalink($quote_id);
+        $url = add_query_arg( array(
+            'wpi_action' => 'quote_action',
+            'action' => 'decline',
+            'qid' => $quote_id,
+            '_wpnonce' => $nonce,
+        ), $url );
         return $url;
     }
 

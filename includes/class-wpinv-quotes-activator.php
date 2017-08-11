@@ -28,8 +28,10 @@ class Wpinv_Quotes_Activator
      *
      * @since    1.0.0
      */
-    public static function activate()
+    public static function activate($network_wide = false)
     {
+        global $wpdb;
+
         $cap_type = 'post';
         $plural = __('Quotes', 'invoicing');
         $single = __('Quote', 'invoicing');
@@ -96,7 +98,15 @@ class Wpinv_Quotes_Activator
 
         flush_rewrite_rules();
 
-        add_option( 'activated_quotes', 'wpinv-quotes' );
+        if ( is_multisite() && $network_wide ) {
+            foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs LIMIT 100" ) as $blog_id ) {
+                switch_to_blog( $blog_id );
+                update_option( 'activated_quotes', 'wpinv-quotes' );
+                restore_current_blog();
+            }
+        } else {
+            update_option( 'activated_quotes', 'wpinv-quotes' );
+        }
 
         do_action( 'wpinv_quote_activated' );
     }
