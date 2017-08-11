@@ -459,6 +459,22 @@ class Wpinv_Quotes_Admin
     }
 
     /**
+     * Change quote details metabox input labels
+     *
+     * @since    1.0.0
+     * @param array $title labels of form fields
+     * @param object $post current post object
+     * @return array $title new labels of form fields
+     */
+    function wpinv_quote_items_total_label($title, $quote)
+    {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
+            $title = __('Quote Total:', 'invoicing');
+        }
+        return $title;
+    }
+
+    /**
      * Change quote details metabox mail notice
      *
      * @since    1.0.0
