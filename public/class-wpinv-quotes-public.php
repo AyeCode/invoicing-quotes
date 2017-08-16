@@ -193,19 +193,9 @@ class Wpinv_Quotes_Public
                 <a class="btn btn-primary btn-sm" onclick="window.print();"
                    href="javascript:void(0)"><?php _e('Print Quote', 'invoicing'); ?></a> &nbsp;
                 <a class="btn btn-warning btn-sm"
-                   href="<?php echo esc_url(wpinv_get_history_page_uri()); ?>"><?php _e('Quote History', 'invoicing'); ?></a>
+                   href="<?php echo esc_url(Wpinv_Quotes_Shared::wpinv_get_quote_history_page_uri()); ?>"><?php _e('Quote History', 'invoicing'); ?></a>
             <?php }
         }
-    }
-
-    /**
-     * Template to display quotes in history
-     *
-     * @since    1.0.0
-     */
-    public function wpinv_quote_before_user_invoices_template()
-    {
-        wpinv_get_template('wpinv-quote-history.php', '', 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
     }
 
 }

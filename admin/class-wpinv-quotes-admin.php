@@ -101,6 +101,19 @@ class Wpinv_Quotes_Admin
 
             global $wpinv_options;
 
+            $pages = apply_filters( 'wpinv_create_pages', array(
+                'quote_history_page' => array(
+                    'name'    => _x( 'wpi-quotes-history', 'Page slug', 'invoicing' ),
+                    'title'   => _x( 'Quote History', 'Page title', 'invoicing' ),
+                    'content' => '[' . apply_filters( 'wpinv_quote_history_shortcode_tag', 'wpinv_quote_history' ) . ']',
+                    'parent' => 'wpi-checkout',
+                ),
+            ) );
+
+            foreach ( $pages as $key => $page ) {
+                wpinv_create_page( esc_sql( $page['name'] ), $key, $page['title'], $page['content'], $page['parent'] );
+            }
+
             // Pull options from WP, not GD Invoice's global
             $current_options = get_option( 'wpinv_settings', array() );
             $options = array();
@@ -171,7 +184,7 @@ class Wpinv_Quotes_Admin
         $cap_type = 'post';
         $plural = __('Quotes', 'invoicing');
         $single = __('Quote', 'invoicing');
-        $menu_icon = WPINV_PLUGIN_URL . '/assets/images/favicon.ico';
+        $menu_icon = WPINV_QUOTES_URL . '/images/favicon.ico';
         $menu_icon = apply_filters('wpinv_menu_icon_quotes', $menu_icon);
 
         $opts['can_export'] = TRUE;
@@ -560,6 +573,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_registered_settings($wpinv_settings)
     {
+        $pages = wpinv_get_pages( true );
         $quote_number_padd_options = array();
         for ($i = 0; $i <= 20; $i++) {
             $quote_number_padd_options[$i] = $i;
@@ -598,6 +612,20 @@ class Wpinv_Quotes_Admin
                             'type' => 'text',
                             'size' => 'regular',
                             'std' => ''
+                        ),
+                        'quote_page_settings' => array(
+                            'id' => 'quote_page_settings',
+                            'name' => '<h3>' . __('Quote Page Settings', 'invoicing') . '</h3>',
+                            'type' => 'header',
+                        ),
+                        'quote_history_page' => array(
+                            'id'          => 'quote_history_page',
+                            'name'        => __( 'Quote History Page', 'invoicing' ),
+                            'desc'        => __( 'This page displays history of quotes. The <b>[wpinv_quotes]</b> short code should be on this page.', 'invoicing' ),
+                            'type'        => 'select',
+                            'options'     => $pages,
+                            'chosen'      => true,
+                            'placeholder' => __( 'Select a page', 'invoicing' ),
                         ),
                         'accept_quote_settings' => array(
                             'id' => 'accept_quote_settings',
