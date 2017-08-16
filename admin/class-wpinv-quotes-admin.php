@@ -181,7 +181,7 @@ class Wpinv_Quotes_Admin
     public function wpinv_quote_new_cpt()
     {
 
-        $cap_type = 'post';
+        $cap_type = 'wpi_quote';
         $plural = __('Quotes', 'invoicing');
         $single = __('Quote', 'invoicing');
         $menu_icon = WPINV_QUOTES_URL . '/images/favicon.ico';
@@ -201,11 +201,12 @@ class Wpinv_Quotes_Admin
         $opts['register_meta_box_cb'] = '';
         $opts['rewrite'] = TRUE;
         $opts['show_in_admin_bar'] = TRUE;
-        $opts['show_in_menu'] = "wpinv";
+        $opts['show_in_menu'] = current_user_can( 'manage_invoicing' ) ? 'wpinv' : true;
         $opts['show_in_nav_menu'] = TRUE;
         $opts['show_ui'] = TRUE;
         $opts['supports'] = array('title');
         $opts['taxonomies'] = array('');
+
 
         $opts['capabilities']['delete_others_posts'] = "delete_others_{$cap_type}s";
         $opts['capabilities']['delete_post'] = "delete_{$cap_type}";
