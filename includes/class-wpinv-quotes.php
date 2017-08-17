@@ -113,8 +113,9 @@ class Wpinv_Quotes
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wpinv-quotes-admin.php';
         require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-meta-boxes.php');
-        require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-shared.php');
         require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-reports.php');
+        require_once(WPINV_QUOTES_PATH . 'includes/shortcodes/class-wpinv-quote-shortcodes.php');
+        require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-shared.php');
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
@@ -240,7 +241,7 @@ class Wpinv_Quotes
         $this->loader->add_action('wpinv_invoice_display_left_actions', $plugin_public, 'wpinv_quote_display_left_actions');
         $this->loader->add_action('wpinv_invoice_display_right_actions', $plugin_public, 'wpinv_quote_display_right_actions', 10, 1);
         $this->loader->add_action('wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles');
-        $this->loader->add_action('wpinv_before_user_invoices_template', $plugin_public, 'wpinv_quote_before_user_invoices_template', 10, 1);
+        $this->loader->add_filter('pre_get_posts', $plugin_public, 'wpinv_quote_pre_get_posts');
     }
 
     /**

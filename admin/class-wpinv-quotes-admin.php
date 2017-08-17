@@ -101,6 +101,19 @@ class Wpinv_Quotes_Admin
 
             global $wpinv_options;
 
+            $pages = apply_filters( 'wpinv_create_pages', array(
+                'quote_history_page' => array(
+                    'name'    => _x( 'wpi-quotes-history', 'Page slug', 'invoicing' ),
+                    'title'   => _x( 'Quote History', 'Page title', 'invoicing' ),
+                    'content' => '[' . apply_filters( 'wpinv_quote_history_shortcode_tag', 'wpinv_quote_history' ) . ']',
+                    'parent' => 'wpi-checkout',
+                ),
+            ) );
+
+            foreach ( $pages as $key => $page ) {
+                wpinv_create_page( esc_sql( $page['name'] ), $key, $page['title'], $page['content'], $page['parent'] );
+            }
+
             // Pull options from WP, not GD Invoice's global
             $current_options = get_option( 'wpinv_settings', array() );
             $options = array();
@@ -168,10 +181,10 @@ class Wpinv_Quotes_Admin
     public function wpinv_quote_new_cpt()
     {
 
-        $cap_type = 'post';
+        $cap_type = 'wpi_quote';
         $plural = __('Quotes', 'invoicing');
         $single = __('Quote', 'invoicing');
-        $menu_icon = WPINV_PLUGIN_URL . '/assets/images/favicon.ico';
+        $menu_icon = WPINV_QUOTES_URL . '/images/favicon.ico';
         $menu_icon = apply_filters('wpinv_menu_icon_quotes', $menu_icon);
 
         $opts['can_export'] = TRUE;
@@ -188,11 +201,12 @@ class Wpinv_Quotes_Admin
         $opts['register_meta_box_cb'] = '';
         $opts['rewrite'] = TRUE;
         $opts['show_in_admin_bar'] = TRUE;
-        $opts['show_in_menu'] = "wpinv";
+        $opts['show_in_menu'] = current_user_can( 'manage_invoicing' ) ? 'wpinv' : true;
         $opts['show_in_nav_menu'] = TRUE;
         $opts['show_ui'] = TRUE;
         $opts['supports'] = array('title');
         $opts['taxonomies'] = array('');
+
 
         $opts['capabilities']['delete_others_posts'] = "delete_others_{$cap_type}s";
         $opts['capabilities']['delete_post'] = "delete_{$cap_type}";
@@ -240,12 +254,12 @@ class Wpinv_Quotes_Admin
     {
         $columns = array(
             'cb' => $columns['cb'],
-            'ID' => __('ID', 'invoicing'),
-            'details' => __('Details', 'invoicing'),
+            'number' => __( 'Number', 'invoicing' ),
             'customer' => __('Customer', 'invoicing'),
             'amount' => __('Amount', 'invoicing'),
             'quote_date' => __('Date', 'invoicing'),
             'status' => __('Status', 'invoicing'),
+            'ID' => __('ID', 'invoicing'),
             'wpi_actions' => __('Actions', 'invoicing'),
         );
 
@@ -279,6 +293,7 @@ class Wpinv_Quotes_Admin
     {
         $columns = array(
             'ID' => array('ID', true),
+            'number' => array('number', false),
             'amount' => array('amount', false),
             'quote_date' => array('date', false),
             'customer' => array('customer', false),
@@ -334,9 +349,9 @@ class Wpinv_Quotes_Admin
             case 'status' :
                 $value = $wpi_invoice->get_status(true);
                 break;
-            case 'details' :
-                $edit_link = get_edit_post_link($post->ID);
-                $value = '<a href="' . esc_url($edit_link) . '">' . __('View Quote Details', 'invoicing') . '</a>';
+            case 'number' :
+                $edit_link = get_edit_post_link( $post->ID );
+                $value = '<a title="' . esc_attr__( 'View Quote Details', 'invoicing' ) . '" href="' . esc_url( $edit_link ) . '">' . $wpi_invoice->get_number() . '</a>';
                 break;
             case 'wpi_actions' :
                 $value = '';
@@ -560,6 +575,7 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_registered_settings($wpinv_settings)
     {
+        $pages = wpinv_get_pages( true );
         $quote_number_padd_options = array();
         for ($i = 0; $i <= 20; $i++) {
             $quote_number_padd_options[$i] = $i;
@@ -598,6 +614,20 @@ class Wpinv_Quotes_Admin
                             'type' => 'text',
                             'size' => 'regular',
                             'std' => ''
+                        ),
+                        'quote_page_settings' => array(
+                            'id' => 'quote_page_settings',
+                            'name' => '<h3>' . __('Quote Page Settings', 'invoicing') . '</h3>',
+                            'type' => 'header',
+                        ),
+                        'quote_history_page' => array(
+                            'id'          => 'quote_history_page',
+                            'name'        => __( 'Quote History Page', 'invoicing' ),
+                            'desc'        => __( 'This page displays history of quotes. The <b>[wpinv_quotes]</b> short code should be on this page.', 'invoicing' ),
+                            'type'        => 'select',
+                            'options'     => $pages,
+                            'chosen'      => true,
+                            'placeholder' => __( 'Select a page', 'invoicing' ),
                         ),
                         'accept_quote_settings' => array(
                             'id' => 'accept_quote_settings',
@@ -1540,15 +1570,17 @@ class Wpinv_Quotes_Admin
         global $typenow, $wp_post_statuses;
 
         if ( 'wpi_quote' === $typenow ) {
-            $post_statuses = Wpinv_Quotes_Shared::wpinv_get_quote_statuses();
+            if ( !isset( $vars['post_status'] ) ) {
+                $post_statuses = Wpinv_Quotes_Shared::wpinv_get_quote_statuses();
 
-            foreach ( $post_statuses as $status => $value ) {
-                if ( isset( $wp_post_statuses[ $status ] ) && false === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
-                    unset( $post_statuses[ $status ] );
+                foreach ( $post_statuses as $status => $value ) {
+                    if ( isset( $wp_post_statuses[ $status ] ) && false === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
+                        unset( $post_statuses[ $status ] );
+                    }
                 }
-            }
 
-            $vars['post_status'] = array_keys( $post_statuses );
+                $vars['post_status'] = array_keys( $post_statuses );
+            }
         }
 
         return $vars;

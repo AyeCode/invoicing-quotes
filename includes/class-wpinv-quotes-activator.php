@@ -32,10 +32,10 @@ class Wpinv_Quotes_Activator
     {
         global $wpdb;
 
-        $cap_type = 'post';
+        $cap_type = 'wpi_quote';
         $plural = __('Quotes', 'invoicing');
         $single = __('Quote', 'invoicing');
-        $menu_icon = WPINV_PLUGIN_URL . '/assets/images/favicon.ico';
+        $menu_icon = WPINV_QUOTES_URL . '/assets/images/favicon.ico';
         $menu_icon = apply_filters('wpinv_menu_icon_quotes', $menu_icon);
 
         $opts['can_export'] = TRUE;
@@ -52,7 +52,7 @@ class Wpinv_Quotes_Activator
         $opts['register_meta_box_cb'] = '';
         $opts['rewrite'] = FALSE;
         $opts['show_in_admin_bar'] = TRUE;
-        $opts['show_in_menu'] = "wpinv";
+        $opts['show_in_menu'] = current_user_can( 'manage_invoicing' ) ? 'wpinv' : true;
         $opts['show_in_nav_menu'] = TRUE;
         $opts['show_ui'] = TRUE;
         $opts['supports'] = array('title');

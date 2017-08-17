@@ -28,7 +28,6 @@
 function wpinv_quote_call_shared_class()
 {
     new Wpinv_Quotes_Shared();
-
 }
 
 add_action('wpinv_quotes_loaded', 'wpinv_quote_call_shared_class', 2);
@@ -48,6 +47,7 @@ class Wpinv_Quotes_Shared
         add_action('wpinv_statuses', array($this, 'wpinv_quote_statuses'), 99);
         add_action('wpinv_get_status', array($this, 'wpinv_quote_get_status'), 99, 4);
         add_action('wpinv_setup_invoice', array($this, 'wpinv_quote_setup_quote'), 10, 1);
+        add_action( 'init', array( 'Wpinv_Quote_Shortcodes', 'init' ) );
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'pending' => __('Pending', 'invoicing'),
@@ -342,6 +342,19 @@ class Wpinv_Quotes_Shared
             '_wpnonce' => $nonce,
         ), $url );
         return $url;
+    }
+
+    /**
+     * Get url of quote history page
+     *
+     * @since    1.0.0
+     * @return string $url url of quote history page
+     */
+    public static function wpinv_get_quote_history_page_uri() {
+        $page_id = wpinv_get_option( 'quote_history_page', 0 );
+        $page_id = absint( $page_id );
+
+        return apply_filters( 'wpinv_get_quote_page_uri', get_permalink( $page_id ) );
     }
 
 }

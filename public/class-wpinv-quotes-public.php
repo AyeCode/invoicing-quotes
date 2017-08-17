@@ -193,19 +193,22 @@ class Wpinv_Quotes_Public
                 <a class="btn btn-primary btn-sm" onclick="window.print();"
                    href="javascript:void(0)"><?php _e('Print Quote', 'invoicing'); ?></a> &nbsp;
                 <a class="btn btn-warning btn-sm"
-                   href="<?php echo esc_url(wpinv_get_history_page_uri()); ?>"><?php _e('Quote History', 'invoicing'); ?></a>
+                   href="<?php echo esc_url(Wpinv_Quotes_Shared::wpinv_get_quote_history_page_uri()); ?>"><?php _e('Quote History', 'invoicing'); ?></a>
             <?php }
         }
     }
 
     /**
-     * Template to display quotes in history
+     * Add custom quote status in queries
      *
      * @since    1.0.0
      */
-    public function wpinv_quote_before_user_invoices_template()
-    {
-        wpinv_get_template('wpinv-quote-history.php', '', 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
+    public function wpinv_quote_pre_get_posts( $wp_query ) {
+        if ( !empty( $wp_query->query_vars['post_type'] ) && $wp_query->query_vars['post_type'] == 'wpi_quote' && is_user_logged_in() && is_single() && $wp_query->is_main_query() ) {
+            $wp_query->query_vars['post_status'] = array_keys( Wpinv_Quotes_Shared::wpinv_get_quote_statuses() );
+        }
+
+        return $wp_query;
     }
 
 }
