@@ -254,12 +254,12 @@ class Wpinv_Quotes_Admin
     {
         $columns = array(
             'cb' => $columns['cb'],
-            'ID' => __('ID', 'invoicing'),
-            'details' => __('Details', 'invoicing'),
+            'number' => __( 'Number', 'invoicing' ),
             'customer' => __('Customer', 'invoicing'),
             'amount' => __('Amount', 'invoicing'),
             'quote_date' => __('Date', 'invoicing'),
             'status' => __('Status', 'invoicing'),
+            'ID' => __('ID', 'invoicing'),
             'wpi_actions' => __('Actions', 'invoicing'),
         );
 
@@ -293,6 +293,7 @@ class Wpinv_Quotes_Admin
     {
         $columns = array(
             'ID' => array('ID', true),
+            'number' => array('number', false),
             'amount' => array('amount', false),
             'quote_date' => array('date', false),
             'customer' => array('customer', false),
@@ -348,9 +349,9 @@ class Wpinv_Quotes_Admin
             case 'status' :
                 $value = $wpi_invoice->get_status(true);
                 break;
-            case 'details' :
-                $edit_link = get_edit_post_link($post->ID);
-                $value = '<a href="' . esc_url($edit_link) . '">' . __('View Quote Details', 'invoicing') . '</a>';
+            case 'number' :
+                $edit_link = get_edit_post_link( $post->ID );
+                $value = '<a title="' . esc_attr__( 'View Quote Details', 'invoicing' ) . '" href="' . esc_url( $edit_link ) . '">' . $wpi_invoice->get_number() . '</a>';
                 break;
             case 'wpi_actions' :
                 $value = '';
