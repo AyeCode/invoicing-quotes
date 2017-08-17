@@ -1570,15 +1570,17 @@ class Wpinv_Quotes_Admin
         global $typenow, $wp_post_statuses;
 
         if ( 'wpi_quote' === $typenow ) {
-            $post_statuses = Wpinv_Quotes_Shared::wpinv_get_quote_statuses();
+            if ( !isset( $vars['post_status'] ) ) {
+                $post_statuses = Wpinv_Quotes_Shared::wpinv_get_quote_statuses();
 
-            foreach ( $post_statuses as $status => $value ) {
-                if ( isset( $wp_post_statuses[ $status ] ) && false === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
-                    unset( $post_statuses[ $status ] );
+                foreach ( $post_statuses as $status => $value ) {
+                    if ( isset( $wp_post_statuses[ $status ] ) && false === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
+                        unset( $post_statuses[ $status ] );
+                    }
                 }
-            }
 
-            $vars['post_status'] = array_keys( $post_statuses );
+                $vars['post_status'] = array_keys( $post_statuses );
+            }
         }
 
         return $vars;
