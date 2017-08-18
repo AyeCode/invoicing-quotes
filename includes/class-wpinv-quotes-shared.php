@@ -234,11 +234,9 @@ class Wpinv_Quotes_Shared
             }
         }
 
-        $wpinv_cpt = isset( $_REQUEST[ 'wpinv-cpt' ] ) ? $_REQUEST[ 'wpinv-cpt' ] : '';
-
-        if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
+        if (get_query_var('paged'))
             $args['page'] = get_query_var('paged');
-        else if (get_query_var('page') && 'wpi_quote' == $wpinv_cpt)
+        else if (get_query_var('page'))
             $args['page'] = get_query_var('page');
         else if (!empty($args['page']))
             $args['page'] = $args['page'];

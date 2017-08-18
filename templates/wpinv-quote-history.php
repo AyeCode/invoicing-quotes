@@ -104,11 +104,10 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
         <div class="invoicing-Pagination">
             <?php
             $big = 999999;
-            $wpinv_cpt = isset( $_REQUEST[ 'wpinv-cpt' ] ) ? $_REQUEST[ 'wpinv-cpt' ] : '';
 
-            if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
+            if (get_query_var('paged'))
                 $current_page = get_query_var('paged');
-            elseif (get_query_var('page') && 'wpi_quote' == $wpinv_cpt)
+            elseif (get_query_var('page'))
                 $current_page = get_query_var('page');
             else
                 $current_page = 1;
@@ -118,9 +117,6 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                 'format' => '?paged=%#%',
                 'current' => max(1, $current_page),
                 'total' => $user_quotes->max_num_pages,
-                'add_args' => array(
-                    'wpinv-cpt' => 'wpi_quote',
-                )
             ));
             ?>
         </div>
