@@ -67,7 +67,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                                 )
                             );
 
-                            if ($quote->post_status == 'pending') {
+                            if ($quote->post_status == 'wpi-quote-pending') {
                                 $quote_actions = array(
                                     'accept' => array(
                                         'url' => Wpinv_Quotes_Shared::get_accept_quote_url($quote_id),
