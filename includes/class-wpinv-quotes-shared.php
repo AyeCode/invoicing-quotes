@@ -50,7 +50,7 @@ class Wpinv_Quotes_Shared
         add_action( 'init', array( 'Wpinv_Quote_Shortcodes', 'init' ) );
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
-            'pending' => __('Pending', 'invoicing'),
+            'wpi-quote-pending' => __('Pending', 'invoicing'),
             'wpi-quote-accepted' => __('Accepted', 'invoicing'),
             'wpi-quote-declined' => __('Declined', 'invoicing'),
         ));
@@ -157,7 +157,7 @@ class Wpinv_Quotes_Shared
             case 'wpi-quote-accepted' :
                 $class = 'label-success';
                 break;
-            case 'pending' :
+            case 'wpi-quote-pending' :
                 $class = 'label-primary';
                 break;
             case 'wpi-quote-declined' :
@@ -234,11 +234,9 @@ class Wpinv_Quotes_Shared
             }
         }
 
-        $wpinv_cpt = isset( $_REQUEST[ 'wpinv-cpt' ] ) ? $_REQUEST[ 'wpinv-cpt' ] : '';
-
-        if (get_query_var('paged') && 'wpi_quote' == $wpinv_cpt)
+        if (get_query_var('paged'))
             $args['page'] = get_query_var('paged');
-        else if (get_query_var('page') && 'wpi_quote' == $wpinv_cpt)
+        else if (get_query_var('page'))
             $args['page'] = get_query_var('page');
         else if (!empty($args['page']))
             $args['page'] = $args['page'];

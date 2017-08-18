@@ -2,6 +2,8 @@
     'use strict';
 
     $(document).ready(function () {
+        $('.post-type-wpi_quote form#post #titlediv [name="post_title"]').attr('readonly', true);
+
         var $postForm = $('.post-type-wpi_quote form#post');
         if ($('[name="wpinv_status"]', $postForm).length) {
             var origStatus = $('[name="wpinv_status"]', $postForm).val();

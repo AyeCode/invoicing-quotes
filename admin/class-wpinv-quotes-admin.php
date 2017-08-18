@@ -363,7 +363,7 @@ class Wpinv_Quotes_Admin
                     $value .= '<a title="' . esc_attr__('Send quote to customer', 'invoicing') . '" href="' . esc_url(add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID))) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
                 }
 
-                if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('pending'))) {
+                if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('wpi-quote-pending'))) {
                     $action_url = add_query_arg(array('wpi_action' => 'convert_quote_to_invoice', 'quote_id' => $post->ID));
                     $action_url = esc_url(wp_nonce_url($action_url, 'convert', 'wpinv_convert_quote'));
                     $value .= '<a title="' . esc_attr__('Convert quote to invoice', 'invoicing') . '" href="' . $action_url . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-controls-repeat"></span></a>';
@@ -414,7 +414,7 @@ class Wpinv_Quotes_Admin
             add_meta_box('wpinv-address', __('Billing Details', 'invoicing'), 'WPInv_Meta_Box_Billing_Details::output', 'wpi_quote', 'normal', 'high');
             add_meta_box('wpinv-items', __('Quote Items', 'invoicing'), 'WPInv_Meta_Box_Items::output', 'wpi_quote', 'normal', 'high');
             add_meta_box('wpinv-notes', __('Quote Notes', 'invoicing'), 'WPInv_Meta_Box_Notes::output', 'wpi_quote', 'normal', 'high');
-            if (!empty($wpi_mb_invoice) && $wpi_mb_invoice->has_status(array('pending'))) {
+            if (!empty($wpi_mb_invoice) && $wpi_mb_invoice->has_status(array('wpi-quote-pending'))) {
                 add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'invoicing'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
                 add_meta_box('wpinv-mb-convert-quote', __('Convert Quote', 'invoicing'), 'WPInv_Quote_Meta_Box::quote_to_invoice_output', 'wpi_quote', 'side', 'high');
             }
@@ -513,6 +513,14 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_quote_register_post_status()
     {
+        register_post_status('wpi-quote-pending', array(
+            'label' => _x('Pending', 'Quote status', 'invoicing'),
+            'public' => true,
+            'exclude_from_search' => true,
+            'show_in_admin_all_list' => true,
+            'show_in_admin_status_list' => true,
+            'label_count' => _n_noop('Pending <span class="count">(%s)</span>', 'Pending <span class="count">(%s)</span>', 'invoicing')
+        ));
         register_post_status('wpi-quote-accepted', array(
             'label' => _x('Accepted', 'Quote status', 'invoicing'),
             'public' => true,
@@ -1028,7 +1036,7 @@ class Wpinv_Quotes_Admin
 
             wp_update_post(array(
                 'ID' => $quote_id,
-                'post_status' => 'pending',
+                'post_status' => 'wpi-pending',
                 'post_title' => $number,
             ));
 
@@ -1060,7 +1068,7 @@ class Wpinv_Quotes_Admin
                 'post_name' => $post->post_name,
                 'post_parent' => $post->post_parent,
                 'post_password' => $post->post_password,
-                'post_status' => 'pending',
+                'post_status' => 'wpi-pending',
                 'post_type' => 'wpi_invoice',
                 'post_title' => $post->post_title,
                 'to_ping' => $post->to_ping,
@@ -1321,7 +1329,7 @@ class Wpinv_Quotes_Admin
             return;
         }
 
-        $old_status = 'pending';
+        $old_status = 'wpi-quote-pending';
 
         if ($data['action'] == 'accept') {
             $new_status = 'wpi-quote-accepted';
