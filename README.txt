@@ -1,21 +1,29 @@
-=== Invoicing - Quotes for Invoicing ===
+=== Quotes add-on for the Invoicing plugin ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpinvoicing.com
-Tags: Quotes, Customer Quotes, Invoicing, Billing, Accounts
+Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
 Requires at least: 3.1
-Tested up to: 4.8
+Tested up to: 4.8.1
 Stable tag: 1.0.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create quotes for customers, if accepted it will convert to an invoice that can be paid.
+Quotes add-on for the WordPress Invoicing plugin. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer.
 
 == Description ==
 
-This plugin is an addon for the Invoicing plugin, it will add Quotes functionality allowing you to send Quotes to customers.
+= Quotes add-on for the WordPress Invoicing plugin. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer. This plugin requires to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/) =
 
-A customer can refuse or accept the quote, if accepted the quote will be converted to an invoice which can then be paid.
+= Features =
 
+* Create quotes and estimates to send to your clients.
+* Quotes can be turned into invoices when accepted and client can pay online.
+
+= This plugin requires you to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/) =
+
+= Support =
+
+Get timely and friendly support for both Core Plugin and add-ons at our official website, [Invoicing Support](https://wpinvoicing.com/support/)
 
 == Installation ==
 
@@ -27,32 +35,35 @@ A customer can refuse or accept the quote, if accepted the quote will be convert
 
 = Automatic installation =
 
-Automatic installation is the easiest option. To do an automatic install of Quotes, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
+Automatic installation is the easiest option. To do an automatic install of GeoDirectory, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
 
-In the search field type "Quotes for Invoicing" and click Search Plugins. Once you’ve found our plugin you install it by simply clicking Install Now > Activate.
+In the search field type Invoicing and click Search Plugins. Once you've found our Direcotry plugin you install it by simply clicking Install Now. [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
 
-== Screenshots ==
+= Manual installation =
 
-1. General Settings.
+The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
 
+= Updating =
+
+Automatic updates should seamlessly work. We always suggest you backup up your website before performing any automated update to avoid unforeseen problems.
 
 == Frequently Asked Questions ==
 
-= Is the plugin Invoicing required? =
+[Invoicing FAQ](https://wpinvoicing.com/faq/).
 
-Yes, this is an addon for that plugin.
+== Screenshots ==
 
-= Can the Quote show tax? =
-
-Yes it can.
-
+1. Quotes.
+2. Create new quote.
+3. Quote item.
+3. Quote view.
 
 == Changelog ==
 
 = 1.0.0 =
 
-* First release.
+initial release
 
 == Upgrade Notice ==
 
-none
+None yet
