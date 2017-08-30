@@ -206,6 +206,8 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_email_details_date', $plugin_admin, 'wpinv_quote_email_details_date', 10, 2);
         $this->loader->add_filter('wpinv_email_details_status', $plugin_admin, 'wpinv_quote_email_details_status', 10, 2);
         $this->loader->add_filter('wpinv_quote_action', $plugin_admin, 'wpinv_front_quote_actions', 10, 3);
+        $this->loader->add_action('wp_insert_post', $plugin_admin, 'wpinv_update_quote_number', 10, 3);
+        $this->loader->add_filter('wpinv_get_next_invoice_number', $plugin_admin, 'wpinv_get_next_quote_number', 10, 2);
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
             $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);
