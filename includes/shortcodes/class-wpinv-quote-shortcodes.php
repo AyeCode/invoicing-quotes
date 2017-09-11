@@ -66,7 +66,7 @@ class Wpinv_Quote_Shortcodes {
 	 */
 	public static function output( $atts ) {
         do_action( 'wpinv_before_user_quote_history' );
-        wpinv_get_template('wpinv-quote-history.php', $atts, 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
+        wpinv_get_template('wpinv-quote-history.php', $atts, 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
         do_action( 'wpinv_after_user_quote_history' );
 	}
 }

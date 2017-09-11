@@ -355,4 +355,14 @@ class Wpinv_Quotes_Shared
         return apply_filters( 'wpinv_get_quote_page_uri', get_permalink( $page_id ) );
     }
 
+    /**
+     * Check sequential number or not for quote.
+     *
+     * @since    1.0.1
+     *
+     * @return   bool True if active else False.
+     */
+    public static function wpinv_sequential_number_active() {
+        return wpinv_get_option( 'sequential_quote_number' );
+    }
 }

@@ -9,5 +9,6 @@
 .post-type-wpi_quote .wp-list-table.widefat th#status {width: 150px;}
 .post-type-wpi_quote .wp-list-table.widefat th#amount {width: 110px;}
 .post-type-wpi_quote .wp-list-table.widefat th#customer {width: 170px;}
+.post-type-wpi_quote .wp-list-table.widefat th#wpi_actions {width: 100px;}
 .post-type-wpi_quote form#post #titlediv [name="post_title"] {cursor: not-allowed;opacity: .75;}
 .post-type-wpi_quote form#post #edit-slug-buttons {display: none;}

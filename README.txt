@@ -60,6 +60,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Changelog ==
 
+= 1.0.1 =
+Problem in sending quote notification emails - FIXED
+
 = 1.0.0 =
 
 initial release
