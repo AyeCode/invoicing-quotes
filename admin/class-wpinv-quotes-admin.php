@@ -588,6 +588,15 @@ class Wpinv_Quotes_Admin
         for ($i = 0; $i <= 20; $i++) {
             $quote_number_padd_options[$i] = $i;
         }
+        
+        $last_number = '';
+        if ( $last_quote_number = get_option( 'wpinv_last_quote_number' ) ) {
+            $last_quote_number = is_numeric( $last_quote_number ) ? $last_quote_number : $this->wpinv_clean_quote_number( $last_quote_number );
+
+            if ( !empty( $last_quote_number ) ) {
+                $last_number = ' ' . wp_sprintf( __( "( Last Quote's sequential number: <b>%s</b> )", 'invoicing' ), $last_quote_number );
+            }
+        }
         $quote_settings = array(
             'quote' => apply_filters('wpinv_settings_quote',
                 array(
@@ -606,7 +615,7 @@ class Wpinv_Quotes_Admin
                         'quote_sequence_start' => array(
                             'id'   => 'quote_sequence_start',
                             'name' => __( 'Sequential Starting Number', 'invoicing' ),
-                            'desc' => __( 'The number at which the quote number sequence should begin.', 'invoicing' ),
+                            'desc' => __( 'The number at which the quote number sequence should begin.', 'invoicing' ) . $last_number,
                             'type' => 'number',
                             'size' => 'small',
                             'std'  => '1',
