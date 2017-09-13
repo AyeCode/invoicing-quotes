@@ -129,12 +129,7 @@ class Wpinv_Quotes_Public
 
         $accept_msg = wpinv_get_option('accepted_quote_message');
         $decline_msg = wpinv_get_option('declined_quote_message');
-        $user_id = (int)$quote->get_user_id();
-        $current_user_id = (int)get_current_user_id();
-
-        if ($user_id > 0 && $user_id != $current_user_id) {
-            return;
-        }
+        
         if ($quote->post_status == 'wpi-quote-pending') {
             remove_query_arg('wpi_action');
             $quote_id = $quote->ID;

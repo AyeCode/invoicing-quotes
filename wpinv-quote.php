@@ -17,7 +17,7 @@
  * Plugin URI:        https://wpinvoicing.com/
  * Description:       Create quotes for customers, if accepted it will convert to an invoice that can be paid.
  * Version:           1.0.0
- * Author:            GeoDirectory Team
+ * Author:            AyeCode Ltd
  * Author URI:        https://wpinvoicing.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
