@@ -186,7 +186,7 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_invoice_items_total_label', $plugin_admin, 'wpinv_quote_items_total_label', 10, 2);
         $this->loader->add_filter('wpinv_metabox_mail_notice', $plugin_admin, 'wpinv_quote_metabox_mail_notice', 10, 2);
         $this->loader->add_filter('post_row_actions', $plugin_admin, 'wpinv_quote_post_row_actions', 9999, 2);
-        $this->loader->add_action('save_post_wpi_quote', $plugin_admin, 'wpinv_send_quote_after_save', 100, 1);
+        $this->loader->add_action('wpinv_invoice_metabox_saved', $plugin_admin, 'wpinv_send_quote_after_save', 100, 1);
         $this->loader->add_action('wpinv_should_update_invoice_status', $plugin_admin, 'wpinv_quote_should_update_quote_status', 100, 4);
         $this->loader->add_action('wpinv_update_status', $plugin_admin, 'wpinv_quote_record_status_change', 100, 3);
         $this->loader->add_filter('wpinv_send_quote', $plugin_admin, 'wpinv_send_customer_quote', 10, 1);
@@ -196,16 +196,24 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_settings_tabs', $plugin_admin, 'wpinv_quote_settings_tabs', 10, 1);
         $this->loader->add_filter('wpinv_settings_sections', $plugin_admin, 'wpinv_quote_settings_sections', 10, 1);
         $this->loader->add_filter('wpinv_registered_settings', $plugin_admin, 'wpinv_quote_registered_settings', 10, 1);
-        $this->loader->add_filter('wpinv_format_invoice_number', $plugin_admin, 'wpinv_format_quote_number', 10, 3);
         $this->loader->add_filter('wpinv_email_before_note_details', $plugin_admin, 'wpinv_quote_email_before_note_details', 10, 4);
         $this->loader->add_filter('wpinv_get_emails', $plugin_admin, 'wpinv_quote_mail_settings');
         $this->loader->add_filter('wpinv_email_recipient', $plugin_admin, 'wpinv_quote_email_recipient', 10, 4);
         $this->loader->add_filter('wpinv_email_before_quote_details', $plugin_admin, 'wpinv_email_before_quote_details', 10, 2);
         $this->loader->add_filter('wpinv_email_details_title', $plugin_admin, 'wpinv_quote_email_details_title', 10, 2);
-        $this->loader->add_filter('wpinv_email_details_number', $plugin_admin, 'wpinv_quote_email_details_number', 10, 2);
-        $this->loader->add_filter('wpinv_email_details_date', $plugin_admin, 'wpinv_quote_email_details_date', 10, 2);
-        $this->loader->add_filter('wpinv_email_details_status', $plugin_admin, 'wpinv_quote_email_details_status', 10, 2);
+        $this->loader->add_filter('wpinv_invoice_number_label', $plugin_admin, 'wpinv_quote_number_label', 10, 2);
+        $this->loader->add_filter('wpinv_invoice_date_label', $plugin_admin, 'wpinv_quote_date_label', 10, 2);
+        $this->loader->add_filter('wpinv_invoice_status_label', $plugin_admin, 'wpinv_quote_status_label', 10, 2);
+        $this->loader->add_filter('wpinv_invoice_user_vat_number_label', $plugin_admin, 'wpinv_quote_user_vat_number_label', 10, 3);
         $this->loader->add_filter('wpinv_quote_action', $plugin_admin, 'wpinv_front_quote_actions', 10, 3);
+        $this->loader->add_filter('wpinv_pre_format_invoice_number', $plugin_admin, 'wpinv_pre_format_quote_number', 10, 3);
+        $this->loader->add_filter('wpinv_pre_check_sequential_number_active', $plugin_admin, 'wpinv_pre_check_sequential_number_active', 10, 2);
+        $this->loader->add_filter('wpinv_get_pre_next_invoice_number', $plugin_admin, 'wpinv_get_pre_next_quote_number', 10, 2);
+        $this->loader->add_filter('wpinv_pre_clean_invoice_number', $plugin_admin, 'wpinv_pre_clean_quote_number', 10, 3);
+        $this->loader->add_filter('wpinv_pre_update_invoice_number', $plugin_admin, 'wpinv_pre_update_quote_number', 10, 4);
+        $this->loader->add_filter('save_post_wpi_quote', $plugin_admin, 'wpinv_save_number_post_saved', 10, 3);
+        $this->loader->add_filter('post_updated', $plugin_admin, 'wpinv_save_number_post_updated', 10, 3);
+        $this->loader->add_filter('wpinv_post_name_prefix', $plugin_admin, 'wpinv_quote_post_name_prefix', 10, 2);
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
             $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);

@@ -588,6 +588,15 @@ class Wpinv_Quotes_Admin
         for ($i = 0; $i <= 20; $i++) {
             $quote_number_padd_options[$i] = $i;
         }
+        
+        $last_number = '';
+        if ( $last_quote_number = get_option( 'wpinv_last_quote_number' ) ) {
+            $last_quote_number = is_numeric( $last_quote_number ) ? $last_quote_number : $this->wpinv_clean_quote_number( $last_quote_number );
+
+            if ( !empty( $last_quote_number ) ) {
+                $last_number = ' ' . wp_sprintf( __( "( Last Quote's sequential number: <b>%s</b> )", 'invoicing' ), $last_quote_number );
+            }
+        }
         $quote_settings = array(
             'quote' => apply_filters('wpinv_settings_quote',
                 array(
@@ -596,6 +605,21 @@ class Wpinv_Quotes_Admin
                             'id' => 'quote_number_format_settings',
                             'name' => '<h3>' . __('Quote Number', 'invoicing') . '</h3>',
                             'type' => 'header',
+                        ),
+                        'sequential_quote_number' => array(
+                            'id'   => 'sequential_quote_number',
+                            'name' => __( 'Sequential Quote Numbers', 'invoicing' ),
+                            'desc' => __( 'Check this box to enable sequential quote numbers.', 'invoicing' ),
+                            'type' => 'checkbox',
+                        ),
+                        'quote_sequence_start' => array(
+                            'id'   => 'quote_sequence_start',
+                            'name' => __( 'Sequential Starting Number', 'invoicing' ),
+                            'desc' => __( 'The number at which the quote number sequence should begin.', 'invoicing' ) . $last_number,
+                            'type' => 'number',
+                            'size' => 'small',
+                            'std'  => '1',
+                            'class'=> 'w100'
                         ),
                         'quote_number_padd' => array(
                             'id' => 'quote_number_padd',
@@ -609,7 +633,7 @@ class Wpinv_Quotes_Admin
                         'quote_number_prefix' => array(
                             'id' => 'quote_number_prefix',
                             'name' => __('Quote Number Prefix', 'invoicing'),
-                            'desc' => __('A prefix to prepend to all quote numbers. Ex: WPINV-', 'invoicing'),
+                            'desc' => __('A prefix to prepend to all quote numbers. Ex: WPQUO-', 'invoicing'),
                             'type' => 'text',
                             'size' => 'regular',
                             'std' => 'WPQUO-',
@@ -804,57 +828,45 @@ class Wpinv_Quotes_Admin
      * Send customer quote email notification if Send Quote is selected "yes"
      *
      * @since    1.0.0
-     * @param string $formatted_number formatted number for invoice
      * @param int $number quote id
      * @return string $formatted_number change formatted number of quote
      */
-    function wpinv_format_quote_number($formatted_number, $number)
+    function wpinv_format_quote_number($number)
     {
-        global $post;
-        if (isset($number) && 'wpi_quote' == get_post_type($number)) {
-            $padd = wpinv_get_option('quote_number_padd');
-
-            // TODO maintain old invoice numbers if invoice number settings not saved. Should be removed before stable release.
-            if ($padd === '' || $padd === false || $padd === NULL) {
-                return wp_sprintf(__('WPQUO-%d', 'invoicing'), $number);
-            }
-
-            $prefix = wpinv_get_option('quote_number_prefix');
-            $postfix = wpinv_get_option('quote_number_postfix');
-
-            $padd = absint($padd);
-            $formatted_number = absint($number);
-
-            if ($padd > 0) {
-                $formatted_number = zeroise($formatted_number, $padd);
-            }
-
-            $formatted_number = $prefix . $formatted_number . $postfix;
-
-            return apply_filters('wpinv_format_quote_number', $formatted_number, $number, $prefix, $postfix, $padd);
+        if ( !empty( $number ) && !is_numeric( $number ) ) {
+            return $number;
         }
-        return $formatted_number;
+    
+        $padd  = wpinv_get_option( 'quote_number_padd' );
+        $prefix  = wpinv_get_option( 'quote_number_prefix' );
+        $postfix = wpinv_get_option( 'quote_number_postfix' );
+
+        $padd = absint( $padd );
+        $formatted_number = absint( $number );
+
+        if ( $padd > 0 ) {
+            $formatted_number = zeroise( $formatted_number, $padd );
+        }    
+
+        $formatted_number = $prefix . $formatted_number . $postfix;
+
+        return apply_filters( 'wpinv_format_quote_number', $formatted_number, $number, $prefix, $postfix, $padd );
     }
 
     /**
      * Send customer quote email notification if Send Quote is selected "yes"
      *
      * @since    1.0.0
-     * @param int ID of post/quote
+     * @param object Quote object.
      */
-    function wpinv_send_quote_after_save($post_id)
+    function wpinv_send_quote_after_save($quote)
     {
-
-        if (wp_is_post_revision($post_id)) {
+        if ( empty( $_POST['wpi_save_send'] ) ) {
             return;
         }
-
-        if (!current_user_can('manage_options') || 'wpi_quote' != get_post_type($post_id)) {
-            return;
-        }
-
-        if (!empty($_POST['wpi_save_send'])) {
-            $this->wpinv_user_quote_notification($post_id);
+        
+        if ( !empty( $quote->ID ) && !empty( $quote->post_type ) && 'wpi_quote' == $quote->post_type ) {
+            $this->wpinv_user_quote_notification( $quote->ID );
         }
     }
 
@@ -915,7 +927,7 @@ class Wpinv_Quotes_Admin
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
-        ), 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
+        ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1032,12 +1044,16 @@ class Wpinv_Quotes_Admin
             //convert quote to invoice
             set_post_type($quote_id, 'wpi_invoice');
 
-            $number = wpinv_format_invoice_number($quote_id);
+            $number = wpinv_update_invoice_number($quote_id, true);
+            if (empty($number)) {
+                $number = wpinv_format_invoice_number($quote_id);
+            }
 
             wp_update_post(array(
                 'ID' => $quote_id,
                 'post_status' => 'wpi-pending',
                 'post_title' => $number,
+                'post_name' => wpinv_generate_post_name( $quote_id ),
             ));
 
             //update meta data
@@ -1091,8 +1107,11 @@ class Wpinv_Quotes_Admin
                 $wpdb->query($sql_query);
             }
 
-            $number = wpinv_format_invoice_number($new_invoice_id);
-            $post_name = sanitize_title($number);
+            $number = wpinv_update_invoice_number($new_invoice_id, true);
+            if (empty($number)) {
+                $number = wpinv_format_invoice_number($new_invoice_id);
+            }
+            $post_name = wpinv_generate_post_name($new_invoice_id);
 
             $quote = wpinv_get_invoice($new_invoice_id);
             $quote->add_note(sprintf(__('Created Invoice from Quote #%s.', 'invoicing'), $quote_id), false, false, true);
@@ -1198,7 +1217,7 @@ class Wpinv_Quotes_Admin
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
-        ), 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
+        ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1304,7 +1323,7 @@ class Wpinv_Quotes_Admin
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
-        ), 'wpinv-quote/', WP_PLUGIN_DIR . '/wpinv-quote/templates/');
+        ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1480,14 +1499,14 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Change quote number title in email template
+     * Change quote number title.
      *
      * @since    1.0.0
      * @param string $title label of number field
      * @param object $quote quote object
      * @return string $title new label of number field
      */
-    function wpinv_quote_email_details_number($title, $quote)
+    function wpinv_quote_number_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Number', 'invoicing');
@@ -1496,14 +1515,14 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Change quote date title in email template
+     * Change quote date title.
      *
      * @since    1.0.0
      * @param string $title label of date field
      * @param object $quote quote object
      * @return string $title new label of date field
      */
-    function wpinv_quote_email_details_date($title, $quote)
+    function wpinv_quote_date_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Date', 'invoicing');
@@ -1512,17 +1531,34 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Change quote status title in email template
+     * Change quote status title.
      *
      * @since    1.0.0
      * @param string $title label of status field
      * @param object $quote quote object
      * @return string $title new label of status field
      */
-    function wpinv_quote_email_details_status($title, $quote)
+    function wpinv_quote_status_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
             $title = __('Quote Status', 'invoicing');
+        }
+        return $title;
+    }
+    
+    /**
+     * Change quote user vat number title.
+     *
+     * @since    1.0.0
+     * @param string $label User vat number title.
+     * @param object $quote quote object
+     * @param string $vat_name Vat name.
+     * @return string $title new label of status field
+     */
+    function wpinv_quote_user_vat_number_label($title, $quote, $vat_name)
+    {
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
+            $title = wp_sprintf( __( 'Quote %s Number', 'invoicing' ), $vat_name );
         }
         return $title;
     }
@@ -1592,5 +1628,174 @@ class Wpinv_Quotes_Admin
         }
 
         return $vars;
+    }
+    
+    function wpinv_quote_post_name_prefix( $prefix, $post_type ) {
+        if ( $post_type == 'wpi_quote' ) {
+            $prefix = 'quote-';
+        }
+        
+        return $prefix;
+    }
+    
+    function wpinv_get_next_quote_number() {
+        if ( ! Wpinv_Quotes_Shared::wpinv_sequential_number_active() ) {
+            return false;
+        }
+
+        $number = $last_number = get_option( 'wpinv_last_quote_number' );
+        $start  = wpinv_get_option( 'quote_sequence_start' );
+        if ( !absint( $start ) > 0 ) {
+            $start = 1;
+        }
+        $increment_number = true;
+        $save_number = false;
+
+        if ( !empty( $number ) && !is_numeric( $number ) && $number == $this->wpinv_format_quote_number( $number ) ) {
+            $number = $this->wpinv_clean_quote_number( $number );
+        }
+
+        if ( empty( $number ) ) {
+            if ( !( $last_number === 0 || $last_number === '0' ) ) {
+                $quote_statuses = array_keys( Wpinv_Quotes_Shared::wpinv_get_quote_statuses() );
+                $quote_statuses[] = 'trash';
+                $last_quote = Wpinv_Quotes_Shared::wpinv_get_quotes( array( 'limit' => 1, 'order' => 'DESC', 'orderby' => 'ID', 'return' => 'posts', 'fields' => 'ids', 'status' => $quote_statuses ) );
+ 
+                if ( !empty( $last_quote[0] ) && $quote_number = wpinv_get_invoice_number( $last_quote[0] ) ) {
+                    if ( is_numeric( $quote_number ) ) {
+                        $number = $quote_number;
+                    } else {
+                        $number = $this->wpinv_clean_quote_number( $quote_number );
+                    }
+                }
+
+                if ( empty( $number ) ) {
+                    $increment_number = false;
+                    $number = $start;
+                    $save_number = ( $number - 1 );
+                } else {
+                    $save_number = $number;
+                }
+            }
+        }
+
+        if ( $start > $number ) {
+            $increment_number = false;
+            $number = $start;
+            $save_number = ( $number - 1 );
+        }
+
+        if ( $save_number !== false ) {
+            update_option( 'wpinv_last_quote_number', $save_number );
+        }
+        
+        $increment_number = apply_filters( 'wpinv_increment_payment_quote_number', $increment_number, $number );
+
+        if ( $increment_number ) {
+            $number++;
+        }
+
+        return apply_filters( 'wpinv_get_next_quote_number', $number );
+    }
+
+    function wpinv_clean_quote_number( $number ) {
+        $prefix  = wpinv_get_option( 'quote_number_prefix' );
+        $postfix = wpinv_get_option( 'quote_number_postfix' );
+
+        $number = preg_replace( '/' . $prefix . '/', '', $number, 1 );
+
+        $length      = strlen( $number );
+        $postfix_pos = strrpos( $number, $postfix );
+        
+        if ( false !== $postfix_pos ) {
+            $number      = substr_replace( $number, '', $postfix_pos, $length );
+        }
+
+        $number = intval( $number );
+
+        return apply_filters( 'wpinv_clean_quote_number', $number, $prefix, $postfix );
+    }
+
+    function wpinv_save_number_post_saved( $post_ID, $post, $update ) {
+        global $wpdb;
+
+        if ( !$update && !get_post_meta( $post_ID, '_wpinv_number', true ) ) {
+            $this->wpinv_update_quote_number( $post_ID, $post->post_status != 'auto-draft' );
+        }
+
+        if ( !$update ) {
+            $wpdb->update( $wpdb->posts, array( 'post_name' => wpinv_generate_post_name( $post_ID ) ), array( 'ID' => $post_ID ) );
+            clean_post_cache( $post_ID );
+        }
+    }
+
+    function wpinv_save_number_post_updated( $post_ID, $post_after, $post_before ) {
+        if ( !empty( $post_after->post_type ) && $post_after->post_type == 'wpi_quote' && $post_before->post_status == 'auto-draft' && $post_after->post_status != $post_before->post_status ) {
+            $this->wpinv_update_quote_number( $post_ID, true );
+        }
+    }
+
+    function wpinv_update_quote_number( $post_ID, $save_sequential = false ) {
+        global $wpdb;
+
+        if ( Wpinv_Quotes_Shared::wpinv_sequential_number_active() ) {
+            $number = $this->wpinv_get_next_quote_number();
+
+            if ( $save_sequential ) {
+                update_option( 'wpinv_last_quote_number', $number );
+            }
+        } else {
+            $number = $post_ID;
+        }
+
+        $number = $this->wpinv_format_quote_number( $number );
+
+        update_post_meta( $post_ID, '_wpinv_number', $number );
+
+        $wpdb->update( $wpdb->posts, array( 'post_title' => $number ), array( 'ID' => $post_ID ) );
+
+        clean_post_cache( $post_ID );
+
+        return $number;
+    }
+    
+    function wpinv_pre_format_quote_number( $value, $number, $type ) {
+        if ( $type == 'wpi_quote' ) {
+            $value = $this->wpinv_format_quote_number( $number );
+        }
+
+        return $value;
+    }
+    
+    function wpinv_pre_check_sequential_number_active( $value, $type ) {
+        if ( $type == 'wpi_quote' ) {
+            $value = Wpinv_Quotes_Shared::wpinv_sequential_number_active();
+        }
+
+        return $value;
+    }
+    
+    function wpinv_get_pre_next_quote_number( $value, $type ) {
+        if ( $type == 'wpi_quote' ) {
+            $value = $this->wpinv_get_next_quote_number();
+        }
+
+        return $value;
+    }
+    
+    function wpinv_pre_clean_quote_number( $value, $number, $type ) {
+        if ( $type == 'wpi_quote' ) {
+            $value = $this->wpinv_clean_quote_number( $number );
+        }
+
+        return $value;
+    }
+    
+    function wpinv_pre_update_quote_number( $value, $post_ID, $save_sequential, $type ) {
+        if ( $type == 'wpi_quote' ) {
+            $value = $this->wpinv_update_quote_number( $post_ID, $save_sequential );
+        }
+
+        return $value;
     }
 }
