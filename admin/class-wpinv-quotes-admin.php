@@ -928,6 +928,8 @@ class Wpinv_Quotes_Admin
             'sent_to_admin' => false,
             'plain_text' => false,
         ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
+        
+        $content = wpinv_email_format_text( $content );
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1218,6 +1220,8 @@ class Wpinv_Quotes_Admin
             'sent_to_admin' => false,
             'plain_text' => false,
         ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
+        
+        $content = wpinv_email_format_text( $content );
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1324,6 +1328,8 @@ class Wpinv_Quotes_Admin
             'sent_to_admin' => false,
             'plain_text' => false,
         ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
+        
+        $content = wpinv_email_format_text( $content );
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1449,13 +1455,17 @@ class Wpinv_Quotes_Admin
         if ($quote->post_type == 'wpi_quote' && !empty($email_type)) {
             switch ($email_type) {
                 case 'user_quote':
-                    $email_output = sprintf(__("<p>Hi there. Your recent quote on %s has been created. Your quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
+                    if ( $quote->post_status == 'wpi-quote-pending' ) {
+                        $email_output = sprintf(__("<p>Hi {name}, <br><br>We have provided you with our quote on %s. <br>Click on the following link to view it online where you will be able to accept or decline the quote. %s <br><br>Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name(), '<a class="btn btn-success" href="' . esc_url( $quote->get_view_url(true) ) . '">' . __( 'View & Accept / Decline Quote', 'invoicing' ) . '</a>');
+                    } else {
+                        $email_output = sprintf(__("<p>Hi {name}, <br><br>We have provided you with our quote on %s. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
+                    }
                     break;
                 case 'user_quote_accepted':
-                    $email_output = sprintf(__("<p>Hi there. Quote on %s has been accepted. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
+                    $email_output = sprintf(__("<p>Hi There, <br><br>Quote on %s has been accepted. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
                     break;
                 case 'user_quote_declined':
-                    $email_output = sprintf(__("<p>Hi there. Quote on %s has been declined. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
+                    $email_output = sprintf(__("<p>Hi There, <br><br>Quote on %s has been declined. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
                     break;
                 default:
                     $email_output = '';

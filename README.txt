@@ -39,7 +39,7 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 
 Automatic installation is the easiest option. To do an automatic install of GeoDirectory, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
 
-In the search field type Invoicing and click Search Plugins. Once you've found our Direcotry plugin you install it by simply clicking Install Now. [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
+In the search field type Invoicing and click Search Plugins. Once you've found our Directory plugin you install it by simply clicking Install Now. [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
 
 = Manual installation =
 
@@ -67,6 +67,7 @@ Problem in sending quote notification emails - FIXED
 Show last quote's sequential number - ADDED
 User needs to be logged in to accept/decline quote - FIXED
 Accepting quote redirects to invoice without invoice_key - FIXED
+Link added in quote notification to accept or decline quote - ADDED
 
 = 1.0.0 =
 
