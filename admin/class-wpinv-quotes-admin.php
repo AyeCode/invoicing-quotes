@@ -1385,7 +1385,12 @@ class Wpinv_Quotes_Admin
 
         do_action('wpinv_front_quote_actions_after_process', $quote_id, $old_status, $new_status);
 
-        wp_redirect(get_post_permalink($quote_id));
+        $permalink =  get_post_permalink($quote_id);
+        $key = $quote->get_key();
+        if($key){
+            $permalink = add_query_arg( 'invoice_key', $key, $permalink);
+        }
+        wp_redirect($permalink);
         exit();
     }
 

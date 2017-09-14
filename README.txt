@@ -12,14 +12,16 @@ Quotes add-on for the WordPress Invoicing plugin. Allows you to create quotes, s
 
 == Description ==
 
-= Quotes add-on for the WordPress Invoicing plugin. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer. This plugin requires to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/) =
+= Quotes add-on for the WordPress Invoicing plugin =
+Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer. This plugin requires to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/)
 
 = Features =
 
 * Create quotes and estimates to send to your clients.
 * Quotes can be turned into invoices when accepted and client can pay online.
 
-= This plugin requires you to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/) =
+= This plugin requires you to install =
+[Invoicing plugin](https://wordpress.org/plugins/invoicing/)
 
 = Support =
 
@@ -63,6 +65,8 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 = 1.0.1 =
 Problem in sending quote notification emails - FIXED
 Show last quote's sequential number - ADDED
+User needs to be logged in to accept/decline quote - FIXED
+Accepting quote redirects to invoice without invoice_key - FIXED
 
 = 1.0.0 =
 
