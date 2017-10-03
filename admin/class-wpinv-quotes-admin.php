@@ -165,8 +165,6 @@ class Wpinv_Quotes_Admin
         if (isset($post->ID) && $post->post_type == 'wpi_quote' && ($pagenow == 'post-new.php' || $pagenow == 'post.php')) {
             $localize['emptyInvoice'] = __('Add at least one item to save quote!', 'invoicing');
             $localize['OneItemMin'] = __('Quote must contain at least one item', 'invoicing');
-            $localize['deletePackage'] = __('GD package items should be deleted from GD payment manager only, otherwise it will break quotes created with this package!', 'invoicing');
-            $localize['deleteInvoiceFirst'] = __('This item is in use! Before delete this item, you need to delete all the quote(s) using this item.', 'invoicing');
         }
 
         return $localize;
