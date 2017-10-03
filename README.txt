@@ -68,6 +68,7 @@ Show last quote's sequential number - ADDED
 User needs to be logged in to accept/decline quote - FIXED
 Accepting quote redirects to invoice without invoice_key - FIXED
 Link added in quote notification to accept or decline quote - ADDED
+Redirect accepted quote to invoice - FIXED
 
 = 1.0.0 =
 

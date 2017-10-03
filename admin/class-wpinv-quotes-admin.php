@@ -1811,4 +1811,15 @@ class Wpinv_Quotes_Admin
 
         return $value;
     }
+    
+    function quote_to_invoice_redirect() {
+        if ( !empty( $_GET['invoice_key'] ) && is_404() && get_query_var( 'post_type' ) == 'wpi_quote' ) {
+            if ( $invoice_id = wpinv_get_invoice_id_by_key( sanitize_text_field( $_GET['invoice_key'] ) ) ) {
+                $redirect = get_permalink( $invoice_id );
+                $redirect = add_query_arg( $_GET, $redirect );
+                wp_redirect( $redirect, 301 ); // Permanent redirect
+                exit;
+            }
+        }
+    }
 }
