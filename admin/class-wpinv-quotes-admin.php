@@ -165,8 +165,6 @@ class Wpinv_Quotes_Admin
         if (isset($post->ID) && $post->post_type == 'wpi_quote' && ($pagenow == 'post-new.php' || $pagenow == 'post.php')) {
             $localize['emptyInvoice'] = __('Add at least one item to save quote!', 'invoicing');
             $localize['OneItemMin'] = __('Quote must contain at least one item', 'invoicing');
-            $localize['deletePackage'] = __('GD package items should be deleted from GD payment manager only, otherwise it will break quotes created with this package!', 'invoicing');
-            $localize['deleteInvoiceFirst'] = __('This item is in use! Before delete this item, you need to delete all the quote(s) using this item.', 'invoicing');
         }
 
         return $localize;
@@ -1812,5 +1810,16 @@ class Wpinv_Quotes_Admin
         }
 
         return $value;
+    }
+    
+    function quote_to_invoice_redirect() {
+        if ( !empty( $_GET['invoice_key'] ) && is_404() && get_query_var( 'post_type' ) == 'wpi_quote' ) {
+            if ( $invoice_id = wpinv_get_invoice_id_by_key( sanitize_text_field( $_GET['invoice_key'] ) ) ) {
+                $redirect = get_permalink( $invoice_id );
+                $redirect = add_query_arg( $_GET, $redirect );
+                wp_redirect( $redirect, 301 ); // Permanent redirect
+                exit;
+            }
+        }
     }
 }

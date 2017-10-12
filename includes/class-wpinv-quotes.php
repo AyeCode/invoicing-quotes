@@ -214,6 +214,7 @@ class Wpinv_Quotes
         $this->loader->add_filter('save_post_wpi_quote', $plugin_admin, 'wpinv_save_number_post_saved', 10, 3);
         $this->loader->add_filter('post_updated', $plugin_admin, 'wpinv_save_number_post_updated', 10, 3);
         $this->loader->add_filter('wpinv_post_name_prefix', $plugin_admin, 'wpinv_quote_post_name_prefix', 10, 2);
+        $this->loader->add_action('template_redirect', $plugin_admin, 'quote_to_invoice_redirect', 100);
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
             $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);
