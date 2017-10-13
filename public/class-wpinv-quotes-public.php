@@ -141,12 +141,12 @@ class Wpinv_Quotes_Public
             <button class="btn btn-danger btn-sm decline-quote"
                     title="<?php esc_attr_e('Decline This Quotation', 'invoicing'); ?>"
                     onclick="showAlert('decline')"><?php _e('Decline Quotation', 'invoicing'); ?></button>
-            <p id="accept-alert" class="alert alert-success"><?php if('do_nothing' === $accepted_action) { _e('Click on continue to accept this Quotation. ', 'invoicing'); } else { _e('An invoice will be generated on acceptance. ', 'invoicing'); } ?>
+            <p id="accept-alert" class="alert alert-success"><?php if('do_nothing' === $accepted_action) { _e('Click on continue to accept this quotation. ', 'invoicing'); } else { _e('An invoice will be generated on acceptance. ', 'invoicing'); } ?>
                 <a class="btn btn-success btn-xs accept-quote"
                    title="<?php esc_attr_e('Accept This Quotation', 'invoicing'); ?>"
                    href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
             </p>
-            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quote. ', 'invoicing') ?> <a
+            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quotation. ', 'invoicing') ?> <a
                     class="btn btn-danger btn-xs decline-quote"
                     title="<?php esc_attr_e('Decline This Quotation', 'invoicing'); ?>"
                     href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
