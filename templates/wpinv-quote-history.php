@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 if (!($user_id = get_current_user_id())) {
     ?>
-    <div class="wpinv-empty alert alert-error"><?php _e('You are not allowed to access this section', 'invoicing'); ?></div>
+    <div class="wpinv-empty alert alert-error"><?php _e('You are not allowed to access this section', 'wpinv-quotes'); ?></div>
     <?php
     return;
 }
@@ -42,7 +42,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
 
                         <?php elseif ('quote-number' === $column_id) : ?>
                             <a href="<?php echo esc_url($quote->get_view_url()); ?>">
-                                <?php echo _x('#', 'hash before quote number', 'invoicing') . $quote->get_number(); ?>
+                                <?php echo _x('#', 'hash before quote number', 'wpinv-quotes') . $quote->get_number(); ?>
                             </a>
 
                         <?php elseif ('quote-date' === $column_id) : $date = wpinv_get_invoice_date($quote_id);
@@ -61,7 +61,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                             $actions = array(
                                 'print' => array(
                                     'url' => $quote->get_view_url(),
-                                    'name' => __('Print', 'invoicing'),
+                                    'name' => __('Print', 'wpinv-quotes'),
                                     'class' => 'btn-primary',
                                     'attrs' => 'target="_blank"'
                                 )
@@ -71,12 +71,12 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                                 $quote_actions = array(
                                     'accept' => array(
                                         'url' => Wpinv_Quotes_Shared::get_accept_quote_url($quote_id),
-                                        'name' => __('Accept', 'invoicing'),
+                                        'name' => __('Accept', 'wpinv-quotes'),
                                         'class' => 'btn-success'
                                     ),
                                     'decline' => array(
                                         'url' => Wpinv_Quotes_Shared::get_decline_quote_url($quote_id),
-                                        'name' => __('Decline', 'invoicing'),
+                                        'name' => __('Decline', 'wpinv-quotes'),
                                         'class' => 'btn-danger'
                                     ),
                                 );

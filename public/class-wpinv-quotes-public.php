@@ -135,20 +135,20 @@ class Wpinv_Quotes_Public
             $quote_id = $quote->ID;
             ?>
             <button class="btn btn-success btn-sm accept-quote"
-                    title="<?php esc_attr_e('Accept This Quotation', 'invoicing'); ?>"
-                    onclick="showAlert('accept')"><?php _e('Accept Quotation', 'invoicing'); ?></button> &nbsp;
+                    title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>"
+                    onclick="showAlert('accept')"><?php _e('Accept Quotation', 'wpinv-quotes'); ?></button> &nbsp;
             <button class="btn btn-danger btn-sm decline-quote"
-                    title="<?php esc_attr_e('Decline This Quotation', 'invoicing'); ?>"
-                    onclick="showAlert('decline')"><?php _e('Decline Quotation', 'invoicing'); ?></button>
+                    title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"
+                    onclick="showAlert('decline')"><?php _e('Decline Quotation', 'wpinv-quotes'); ?></button>
             <p id="accept-alert" class="alert alert-success"><?php _e('An invoice will be generated on acceptance. ') ?>
                 <a class="btn btn-success btn-xs accept-quote"
-                   title="<?php esc_attr_e('Accept This Quotation', 'invoicing'); ?>"
-                   href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
+                   title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>"
+                   href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>
             </p>
             <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quote. ') ?> <a
                     class="btn btn-danger btn-xs decline-quote"
-                    title="<?php esc_attr_e('Decline This Quotation', 'invoicing'); ?>"
-                    href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'invoicing'); ?></a>
+                    title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"
+                    href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>
             <script>
                 function showAlert(action) {
                     var x = document.getElementById('accept-alert');
@@ -164,9 +164,9 @@ class Wpinv_Quotes_Public
             </script>
             <?php
         } elseif ($quote->post_status == 'wpi-quote-accepted' && !empty($accept_msg)) { ?>
-            <p class="btn-success btn-sm quote-front-msg"><?php _e($accept_msg, 'invoicing'); ?></p>
+            <p class="btn-success btn-sm quote-front-msg"><?php _e($accept_msg, 'wpinv-quotes'); ?></p>
         <?php } elseif ($quote->post_status == 'wpi-quote-declined' && !empty($decline_msg)) { ?>
-            <p class="btn-danger btn-sm quote-front-msg"><?php _e($decline_msg, 'invoicing'); ?></p>
+            <p class="btn-danger btn-sm quote-front-msg"><?php _e($decline_msg, 'wpinv-quotes'); ?></p>
             <?php
         }
     }
@@ -186,9 +186,9 @@ class Wpinv_Quotes_Public
             if ($user_id > 0 && $user_id == $current_user_id) {
                 ?>
                 <a class="btn btn-primary btn-sm" onclick="window.print();"
-                   href="javascript:void(0)"><?php _e('Print Quote', 'invoicing'); ?></a> &nbsp;
+                   href="javascript:void(0)"><?php _e('Print Quote', 'wpinv-quotes'); ?></a> &nbsp;
                 <a class="btn btn-warning btn-sm"
-                   href="<?php echo esc_url(Wpinv_Quotes_Shared::wpinv_get_quote_history_page_uri()); ?>"><?php _e('Quote History', 'invoicing'); ?></a>
+                   href="<?php echo esc_url(Wpinv_Quotes_Shared::wpinv_get_quote_history_page_uri()); ?>"><?php _e('Quote History', 'wpinv-quotes'); ?></a>
             <?php }
         }
     }
