@@ -218,6 +218,11 @@ class Wpinv_Quotes
         $this->loader->add_action('wpinv_meta_box_details_after_due_date', $plugin_admin, 'wpinv_meta_box_details_after_due_date', 10, 1);
         $this->loader->add_action('wpinv_display_details_after_due_date', $plugin_admin, 'wpinv_display_details_after_due_date', 10, 1);
         $this->loader->add_action('wpinv_email_invoice_details_after_due_date', $plugin_admin, 'wpinv_email_invoice_details_after_due_date', 10, 1);
+        $this->loader->add_filter('wpinv_settings_email_wildcards_description', $plugin_admin, 'wpinv_settings_email_wildcards_description', 10, 3);
+
+        add_action( 'wpinv_settings_tab_bottom_emails_user_quote', 'wpinv_settings_tab_bottom_emails', 10, 2 );
+        add_action( 'wpinv_settings_tab_bottom_emails_user_quote_accepted', 'wpinv_settings_tab_bottom_emails', 10, 2 );
+        add_action( 'wpinv_settings_tab_bottom_emails_user_quote_declined', 'wpinv_settings_tab_bottom_emails', 10, 2 );
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
             $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);

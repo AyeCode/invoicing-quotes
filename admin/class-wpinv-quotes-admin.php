@@ -1783,6 +1783,7 @@ class Wpinv_Quotes_Admin
         $replace_array['{quote_number}']    = $quote->get_number();
         $replace_array['{quote_date}']      = $quote->get_invoice_date();
         $replace_array['{quote_link}']      = $quote->get_view_url( true );
+        $replace_array['{valid_until}']     = $this->get_valid_date(true, $quote_id);
 
         return $replace_array;
     }
@@ -1859,6 +1860,18 @@ class Wpinv_Quotes_Admin
             </tr>
             <?php
         }
+    }
+
+    function wpinv_settings_email_wildcards_description( $description, $active_tab, $section ) {
+
+        if ( 'emails' == $active_tab && in_array($section, array('user_quote','user_quote_accepted','user_quote_declined','user_note')) ) {
+            $description .= __( '<strong>{quote_number} :</strong> The quote number<br>
+                <strong>{quote_link} :</strong> The quote link<br>
+                <strong>{quote_date} :</strong> The date the quote was created<br>
+                <strong>{valid_until} :</strong> The date the quote is valid until<br>', 'wpinv-quotes' );
+        }
+
+        return $description;
     }
 
 }
