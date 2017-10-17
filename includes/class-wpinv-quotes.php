@@ -199,7 +199,6 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_email_before_note_details', $plugin_admin, 'wpinv_quote_email_before_note_details', 10, 4);
         $this->loader->add_filter('wpinv_get_emails', $plugin_admin, 'wpinv_quote_mail_settings');
         $this->loader->add_filter('wpinv_email_recipient', $plugin_admin, 'wpinv_quote_email_recipient', 10, 4);
-        $this->loader->add_filter('wpinv_email_before_quote_details', $plugin_admin, 'wpinv_email_before_quote_details', 10, 2);
         $this->loader->add_filter('wpinv_email_details_title', $plugin_admin, 'wpinv_quote_email_details_title', 10, 2);
         $this->loader->add_filter('wpinv_invoice_number_label', $plugin_admin, 'wpinv_quote_number_label', 10, 2);
         $this->loader->add_filter('wpinv_invoice_date_label', $plugin_admin, 'wpinv_quote_date_label', 10, 2);
@@ -215,6 +214,15 @@ class Wpinv_Quotes
         $this->loader->add_filter('post_updated', $plugin_admin, 'wpinv_save_number_post_updated', 10, 3);
         $this->loader->add_filter('wpinv_post_name_prefix', $plugin_admin, 'wpinv_quote_post_name_prefix', 10, 2);
         $this->loader->add_action('template_redirect', $plugin_admin, 'quote_to_invoice_redirect', 100);
+        $this->loader->add_filter('wpinv_email_format_text', $plugin_admin, 'wpinv_quote_email_format_text', 10, 3);
+        $this->loader->add_action('wpinv_meta_box_details_after_due_date', $plugin_admin, 'wpinv_meta_box_details_after_due_date', 10, 1);
+        $this->loader->add_action('wpinv_display_details_after_due_date', $plugin_admin, 'wpinv_display_details_after_due_date', 10, 1);
+        $this->loader->add_action('wpinv_email_invoice_details_after_due_date', $plugin_admin, 'wpinv_email_invoice_details_after_due_date', 10, 1);
+        $this->loader->add_filter('wpinv_settings_email_wildcards_description', $plugin_admin, 'wpinv_settings_email_wildcards_description', 10, 3);
+
+        add_action( 'wpinv_settings_tab_bottom_emails_user_quote', 'wpinv_settings_tab_bottom_emails', 10, 2 );
+        add_action( 'wpinv_settings_tab_bottom_emails_user_quote_accepted', 'wpinv_settings_tab_bottom_emails', 10, 2 );
+        add_action( 'wpinv_settings_tab_bottom_emails_user_quote_declined', 'wpinv_settings_tab_bottom_emails', 10, 2 );
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
             $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);
