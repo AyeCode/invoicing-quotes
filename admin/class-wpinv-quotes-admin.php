@@ -1688,6 +1688,9 @@ class Wpinv_Quotes_Admin
             $wpdb->update( $wpdb->posts, array( 'post_name' => wpinv_generate_post_name( $post_ID ) ), array( 'ID' => $post_ID ) );
             clean_post_cache( $post_ID );
         }
+
+        $valid_date = isset( $_POST['wpinv_valid_date'] ) ? sanitize_text_field( $_POST['wpinv_valid_date'] ) : '';
+        update_post_meta($post_ID, 'wpinv_quote_valid_until', $valid_date);
     }
 
     function wpinv_save_number_post_updated( $post_ID, $post_after, $post_before ) {
@@ -1783,4 +1786,79 @@ class Wpinv_Quotes_Admin
 
         return $replace_array;
     }
+
+    function get_valid_date( $display = false, $quote_id ) {
+        $valid_date = get_post_meta($quote_id, 'wpinv_quote_valid_until', true);
+        $valid_date = apply_filters( 'wpinv_valid_date', $valid_date, $quote_id );
+
+        if ( !$display || empty( $valid_date ) ) {
+            return $valid_date;
+        }
+
+        return date_i18n( get_option( 'date_format' ), strtotime( $valid_date ) );
+    }
+
+    function wpinv_meta_box_details_after_due_date($quote_id = 0) {
+        $quote = wpinv_get_invoice($quote_id);
+        if ( $quote && 'wpi_quote' != $quote->post_type ) {
+            return;
+        }
+
+        $date_created       = $quote->get_created_date();
+        $datetime_created   = strtotime( $date_created );
+        $date_completed     = $quote->get_completed_date();
+        $date_completed     = $date_completed != '' && $date_completed != '0000-00-00 00:00:00' ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $date_completed ) ) : 'n/a';
+        $valid = $this->get_valid_date(false, $quote_id);
+
+        if($quote->has_status( array( 'auto-draft', 'wpi-quote-pending' ) )){
+        ?>
+        <div class="gdmbx-row gdmbx-type-select gdmbx2-id-wpinv-date-valid">
+            <div class="gdmbx-th"><label for="wpinv_valid_date"><?php _e( 'Valid Until Date:', 'invoicing' );?></label></div>
+            <div class="gdmbx-td">
+                <input type="text" placeholder="<?php esc_attr_e( 'yyyy-mm-dd', 'invoicing' );?>" value="<?php echo esc_attr( $valid );?>" id="wpinv_valid_date" name="wpinv_valid_date" class="regular-text wpiDatepicker" data-minDate="<?php echo esc_attr( date_i18n( 'Y-m-d', $datetime_created ) );?>" data-dateFormat="yy-mm-dd">
+            </div>
+        </div>
+        <?php }
+        if ( $date_completed && $date_completed != 'n/a' ) {
+            $valid_display = $this->get_valid_date(false, $quote_id);
+            ?>
+            <div class="gdmbx-row gdmbx-type-select gdmbx2-id-wpinv-date-completed">
+                <div class="gdmbx-th"><label><?php _e( 'Valid Untill Date:', 'invoicing' );?></label></div>
+                <div class="gdmbx-td"><?php echo $valid_display;?></div>
+            </div>
+        <?php }
+    }
+
+    function wpinv_display_details_after_due_date( $quote_id = 0 ) {
+        $quote = wpinv_get_invoice($quote_id);
+        if ( $quote && 'wpi_quote' != $quote->post_type ) {
+            return;
+        }
+        $valid = $this->get_valid_date(true, $quote_id);
+        if(isset($valid) && !empty($valid)) {
+            ?>
+            <tr class="wpi-row-date">
+                <th><?php echo apply_filters('wpinv_quote_valid_until_date_label', __('Valid Until Date', 'invoicing'), $quote); ?></th>
+                <td><?php echo $valid; ?></td>
+            </tr>
+            <?php
+        }
+    }
+
+    function wpinv_email_invoice_details_after_due_date( $quote_id = 0 ) {
+        $quote = wpinv_get_invoice($quote_id);
+        if ( $quote && 'wpi_quote' != $quote->post_type ) {
+            return;
+        }
+        $valid = $this->get_valid_date(true, $quote_id);
+        if(isset($valid) && !empty($valid)) {
+            ?>
+            <tr>
+                <td><?php echo apply_filters('wpinv_quote_valid_until_date_label', __('Valid Until Date', 'invoicing'), $quote); ?></td>
+                <td><?php echo wp_sprintf('<time datetime="%s">%s</time>', date_i18n('c', strtotime($valid)), $valid); ?></td>
+            </tr>
+            <?php
+        }
+    }
+
 }

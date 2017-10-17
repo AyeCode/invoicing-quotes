@@ -215,6 +215,9 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_post_name_prefix', $plugin_admin, 'wpinv_quote_post_name_prefix', 10, 2);
         $this->loader->add_action('template_redirect', $plugin_admin, 'quote_to_invoice_redirect', 100);
         $this->loader->add_filter('wpinv_email_format_text', $plugin_admin, 'wpinv_quote_email_format_text', 10, 3);
+        $this->loader->add_action('wpinv_meta_box_details_after_due_date', $plugin_admin, 'wpinv_meta_box_details_after_due_date', 10, 1);
+        $this->loader->add_action('wpinv_display_details_after_due_date', $plugin_admin, 'wpinv_display_details_after_due_date', 10, 1);
+        $this->loader->add_action('wpinv_email_invoice_details_after_due_date', $plugin_admin, 'wpinv_email_invoice_details_after_due_date', 10, 1);
 
         if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
             $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);

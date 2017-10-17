@@ -500,7 +500,7 @@ class WPInv_Quote_Reports
             'gateway_nicename' => __('Gateway Nicename', 'invoicing'),
             'transaction_id' => __('Transaction ID', 'invoicing'),
             'currency' => __('Currency', 'invoicing'),
-            'due_date' => __('Due Date', 'invoicing'),
+            'valid_date' => __('Valid Until Date', 'invoicing'),
         );
 
         return $columns;
@@ -544,6 +544,7 @@ class WPInv_Quote_Reports
 
         if (!empty($quotes)) {
             foreach ($quotes as $quote) {
+                $valid_date = get_post_meta($quote->ID, 'wpinv_quote_valid_until', true);
                 $row = array(
                     'id' => $quote->ID,
                     'number' => $quote->get_number(),
@@ -570,7 +571,7 @@ class WPInv_Quote_Reports
                     'gateway_nicename' => $quote->get_gateway_title(),
                     'transaction_id' => $quote->gateway ? $quote->get_transaction_id() : '',
                     'currency' => $quote->get_currency(),
-                    'due_date' => $quote->needs_payment() ? $quote->get_due_date() : '',
+                    'valid_date' => ($valid_date != '') ? date_i18n( get_option( 'date_format' ), strtotime( $valid_date ) ) : '',
                 );
 
                 $data[] = apply_filters('wpinv_export_quote_row', $row, $quote);
