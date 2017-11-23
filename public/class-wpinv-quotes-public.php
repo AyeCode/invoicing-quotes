@@ -129,6 +129,7 @@ class Wpinv_Quotes_Public
 
         $accept_msg = wpinv_get_option('accepted_quote_message');
         $decline_msg = wpinv_get_option('declined_quote_message');
+        $accepted_action = wpinv_get_option('accepted_quote_action');
         
         if ($quote->post_status == 'wpi-quote-pending') {
             remove_query_arg('wpi_action');
@@ -140,12 +141,12 @@ class Wpinv_Quotes_Public
             <button class="btn btn-danger btn-sm decline-quote"
                     title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"
                     onclick="showAlert('decline')"><?php _e('Decline Quotation', 'wpinv-quotes'); ?></button>
-            <p id="accept-alert" class="alert alert-success"><?php _e('An invoice will be generated on acceptance. ') ?>
+            <p id="accept-alert" class="alert alert-success"><?php if('do_nothing' === $accepted_action) { _e('Click on continue to accept this quotation. ', 'wpinv-quotes'); } else { _e('An invoice will be generated on acceptance. ', 'wpinv-quotes'); } ?>
                 <a class="btn btn-success btn-xs accept-quote"
                    title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>"
                    href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>
             </p>
-            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quote. ') ?> <a
+            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quotation. ', 'invoicing') ?> <a
                     class="btn btn-danger btn-xs decline-quote"
                     title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"
                     href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>
