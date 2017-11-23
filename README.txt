@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpinvoicing.com
 Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
 Requires at least: 3.1
-Tested up to: 4.8.1
-Stable tag: 1.0.0
+Tested up to: 4.9
+Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,9 +37,9 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 
 = Automatic installation =
 
-Automatic installation is the easiest option. To do an automatic install of GeoDirectory, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
+Automatic installation is the easiest option. To do an automatic install of Invoicing - Quotes, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
 
-In the search field type Invoicing and click Search Plugins. Once you've found our Directory plugin you install it by simply clicking Install Now. [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
+In the search field type Invoicing - Quotes and click Search Plugins. Once you've found Invoicing - Quotes plugin you install it by simply clicking Install Now. [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
 
 = Manual installation =
 
@@ -68,6 +68,8 @@ Show last quote's sequential number - ADDED
 User needs to be logged in to accept/decline quote - FIXED
 Accepting quote redirects to invoice without invoice_key - FIXED
 Link added in quote notification to accept or decline quote - ADDED
+Redirect accepted quote to invoice - FIXED
+Wrong text domain being used - FIXED
 
 = 1.0.0 =
 
