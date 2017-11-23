@@ -50,9 +50,9 @@ class Wpinv_Quotes_Shared
         add_action( 'init', array( 'Wpinv_Quote_Shortcodes', 'init' ) );
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
-            'wpi-quote-pending' => __('Pending', 'invoicing'),
-            'wpi-quote-accepted' => __('Accepted', 'invoicing'),
-            'wpi-quote-declined' => __('Declined', 'invoicing'),
+            'wpi-quote-pending' => __('Pending', 'wpinv-quotes'),
+            'wpi-quote-accepted' => __('Accepted', 'wpinv-quotes'),
+            'wpi-quote-declined' => __('Declined', 'wpinv-quotes'),
         ));
 
     }
@@ -119,7 +119,7 @@ class Wpinv_Quotes_Shared
     public static function wpinv_quote_status_nicename($status)
     {
         $statuses = self::$quote_statuses;
-        $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'invoicing');
+        $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'wpinv-quotes');
 
         return $status;
     }
@@ -182,10 +182,10 @@ class Wpinv_Quotes_Shared
     public static function wpinv_get_user_quote_columns()
     {
         $columns = array(
-            'quote-number' => array('title' => __('ID', 'invoicing'), 'class' => 'text-left'),
-            'quote-date' => array('title' => __('Date', 'invoicing'), 'class' => 'text-left'),
-            'quote-status' => array('title' => __('Status', 'invoicing'), 'class' => 'text-center'),
-            'quote-total' => array('title' => __('Total', 'invoicing'), 'class' => 'text-right'),
+            'quote-number' => array('title' => __('ID', 'wpinv-quotes'), 'class' => 'text-left'),
+            'quote-date' => array('title' => __('Date', 'wpinv-quotes'), 'class' => 'text-left'),
+            'quote-status' => array('title' => __('Status', 'wpinv-quotes'), 'class' => 'text-center'),
+            'quote-total' => array('title' => __('Total', 'wpinv-quotes'), 'class' => 'text-right'),
             'quote-actions' => array('title' => '&nbsp;', 'class' => 'text-center'),
         );
 

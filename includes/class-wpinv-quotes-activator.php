@@ -33,8 +33,8 @@ class Wpinv_Quotes_Activator
         global $wpdb;
 
         $cap_type = 'wpi_quote';
-        $plural = __('Quotes', 'invoicing');
-        $single = __('Quote', 'invoicing');
+        $plural = __('Quotes', 'wpinv-quotes');
+        $single = __('Quote', 'wpinv-quotes');
         $menu_icon = WPINV_QUOTES_URL . '/assets/images/favicon.ico';
         $menu_icon = apply_filters('wpinv_menu_icon_quotes', $menu_icon);
 
@@ -72,20 +72,20 @@ class Wpinv_Quotes_Activator
         $opts['capabilities']['read_post'] = "read_{$cap_type}";
         $opts['capabilities']['read_private_posts'] = "read_private_{$cap_type}s";
 
-        $opts['labels']['add_new'] = __("Add New {$single}", 'invoicing');
-        $opts['labels']['add_new_item'] = __("Add New {$single}", 'invoicing');
-        $opts['labels']['all_items'] = __($plural, 'invoicing');
-        $opts['labels']['edit_item'] = __("Edit {$single}", 'invoicing');
-        $opts['labels']['menu_name'] = __($plural, 'invoicing');
-        $opts['labels']['name'] = __($plural, 'invoicing');
-        $opts['labels']['name_admin_bar'] = __($single, 'invoicing');
-        $opts['labels']['new_item'] = __("New {$single}", 'invoicing');
-        $opts['labels']['not_found'] = __("No {$plural} Found", 'invoicing');
-        $opts['labels']['not_found_in_trash'] = __("No {$plural} Found in Trash", 'invoicing');
-        $opts['labels']['parent_item_colon'] = __("Parent {$plural} :", 'invoicing');
-        $opts['labels']['search_items'] = __("Search {$plural}", 'invoicing');
-        $opts['labels']['singular_name'] = __($single, 'invoicing');
-        $opts['labels']['view_item'] = __("View {$single}", 'invoicing');
+        $opts['labels']['add_new'] = __("Add New {$single}", 'wpinv-quotes');
+        $opts['labels']['add_new_item'] = __("Add New {$single}", 'wpinv-quotes');
+        $opts['labels']['all_items'] = __($plural, 'wpinv-quotes');
+        $opts['labels']['edit_item'] = __("Edit {$single}", 'wpinv-quotes');
+        $opts['labels']['menu_name'] = __($plural, 'wpinv-quotes');
+        $opts['labels']['name'] = __($plural, 'wpinv-quotes');
+        $opts['labels']['name_admin_bar'] = __($single, 'wpinv-quotes');
+        $opts['labels']['new_item'] = __("New {$single}", 'wpinv-quotes');
+        $opts['labels']['not_found'] = __("No {$plural} Found", 'wpinv-quotes');
+        $opts['labels']['not_found_in_trash'] = __("No {$plural} Found in Trash", 'wpinv-quotes');
+        $opts['labels']['parent_item_colon'] = __("Parent {$plural} :", 'wpinv-quotes');
+        $opts['labels']['search_items'] = __("Search {$plural}", 'wpinv-quotes');
+        $opts['labels']['singular_name'] = __($single, 'wpinv-quotes');
+        $opts['labels']['view_item'] = __("View {$single}", 'wpinv-quotes');
 
         $opts['rewrite']['slug'] = FALSE;
         $opts['rewrite']['with_front'] = FALSE;
