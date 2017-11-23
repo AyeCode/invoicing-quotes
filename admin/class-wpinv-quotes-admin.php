@@ -754,10 +754,10 @@ class Wpinv_Quotes_Admin
                 ),
                 'email_user_quote_body' => array(
                     'id'   => 'email_user_quote_body',
-                    'name' => __( 'Email Content', 'invoicing' ),
-                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'invoicing' ),
+                    'name' => __( 'Email Content', 'wpinv-quotes' ),
+                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
                     'type' => 'rich_editor',
-                    'std'  => __( '<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </p><p>Click on the following link to view it online where you will be able to accept or decline the quote. <a class="btn btn-success" href="{quote_link}">View & Accept / Decline Quote</a></p>', 'invoicing' ),
+                    'std'  => __( '<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </p><p>Click on the following link to view it online where you will be able to accept or decline the quote. <a class="btn btn-success" href="{quote_link}">View & Accept / Decline Quote</a></p>', 'wpinv-quotes' ),
                     'class' => 'large',
                     'size' => '10'
                 ),
@@ -794,10 +794,10 @@ class Wpinv_Quotes_Admin
                 ),
                 'email_user_quote_accepted_body' => array(
                     'id'   => 'email_user_quote_accepted_body',
-                    'name' => __( 'Email Content', 'invoicing' ),
-                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'invoicing' ),
+                    'name' => __( 'Email Content', 'wpinv-quotes' ),
+                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
                     'type' => 'rich_editor',
-                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been accepted. </p>', 'invoicing' ),
+                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been accepted. </p>', 'wpinv-quotes' ),
                     'class' => 'large',
                     'size' => '10'
                 ),
@@ -834,10 +834,10 @@ class Wpinv_Quotes_Admin
                 ),
                 'email_user_quote_declined_body' => array(
                     'id'   => 'email_user_quote_declined_body',
-                    'name' => __( 'Email Content', 'invoicing' ),
-                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'invoicing' ),
+                    'name' => __( 'Email Content', 'wpinv-quotes' ),
+                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
                     'type' => 'rich_editor',
-                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been declined. </p>', 'invoicing' ),
+                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been declined. </p>', 'wpinv-quotes' ),
                     'class' => 'large',
                     'size' => '10'
                 ),
