@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpinvoicing.com
 Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
 Requires at least: 3.1
-Tested up to: 4.9
+Tested up to: 4.9.1
 Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -62,6 +62,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Changelog ==
 
+= 1.0.2 =
+Subscription functionality improved - CHANGED
+
 = 1.0.1 =
 Problem in sending quote notification emails - FIXED
 Show last quote's sequential number - ADDED
@@ -69,6 +72,9 @@ User needs to be logged in to accept/decline quote - FIXED
 Accepting quote redirects to invoice without invoice_key - FIXED
 Link added in quote notification to accept or decline quote - ADDED
 Redirect accepted quote to invoice - FIXED
+Add UI to modify notifications - ADDED
+Wrong text domain being used - FIXED
+Add quote valid to date - ADDED
 
 = 1.0.0 =
 

@@ -5,6 +5,10 @@ if (!defined('ABSPATH'))
 
 do_action('wpinv_email_header', $email_heading, $quote, $email_type, $sent_to_admin);
 
+if ( ! empty( $message_body ) ) {
+    echo wpautop( wptexturize( $message_body ) );
+}
+
 do_action('wpinv_email_before_quote_details', $quote, $email_type, $sent_to_admin);
 
 do_action('wpinv_email_invoice_details', $quote, $email_type, $sent_to_admin);

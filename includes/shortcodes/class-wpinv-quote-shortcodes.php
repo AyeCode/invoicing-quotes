@@ -10,13 +10,12 @@
  */
 
 class Wpinv_Quote_Shortcodes {
-
     /**
      * Init shortcodes.
      */
     public static function init() {
         $shortcodes = array(
-            'wpinv_quote_history'  => __CLASS__ . '::wpinv_quote_history',
+            'wpinv_quote_history'  => __CLASS__ . '::history',
         );
 
         foreach ( $shortcodes as $shortcode => $function ) {
@@ -31,19 +30,11 @@ class Wpinv_Quote_Shortcodes {
      * @param array $atts (default: array())
      * @return string
      */
-    public static function wpinv_shortcode_wrapper(
-        $function,
-        $atts    = array(),
-        $wrapper = array(
-            'class'  => 'wpinv-quotes',
-            'before' => null,
-            'after'  => null,
-        )
-    ) {
+    public static function shortcode_wrapper( $function, $atts = array(), $content = null, $wrapper = array( 'class' => 'wpi-g', 'before' => null, 'after' => null ) ) {
         ob_start();
 
         echo empty( $wrapper['before'] ) ? '<div class="' . esc_attr( $wrapper['class'] ) . '">' : $wrapper['before'];
-        call_user_func( $function, $atts );
+        call_user_func( $function, $atts, $content );
         echo empty( $wrapper['after'] ) ? '</div>' : $wrapper['after'];
 
         return ob_get_clean();
@@ -55,18 +46,18 @@ class Wpinv_Quote_Shortcodes {
      * @param mixed $atts
      * @return string
      */
-    public static function wpinv_quote_history( $atts ) {
-        return self::wpinv_shortcode_wrapper( array( __CLASS__, 'output' ), $atts );
+    public static function history( $atts ) {
+        return self::shortcode_wrapper( array( __CLASS__, 'output' ), $atts );
     }
 
-	/**
-	 * Output the shortcode.
-	 *
-	 * @param array $atts
-	 */
-	public static function output( $atts ) {
+    /**
+     * Output the shortcode.
+     *
+     * @param array $atts
+     */
+    public static function output( $atts ) {
         do_action( 'wpinv_before_user_quote_history' );
-        wpinv_get_template('wpinv-quote-history.php', $atts, 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
+        wpinv_get_template( 'wpinv-quote-history.php', $atts, 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/' );
         do_action( 'wpinv_after_user_quote_history' );
-	}
+    }
 }
