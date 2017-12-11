@@ -83,8 +83,8 @@ class Wpinv_Quotes_Admin
         $localize = array();
         if (isset($post->ID) && $post->post_type == 'wpi_quote' && ($pagenow == 'post-new.php' || $pagenow == 'post.php')) {
             wp_enqueue_script('jquery-ui-datepicker');
-            $localize['convert_quote'] = __('Are you sure you want to convert from Quote to Invoice?', 'invoicing');
-            $localize['save_quote'] = __('Save Quote', 'invoicing');
+            $localize['convert_quote'] = __('Are you sure you want to convert from Quote to Invoice?', 'wpinv-quotes');
+            $localize['save_quote'] = __('Save Quote', 'wpinv-quotes');
         }
         wp_localize_script($this->plugin_name, 'wpinv_quotes_admin', $localize);
 
@@ -103,8 +103,8 @@ class Wpinv_Quotes_Admin
 
             $pages = apply_filters( 'wpinv_create_pages', array(
                 'quote_history_page' => array(
-                    'name'    => _x( 'wpi-quotes-history', 'Page slug', 'invoicing' ),
-                    'title'   => _x( 'Quote History', 'Page title', 'invoicing' ),
+                    'name'    => _x( 'wpi-quotes-history', 'Page slug', 'wpinv-quotes' ),
+                    'title'   => _x( 'Quote History', 'Page title', 'wpinv-quotes' ),
                     'content' => '[' . apply_filters( 'wpinv_quote_history_shortcode_tag', 'wpinv_quote_history' ) . ']',
                     'parent' => 'wpi-checkout',
                 ),
@@ -163,8 +163,10 @@ class Wpinv_Quotes_Admin
         global $pagenow, $post;
 
         if (isset($post->ID) && $post->post_type == 'wpi_quote' && ($pagenow == 'post-new.php' || $pagenow == 'post.php')) {
-            $localize['emptyInvoice'] = __('Add at least one item to save quote!', 'invoicing');
-            $localize['OneItemMin'] = __('Quote must contain at least one item', 'invoicing');
+            $localize['emptyInvoice'] = __('Add at least one item to save quote!', 'wpinv-quotes');
+            $localize['OneItemMin'] = __('Quote must contain at least one item', 'wpinv-quotes');
+            $localize['deletePackage'] = __('GD package items should be deleted from GD payment manager only, otherwise it will break quotes created with this package!', 'wpinv-quotes');
+            $localize['deleteInvoiceFirst'] = __('This item is in use! Before delete this item, you need to delete all the quote(s) using this item.', 'wpinv-quotes');
         }
 
         return $localize;
@@ -180,8 +182,8 @@ class Wpinv_Quotes_Admin
     {
 
         $cap_type = 'wpi_quote';
-        $plural = __('Quotes', 'invoicing');
-        $single = __('Quote', 'invoicing');
+        $plural = __('Quotes', 'wpinv-quotes');
+        $single = __('Quote', 'wpinv-quotes');
         $menu_icon = WPINV_QUOTES_URL . '/images/favicon.ico';
         $menu_icon = apply_filters('wpinv_menu_icon_quotes', $menu_icon);
 
@@ -220,20 +222,20 @@ class Wpinv_Quotes_Admin
         $opts['capabilities']['read_post'] = "read_{$cap_type}";
         $opts['capabilities']['read_private_posts'] = "read_private_{$cap_type}s";
 
-        $opts['labels']['add_new'] = __("Add New {$single}", 'invoicing');
-        $opts['labels']['add_new_item'] = __("Add New {$single}", 'invoicing');
-        $opts['labels']['all_items'] = __($plural, 'invoicing');
-        $opts['labels']['edit_item'] = __("Edit {$single}", 'invoicing');
-        $opts['labels']['menu_name'] = __($plural, 'invoicing');
-        $opts['labels']['name'] = __($plural, 'invoicing');
-        $opts['labels']['name_admin_bar'] = __($single, 'invoicing');
-        $opts['labels']['new_item'] = __("New {$single}", 'invoicing');
-        $opts['labels']['not_found'] = __("No {$plural} Found", 'invoicing');
-        $opts['labels']['not_found_in_trash'] = __("No {$plural} Found in Trash", 'invoicing');
-        $opts['labels']['parent_item_colon'] = __("Parent {$plural} :", 'invoicing');
-        $opts['labels']['search_items'] = __("Search {$plural}", 'invoicing');
-        $opts['labels']['singular_name'] = __($single, 'invoicing');
-        $opts['labels']['view_item'] = __("View {$single}", 'invoicing');
+        $opts['labels']['add_new'] = __("Add New {$single}", 'wpinv-quotes');
+        $opts['labels']['add_new_item'] = __("Add New {$single}", 'wpinv-quotes');
+        $opts['labels']['all_items'] = __($plural, 'wpinv-quotes');
+        $opts['labels']['edit_item'] = __("Edit {$single}", 'wpinv-quotes');
+        $opts['labels']['menu_name'] = __($plural, 'wpinv-quotes');
+        $opts['labels']['name'] = __($plural, 'wpinv-quotes');
+        $opts['labels']['name_admin_bar'] = __($single, 'wpinv-quotes');
+        $opts['labels']['new_item'] = __("New {$single}", 'wpinv-quotes');
+        $opts['labels']['not_found'] = __("No {$plural} Found", 'wpinv-quotes');
+        $opts['labels']['not_found_in_trash'] = __("No {$plural} Found in Trash", 'wpinv-quotes');
+        $opts['labels']['parent_item_colon'] = __("Parent {$plural} :", 'wpinv-quotes');
+        $opts['labels']['search_items'] = __("Search {$plural}", 'wpinv-quotes');
+        $opts['labels']['singular_name'] = __($single, 'wpinv-quotes');
+        $opts['labels']['view_item'] = __("View {$single}", 'wpinv-quotes');
 
         $opts = apply_filters('wpinv_quote_params', $opts);
 
@@ -252,13 +254,13 @@ class Wpinv_Quotes_Admin
     {
         $columns = array(
             'cb' => $columns['cb'],
-            'number' => __( 'Number', 'invoicing' ),
-            'customer' => __('Customer', 'invoicing'),
-            'amount' => __('Amount', 'invoicing'),
-            'quote_date' => __('Date', 'invoicing'),
-            'status' => __('Status', 'invoicing'),
-            'ID' => __('ID', 'invoicing'),
-            'wpi_actions' => __('Actions', 'invoicing'),
+            'number' => __( 'Number', 'wpinv-quotes' ),
+            'customer' => __('Customer', 'wpinv-quotes'),
+            'amount' => __('Amount', 'wpinv-quotes'),
+            'quote_date' => __('Date', 'wpinv-quotes'),
+            'status' => __('Status', 'wpinv-quotes'),
+            'ID' => __('ID', 'wpinv-quotes'),
+            'wpi_actions' => __('Actions', 'wpinv-quotes'),
         );
 
         return apply_filters('wpi_quote_table_columns', $columns);
@@ -324,7 +326,7 @@ class Wpinv_Quotes_Admin
                 break;
             case 'customer' :
                 $customer_name = $wpi_invoice->get_user_full_name();
-                $customer_name = $customer_name != '' ? $customer_name : __('Customer', 'invoicing');
+                $customer_name = $customer_name != '' ? $customer_name : __('Customer', 'wpinv-quotes');
                 $value = '<a href="' . esc_url(get_edit_user_link($wpi_invoice->get_user_id())) . '">' . $customer_name . '</a>';
                 if ($email = $wpi_invoice->get_email()) {
                     $value .= '<br><a class="email" href="mailto:' . $email . '">' . $email . '</a>';
@@ -349,22 +351,22 @@ class Wpinv_Quotes_Admin
                 break;
             case 'number' :
                 $edit_link = get_edit_post_link( $post->ID );
-                $value = '<a title="' . esc_attr__( 'View Quote Details', 'invoicing' ) . '" href="' . esc_url( $edit_link ) . '">' . $wpi_invoice->get_number() . '</a>';
+                $value = '<a title="' . esc_attr__( 'View Quote Details', 'wpinv-quotes' ) . '" href="' . esc_url( $edit_link ) . '">' . $wpi_invoice->get_number() . '</a>';
                 break;
             case 'wpi_actions' :
                 $value = '';
                 if (!empty($post->post_name)) {
-                    $value .= '<a title="' . esc_attr__('Print quote', 'invoicing') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fa fa-print"></i></span></a>';
+                    $value .= '<a title="' . esc_attr__('Print quote', 'wpinv-quotes') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fa fa-print"></i></span></a>';
                 }
 
                 if ($email = $wpi_invoice->get_email()) {
-                    $value .= '<a title="' . esc_attr__('Send quote to customer', 'invoicing') . '" href="' . esc_url(add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID))) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
+                    $value .= '<a title="' . esc_attr__('Send quote to customer', 'wpinv-quotes') . '" href="' . esc_url(add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID))) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
                 }
 
                 if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('wpi-quote-pending'))) {
                     $action_url = add_query_arg(array('wpi_action' => 'convert_quote_to_invoice', 'quote_id' => $post->ID));
                     $action_url = esc_url(wp_nonce_url($action_url, 'convert', 'wpinv_convert_quote'));
-                    $value .= '<a title="' . esc_attr__('Convert quote to invoice', 'invoicing') . '" href="' . $action_url . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-controls-repeat"></span></a>';
+                    $value .= '<a title="' . esc_attr__('Convert quote to invoice', 'wpinv-quotes') . '" href="' . $action_url . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-controls-repeat"></span></a>';
                 }
 
                 break;
@@ -408,13 +410,13 @@ class Wpinv_Quotes_Admin
         global $wpi_mb_invoice;
         if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $wpi_mb_invoice = wpinv_get_invoice($post->ID);
-            add_meta_box('wpinv-details', __('Quote Details', 'invoicing'), 'WPInv_Meta_Box_Details::output', 'wpi_quote', 'side', 'default');
-            add_meta_box('wpinv-address', __('Billing Details', 'invoicing'), 'WPInv_Meta_Box_Billing_Details::output', 'wpi_quote', 'normal', 'high');
-            add_meta_box('wpinv-items', __('Quote Items', 'invoicing'), 'WPInv_Meta_Box_Items::output', 'wpi_quote', 'normal', 'high');
-            add_meta_box('wpinv-notes', __('Quote Notes', 'invoicing'), 'WPInv_Meta_Box_Notes::output', 'wpi_quote', 'normal', 'high');
+            add_meta_box('wpinv-details', __('Quote Details', 'wpinv-quotes'), 'WPInv_Meta_Box_Details::output', 'wpi_quote', 'side', 'default');
+            add_meta_box('wpinv-address', __('Billing Details', 'wpinv-quotes'), 'WPInv_Meta_Box_Billing_Details::output', 'wpi_quote', 'normal', 'high');
+            add_meta_box('wpinv-items', __('Quote Items', 'wpinv-quotes'), 'WPInv_Meta_Box_Items::output', 'wpi_quote', 'normal', 'high');
+            add_meta_box('wpinv-notes', __('Quote Notes', 'wpinv-quotes'), 'WPInv_Meta_Box_Notes::output', 'wpi_quote', 'normal', 'high');
             if (!empty($wpi_mb_invoice) && $wpi_mb_invoice->has_status(array('wpi-quote-pending'))) {
-                add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'invoicing'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
-                add_meta_box('wpinv-mb-convert-quote', __('Convert Quote', 'invoicing'), 'WPInv_Quote_Meta_Box::quote_to_invoice_output', 'wpi_quote', 'side', 'high');
+                add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'wpinv-quotes'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
+                add_meta_box('wpinv-mb-convert-quote', __('Convert Quote', 'wpinv-quotes'), 'WPInv_Quote_Meta_Box::quote_to_invoice_output', 'wpi_quote', 'side', 'high');
             }
         }
     }
@@ -431,8 +433,8 @@ class Wpinv_Quotes_Admin
         global $post;
         if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
             $text = array(
-                'message' => esc_attr__('This will send a copy of the quote to the customer&#8217;s email address.', 'invoicing'),
-                'button_text' => __('Resend Quote', 'invoicing'),
+                'message' => esc_attr__('This will send a copy of the quote to the customer&#8217;s email address.', 'wpinv-quotes'),
+                'button_text' => __('Resend Quote', 'wpinv-quotes'),
             );
         }
         return $text;
@@ -465,8 +467,8 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_detail_metabox_titles($title, $post)
     {
         if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
-            $title['status'] = __('Quote Status:', 'invoicing');
-            $title['number'] = __('Quote Number:', 'invoicing');
+            $title['status'] = __('Quote Status:', 'wpinv-quotes');
+            $title['number'] = __('Quote Number:', 'wpinv-quotes');
         }
         return $title;
     }
@@ -482,7 +484,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_items_total_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
-            $title = __('Quote Total:', 'invoicing');
+            $title = __('Quote Total:', 'wpinv-quotes');
         }
         return $title;
     }
@@ -498,7 +500,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_metabox_mail_notice($mail_notice, $post)
     {
         if (!empty($post->ID) && 'wpi_quote' == $post->post_type) {
-            $mail_notice = __('After saving quote, this will send a copy of the quote to the user&#8217;s email address.', 'invoicing');
+            $mail_notice = __('After saving quote, this will send a copy of the quote to the user&#8217;s email address.', 'wpinv-quotes');
         }
         return $mail_notice;
 
@@ -512,28 +514,28 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_register_post_status()
     {
         register_post_status('wpi-quote-pending', array(
-            'label' => _x('Pending', 'Quote status', 'invoicing'),
+            'label' => _x('Pending', 'Quote status', 'wpinv-quotes'),
             'public' => true,
             'exclude_from_search' => true,
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Pending <span class="count">(%s)</span>', 'Pending <span class="count">(%s)</span>', 'invoicing')
+            'label_count' => _n_noop('Pending <span class="count">(%s)</span>', 'Pending <span class="count">(%s)</span>', 'wpinv-quotes')
         ));
         register_post_status('wpi-quote-accepted', array(
-            'label' => _x('Accepted', 'Quote status', 'invoicing'),
+            'label' => _x('Accepted', 'Quote status', 'wpinv-quotes'),
             'public' => true,
             'exclude_from_search' => true,
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Accepted <span class="count">(%s)</span>', 'Accepted <span class="count">(%s)</span>', 'invoicing')
+            'label_count' => _n_noop('Accepted <span class="count">(%s)</span>', 'Accepted <span class="count">(%s)</span>', 'wpinv-quotes')
         ));
         register_post_status('wpi-quote-declined', array(
-            'label' => _x('Declined', 'Quote status', 'invoicing'),
+            'label' => _x('Declined', 'Quote status', 'wpinv-quotes'),
             'public' => true,
             'exclude_from_search' => true,
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Declined <span class="count">(%s)</span>', 'Declined <span class="count">(%s)</span>', 'invoicing')
+            'label_count' => _n_noop('Declined <span class="count">(%s)</span>', 'Declined <span class="count">(%s)</span>', 'wpinv-quotes')
         ));
     }
 
@@ -541,12 +543,12 @@ class Wpinv_Quotes_Admin
      * Add quote settings tab
      *
      * @since    1.0.0
-     * @param array $tabs all tabs of invoicing settings
+     * @param array $tabs all tabs of wpinv-quotes settings
      * @return array $tabs add with quote tab
      */
     function wpinv_quote_settings_tabs($tabs)
     {
-        $tabs['quote'] = __('Quote', 'invoicing');
+        $tabs['quote'] = __('Quote', 'wpinv-quotes');
 
         return $tabs;
     }
@@ -555,7 +557,7 @@ class Wpinv_Quotes_Admin
      * Add quote settings tab main
      *
      * @since    1.0.0
-     * @param array $sections all sections of invoicing settings
+     * @param array $sections all sections of wpinv-quotes settings
      * @return array $sections add quote main sections
      */
     function wpinv_quote_settings_sections($sections)
@@ -563,7 +565,7 @@ class Wpinv_Quotes_Admin
 
         $quote_sections = array(
             'quote' => apply_filters('wpinv_settings_sections_quote', array(
-                'main' => __('Quote Settings', 'invoicing'),
+                'main' => __('Quote Settings', 'wpinv-quotes'),
             )),
         );
 
@@ -586,13 +588,13 @@ class Wpinv_Quotes_Admin
         for ($i = 0; $i <= 20; $i++) {
             $quote_number_padd_options[$i] = $i;
         }
-        
+
         $last_number = '';
         if ( $last_quote_number = get_option( 'wpinv_last_quote_number' ) ) {
-            $last_quote_number = is_numeric( $last_quote_number ) ? $last_quote_number : $this->wpinv_clean_quote_number( $last_quote_number );
+            $last_quote_number = is_numeric( $last_quote_number ) ? $last_quote_number : Wpinv_Quotes_Shared::wpinv_clean_quote_number( $last_quote_number );
 
             if ( !empty( $last_quote_number ) ) {
-                $last_number = ' ' . wp_sprintf( __( "( Last Quote's sequential number: <b>%s</b> )", 'invoicing' ), $last_quote_number );
+                $last_number = ' ' . wp_sprintf( __( "( Last Quote's sequential number: <b>%s</b> )", 'wpinv-quotes' ), $last_quote_number );
             }
         }
         $quote_settings = array(
@@ -601,19 +603,19 @@ class Wpinv_Quotes_Admin
                     'main' => array(
                         'quote_number_format_settings' => array(
                             'id' => 'quote_number_format_settings',
-                            'name' => '<h3>' . __('Quote Number', 'invoicing') . '</h3>',
+                            'name' => '<h3>' . __('Quote Number', 'wpinv-quotes') . '</h3>',
                             'type' => 'header',
                         ),
                         'sequential_quote_number' => array(
                             'id'   => 'sequential_quote_number',
-                            'name' => __( 'Sequential Quote Numbers', 'invoicing' ),
-                            'desc' => __( 'Check this box to enable sequential quote numbers.', 'invoicing' ),
+                            'name' => __( 'Sequential Quote Numbers', 'wpinv-quotes' ),
+                            'desc' => __( 'Check this box to enable sequential quote numbers.', 'wpinv-quotes' ),
                             'type' => 'checkbox',
                         ),
                         'quote_sequence_start' => array(
                             'id'   => 'quote_sequence_start',
-                            'name' => __( 'Sequential Starting Number', 'invoicing' ),
-                            'desc' => __( 'The number at which the quote number sequence should begin.', 'invoicing' ) . $last_number,
+                            'name' => __( 'Sequential Starting Number', 'wpinv-quotes' ),
+                            'desc' => __( 'The number at which the quote number sequence should begin.', 'wpinv-quotes' ) . $last_number,
                             'type' => 'number',
                             'size' => 'small',
                             'std'  => '1',
@@ -621,8 +623,8 @@ class Wpinv_Quotes_Admin
                         ),
                         'quote_number_padd' => array(
                             'id' => 'quote_number_padd',
-                            'name' => __('Minimum digits', 'invoicing'),
-                            'desc' => __('If the quote number has less digits than this number, it is left padded with 0s. Ex: quote number 108 will padded to 00108 if digits set to 5. The default 0 means no padding.', 'invoicing'),
+                            'name' => __('Minimum digits', 'wpinv-quotes'),
+                            'desc' => __('If the quote number has less digits than this number, it is left padded with 0s. Ex: quote number 108 will padded to 00108 if digits set to 5. The default 0 means no padding.', 'wpinv-quotes'),
                             'type' => 'select',
                             'options' => $quote_number_padd_options,
                             'std' => 5,
@@ -630,8 +632,8 @@ class Wpinv_Quotes_Admin
                         ),
                         'quote_number_prefix' => array(
                             'id' => 'quote_number_prefix',
-                            'name' => __('Quote Number Prefix', 'invoicing'),
-                            'desc' => __('A prefix to prepend to all quote numbers. Ex: WPQUO-', 'invoicing'),
+                            'name' => __('Quote Number Prefix', 'wpinv-quotes'),
+                            'desc' => __('A prefix to prepend to all quote numbers. Ex: WPQUO-', 'wpinv-quotes'),
                             'type' => 'text',
                             'size' => 'regular',
                             'std' => 'WPQUO-',
@@ -639,61 +641,61 @@ class Wpinv_Quotes_Admin
                         ),
                         'quote_number_postfix' => array(
                             'id' => 'quote_number_postfix',
-                            'name' => __('Quote Number Postfix', 'invoicing'),
-                            'desc' => __('A postfix to append to all quote numbers.', 'invoicing'),
+                            'name' => __('Quote Number Postfix', 'wpinv-quotes'),
+                            'desc' => __('A postfix to append to all quote numbers.', 'wpinv-quotes'),
                             'type' => 'text',
                             'size' => 'regular',
                             'std' => ''
                         ),
                         'quote_page_settings' => array(
                             'id' => 'quote_page_settings',
-                            'name' => '<h3>' . __('Quote Page Settings', 'invoicing') . '</h3>',
+                            'name' => '<h3>' . __('Quote Page Settings', 'wpinv-quotes') . '</h3>',
                             'type' => 'header',
                         ),
                         'quote_history_page' => array(
                             'id'          => 'quote_history_page',
-                            'name'        => __( 'Quote History Page', 'invoicing' ),
-                            'desc'        => __( 'This page displays history of quotes. The <b>[wpinv_quotes]</b> short code should be on this page.', 'invoicing' ),
+                            'name'        => __( 'Quote History Page', 'wpinv-quotes' ),
+                            'desc'        => __( 'This page displays history of quotes. The <b>[wpinv_quotes]</b> short code should be on this page.', 'wpinv-quotes' ),
                             'type'        => 'select',
                             'options'     => $pages,
                             'chosen'      => true,
-                            'placeholder' => __( 'Select a page', 'invoicing' ),
+                            'placeholder' => __( 'Select a page', 'wpinv-quotes' ),
                         ),
                         'accept_quote_settings' => array(
                             'id' => 'accept_quote_settings',
-                            'name' => '<h3>' . __('Accept Quote', 'invoicing') . '</h3>',
+                            'name' => '<h3>' . __('Accept Quote', 'wpinv-quotes') . '</h3>',
                             'type' => 'header',
                         ),
                         'accepted_quote_action' => array(
-                            'name' => __('Accepted Quote Action', 'invoicing'),
-                            'desc' => __('Actions to perform automatically when client accepts quote.', 'invoicing'),
+                            'name' => __('Accepted Quote Action', 'wpinv-quotes'),
+                            'desc' => __('Actions to perform automatically when client accepts quote.', 'wpinv-quotes'),
                             'id' => 'accepted_quote_action',
                             'type' => 'select',
                             'default' => 'convert',
                             'options' => array(
-                                'convert' => __('Convert quote to invoice', 'invoicing'),
-                                'convert_send' => __('Convert quote to invoice and send to client', 'invoicing'),
-                                'duplicate' => __('Create invoice, but keep quote', 'invoicing'),
-                                'duplicate_send' => __('Create invoice and send to client, but keep quote', 'invoicing'),
-                                'do_nothing' => __('Do nothing', 'invoicing'),
+                                'convert' => __('Convert quote to invoice', 'wpinv-quotes'),
+                                'convert_send' => __('Convert quote to invoice and send to client', 'wpinv-quotes'),
+                                'duplicate' => __('Create invoice, but keep quote', 'wpinv-quotes'),
+                                'duplicate_send' => __('Create invoice and send to client, but keep quote', 'wpinv-quotes'),
+                                'do_nothing' => __('Do nothing', 'wpinv-quotes'),
                             ),
                             'std' => 'convert',
                         ),
                         'accepted_quote_message' => array(
-                            'name' => __('Accepted Quote Message', 'invoicing'),
-                            'desc' => __('Message to display if client accepts the quote.', 'invoicing'),
+                            'name' => __('Accepted Quote Message', 'wpinv-quotes'),
+                            'desc' => __('Message to display if client accepts the quote.', 'wpinv-quotes'),
                             'id' => 'accepted_quote_message',
                             'type' => 'text',
                             'size' => 'regular',
-                            'std' => __('You have accepted this quote.', 'invoicing'),
+                            'std' => __('You have accepted this quote.', 'wpinv-quotes'),
                         ),
                         'declined_quote_message' => array(
-                            'name' => __('Declined Quote Message', 'invoicing'),
-                            'desc' => __('Message to display if client declines the quote.', 'invoicing'),
+                            'name' => __('Declined Quote Message', 'wpinv-quotes'),
+                            'desc' => __('Message to display if client declines the quote.', 'wpinv-quotes'),
                             'id' => 'declined_quote_message',
                             'type' => 'text',
                             'size' => 'regular',
-                            'std' => __('You have declined this quote.', 'invoicing'),
+                            'std' => __('You have declined this quote.', 'wpinv-quotes'),
                         ),
                     ),
                 )
@@ -718,101 +720,128 @@ class Wpinv_Quotes_Admin
             'user_quote' => array(
                 'email_user_quote_header' => array(
                     'id' => 'email_user_quote_header',
-                    'name' => '<h3>' . __('Customer Quote', 'invoicing') . '</h3>',
-                    'desc' => __('Customer Quote email can be sent to customers containing their quote information.', 'invoicing'),
+                    'name' => '<h3>' . __('Customer Quote', 'wpinv-quotes') . '</h3>',
+                    'desc' => __('Customer Quote email can be sent to customers containing their quote information.', 'wpinv-quotes'),
                     'type' => 'header',
                 ),
                 'email_user_quote_active' => array(
                     'id' => 'email_user_quote_active',
-                    'name' => __('Enable/Disable', 'invoicing'),
-                    'desc' => __('Enable this email notification', 'invoicing'),
+                    'name' => __('Enable/Disable', 'wpinv-quotes'),
+                    'desc' => __('Enable this email notification', 'wpinv-quotes'),
                     'type' => 'checkbox',
                     'std' => 1
                 ),
                 'email_user_quote_subject' => array(
                     'id' => 'email_user_quote_subject',
-                    'name' => __('Subject', 'invoicing'),
-                    'desc' => __('Enter the subject line for the quote receipt email.', 'invoicing'),
+                    'name' => __('Subject', 'wpinv-quotes'),
+                    'desc' => __('Enter the subject line for the quote receipt email.', 'wpinv-quotes'),
                     'type' => 'text',
-                    'std' => __('[{site_title}] Your quote from {quote_date}', 'invoicing'),
+                    'std' => __('[{site_title}] Your quote from {quote_date}', 'wpinv-quotes'),
                     'size' => 'large'
                 ),
                 'email_user_quote_heading' => array(
                     'id' => 'email_user_quote_heading',
-                    'name' => __('Email Heading', 'invoicing'),
-                    'desc' => __('Enter the main heading contained within the email notification for the quote receipt email.', 'invoicing'),
+                    'name' => __('Email Heading', 'wpinv-quotes'),
+                    'desc' => __('Enter the main heading contained within the email notification for the quote receipt email.', 'wpinv-quotes'),
                     'type' => 'text',
-                    'std' => __('Your quote {quote_number} details', 'invoicing'),
+                    'std' => __('Your quote {quote_number} details', 'wpinv-quotes'),
                     'size' => 'large'
                 ),
                 'email_user_quote_admin_bcc' => array(
                     'id' => 'email_user_quote_admin_bcc',
-                    'name' => __('Enable Admin BCC', 'invoicing'),
-                    'desc' => __('Check if you want to send this notification email to site Admin.', 'invoicing'),
+                    'name' => __('Enable Admin BCC', 'wpinv-quotes'),
+                    'desc' => __('Check if you want to send this notification email to site Admin.', 'wpinv-quotes'),
                     'type' => 'checkbox',
                     'std' => 1
+                ),
+                'email_user_quote_body' => array(
+                    'id'   => 'email_user_quote_body',
+                    'name' => __( 'Email Content', 'wpinv-quotes' ),
+                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
+                    'type' => 'rich_editor',
+                    'std'  => __( '<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </p><p>Click on the following link to view it online where you will be able to accept or decline the quote. <a class="btn btn-success" href="{quote_link}">View & Accept / Decline Quote</a></p>', 'wpinv-quotes' ),
+                    'class' => 'large',
+                    'size' => '10'
                 ),
             ),
             'user_quote_accepted' => array(
                 'email_user_quote_accepted_header' => array(
                     'id' => 'email_user_quote_accepted_header',
-                    'name' => '<h3>' . __('Quote Accepted', 'invoicing') . '</h3>',
-                    'desc' => __('This email will be sent to admin if user has accepted quote.', 'invoicing'),
+                    'name' => '<h3>' . __('Quote Accepted', 'wpinv-quotes') . '</h3>',
+                    'desc' => __('This email will be sent to admin if user has accepted quote.', 'wpinv-quotes'),
                     'type' => 'header',
                 ),
                 'email_user_quote_accepted_active' => array(
                     'id' => 'email_user_quote_accepted_active',
-                    'name' => __('Enable/Disable', 'invoicing'),
-                    'desc' => __('Enable this email notification', 'invoicing'),
+                    'name' => __('Enable/Disable', 'wpinv-quotes'),
+                    'desc' => __('Enable this email notification', 'wpinv-quotes'),
                     'type' => 'checkbox',
                     'std' => 1
                 ),
                 'email_user_quote_accepted_subject' => array(
                     'id' => 'email_user_quote_accepted_subject',
-                    'name' => __('Subject', 'invoicing'),
-                    'desc' => __('Enter the subject line for the quote accepted email.', 'invoicing'),
+                    'name' => __('Subject', 'wpinv-quotes'),
+                    'desc' => __('Enter the subject line for the quote accepted email.', 'wpinv-quotes'),
                     'type' => 'text',
-                    'std' => __('[{site_title}] User has accepted the quote {quote_number}', 'invoicing'),
+                    'std' => __('[{site_title}] User has accepted the quote {quote_number}', 'wpinv-quotes'),
                     'size' => 'large'
                 ),
                 'email_user_quote_accepted_heading' => array(
                     'id' => 'email_user_quote_accepted_heading',
-                    'name' => __('Email Heading', 'invoicing'),
-                    'desc' => __('Enter the main heading contained within the email notification for the quote accepted email.', 'invoicing'),
+                    'name' => __('Email Heading', 'wpinv-quotes'),
+                    'desc' => __('Enter the main heading contained within the email notification for the quote accepted email.', 'wpinv-quotes'),
                     'type' => 'text',
-                    'std' => __('Quote {quote_number} Accepted by user', 'invoicing'),
+                    'std' => __('Quote {quote_number} Accepted by user', 'wpinv-quotes'),
                     'size' => 'large'
+                ),
+                'email_user_quote_accepted_body' => array(
+                    'id'   => 'email_user_quote_accepted_body',
+                    'name' => __( 'Email Content', 'wpinv-quotes' ),
+                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
+                    'type' => 'rich_editor',
+                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been accepted. </p>', 'wpinv-quotes' ),
+                    'class' => 'large',
+                    'size' => '10'
                 ),
             ),
             'user_quote_declined' => array(
                 'email_user_quote_declined_header' => array(
                     'id' => 'email_user_quote_declined_header',
-                    'name' => '<h3>' . __('Quote Declined', 'invoicing') . '</h3>',
-                    'desc' => __('This email will be sent to admin if user has declined quote.', 'invoicing'),
+                    'name' => '<h3>' . __('Quote Declined', 'wpinv-quotes') . '</h3>',
+                    'desc' => __('This email will be sent to admin if user has declined quote.', 'wpinv-quotes'),
                     'type' => 'header',
                 ),
                 'email_user_quote_declined_active' => array(
                     'id' => 'email_user_quote_declined_active',
-                    'name' => __('Enable/Disable', 'invoicing'),
-                    'desc' => __('Enable this email notification', 'invoicing'),
+                    'name' => __('Enable/Disable', 'wpinv-quotes'),
+                    'desc' => __('Enable this email notification', 'wpinv-quotes'),
                     'type' => 'checkbox',
                     'std' => 1
                 ),
                 'email_user_quote_declined_subject' => array(
                     'id' => 'email_user_quote_declined_subject',
-                    'name' => __('Subject', 'invoicing'),
-                    'desc' => __('Enter the subject line for the quote declined email.', 'invoicing'),
+                    'name' => __('Subject', 'wpinv-quotes'),
+                    'desc' => __('Enter the subject line for the quote declined email.', 'wpinv-quotes'),
                     'type' => 'text',
-                    'std' => __('[{site_title}] User has declined the quote {quote_number}', 'invoicing'),
+                    'std' => __('[{site_title}] User has declined the quote {quote_number}', 'wpinv-quotes'),
                     'size' => 'large'
                 ),
                 'email_user_quote_declined_heading' => array(
                     'id' => 'email_user_quote_declined_heading',
-                    'name' => __('Email Heading', 'invoicing'),
-                    'desc' => __('Enter the main heading contained within the email notification for the quote declined email.', 'invoicing'),
+                    'name' => __('Email Heading', 'wpinv-quotes'),
+                    'desc' => __('Enter the main heading contained within the email notification for the quote declined email.', 'wpinv-quotes'),
                     'type' => 'text',
-                    'std' => __('Quote {quote_number} Declined by user', 'invoicing'),
+                    'std' => __('Quote {quote_number} Declined by user', 'wpinv-quotes'),
                     'size' => 'large'
+                ),
+                'email_user_quote_declined_body' => array(
+                    'id'   => 'email_user_quote_declined_body',
+                    'name' => __( 'Email Content', 'wpinv-quotes' ),
+                    'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
+                    'type' => 'rich_editor',
+                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been declined. </p>', 'wpinv-quotes' ),
+                    'class' => 'large',
+                    'size' => '10'
                 ),
             ),
         );
@@ -826,35 +855,6 @@ class Wpinv_Quotes_Admin
      * Send customer quote email notification if Send Quote is selected "yes"
      *
      * @since    1.0.0
-     * @param int $number quote id
-     * @return string $formatted_number change formatted number of quote
-     */
-    function wpinv_format_quote_number($number)
-    {
-        if ( !empty( $number ) && !is_numeric( $number ) ) {
-            return $number;
-        }
-    
-        $padd  = wpinv_get_option( 'quote_number_padd' );
-        $prefix  = wpinv_get_option( 'quote_number_prefix' );
-        $postfix = wpinv_get_option( 'quote_number_postfix' );
-
-        $padd = absint( $padd );
-        $formatted_number = absint( $number );
-
-        if ( $padd > 0 ) {
-            $formatted_number = zeroise( $formatted_number, $padd );
-        }    
-
-        $formatted_number = $prefix . $formatted_number . $postfix;
-
-        return apply_filters( 'wpinv_format_quote_number', $formatted_number, $number, $prefix, $postfix, $padd );
-    }
-
-    /**
-     * Send customer quote email notification if Send Quote is selected "yes"
-     *
-     * @since    1.0.0
      * @param object Quote object.
      */
     function wpinv_send_quote_after_save($quote)
@@ -862,7 +862,7 @@ class Wpinv_Quotes_Admin
         if ( empty( $_POST['wpi_save_send'] ) ) {
             return;
         }
-        
+
         if ( !empty( $quote->ID ) && !empty( $quote->post_type ) && 'wpi_quote' == $quote->post_type ) {
             $this->wpinv_user_quote_notification( $quote->ID );
         }
@@ -875,49 +875,33 @@ class Wpinv_Quotes_Admin
      * @param int $quote_id ID of post/quote
      * @return bool $sent email sent or not
      */
-    function wpinv_user_quote_notification($quote_id)
-    {
-        global $wpinv_email_search, $wpinv_email_replace;
-
+    function wpinv_user_quote_notification( $quote_id, $args = array() ) {
         $email_type = 'user_quote';
 
-        if (!wpinv_email_is_enabled($email_type)) {
+        if ( ! wpinv_email_is_enabled( $email_type ) ) {
             return false;
         }
 
-        $quote = new WPInv_Invoice($quote_id);
+        $quote = new WPInv_Invoice( $quote_id );
 
-        if (empty($quote)) {
+        if ( empty( $quote ) ) {
             return false;
         }
 
-        if (!("wpi_quote" === $quote->post_type)) {
+        if ( !( "wpi_quote" === $quote->post_type ) ) {
             return false;
         }
 
-        $recipient = wpinv_email_get_recipient($email_type, $quote_id, $quote);
-
-        if (!is_email($recipient)) {
+        $recipient = wpinv_email_get_recipient( $email_type, $quote_id, $quote );
+        if ( ! is_email( $recipient ) ) {
             return false;
         }
-
-        $search = array();
-        $search['invoice_number'] = '{quote_number}';
-        $search['invoice_date'] = '{quote_date}';
-        $search['name'] = '{name}';
-
-        $replace = array();
-        $replace['invoice_number'] = $quote->get_number();
-        $replace['invoice_date'] = $quote->get_invoice_date();
-        $replace['name'] = $quote->get_user_full_name();
-
-        $wpinv_email_search = $search;
-        $wpinv_email_replace = $replace;
 
         $subject = wpinv_email_get_subject($email_type, $quote_id, $quote);
         $email_heading = wpinv_email_get_heading($email_type, $quote_id, $quote);
         $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
         $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
+        $message_body   = wpinv_email_get_content( $email_type, $quote_id, $quote );
 
         $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
             'quote' => $quote,
@@ -925,16 +909,15 @@ class Wpinv_Quotes_Admin
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
+            'message_body'    => $message_body,
         ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
-        
-        $content = wpinv_email_format_text( $content );
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
         if ($sent) {
-            $note = __('Quote has been emailed to the user.', 'invoicing');
+            $note = __('Quote has been emailed to the user.', 'wpinv-quotes');
         } else {
-            $note = __('Fail to send quote to the user!', 'invoicing');
+            $note = __('Fail to send quote to the user!', 'wpinv-quotes');
         }
         $quote->add_note($note, '', '', true); // Add system note.
 
@@ -996,7 +979,7 @@ class Wpinv_Quotes_Admin
         $old_status_nicename = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($old_status);
         $new_status_nicename = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($new_status);
 
-        $status_change = sprintf(__('Quote status changed from %s to %s', 'invoicing'), $old_status_nicename, $new_status_nicename);
+        $status_change = sprintf(__('Quote status changed from %s to %s', 'wpinv-quotes'), $old_status_nicename, $new_status_nicename);
 
         // Add note
         $quote->add_note($status_change, false, false, true);
@@ -1061,10 +1044,17 @@ class Wpinv_Quotes_Admin
             update_post_meta($quote_id, '_wpinv_gateway', $gateway);
 
             $quote = wpinv_get_invoice($quote_id);
-            $quote->add_note(sprintf(__('Converted from Quote #%s to Invoice.', 'invoicing'), $quote_id), false, false, true);
+            $quote->add_note(sprintf(__('Converted from Quote #%s to Invoice.', 'wpinv-quotes'), $quote_id), false, false, true);
 
             if ($accepted_action === 'convert_send') {
+                global $wpinv_quote, $post;
+                $prev_wpinv_quote = $wpinv_quote;
+                $prev_post = $post;
+                $wpinv_quote = $quote;
+                $post = get_post($quote_id);
                 wpinv_user_invoice_notification($quote_id);
+                $wpinv_quote = $prev_wpinv_quote;
+                $post = $prev_post;
             }
 
             do_action('wpinv_quote_status_update', $quote_id, 'Accepted');
@@ -1114,7 +1104,7 @@ class Wpinv_Quotes_Admin
             $post_name = wpinv_generate_post_name($new_invoice_id);
 
             $quote = wpinv_get_invoice($new_invoice_id);
-            $quote->add_note(sprintf(__('Created Invoice from Quote #%s.', 'invoicing'), $quote_id), false, false, true);
+            $quote->add_note(sprintf(__('Created Invoice from Quote #%s.', 'wpinv-quotes'), $quote_id), false, false, true);
 
             // Update post title and date
             wp_update_post(array(
@@ -1135,10 +1125,17 @@ class Wpinv_Quotes_Admin
 
             delete_post_meta($quote_id, '_wpinv_key');
             $quote = wpinv_get_invoice($quote_id);
-            $quote->add_note(sprintf(__('Converted from Quote to Invoice #%s.', 'invoicing'), $new_invoice_id), false, false, true);
+            $quote->add_note(sprintf(__('Converted from Quote to Invoice #%s.', 'wpinv-quotes'), $new_invoice_id), false, false, true);
 
             if ($accepted_action === 'duplicate_send') {
+                global $wpinv_quote, $post;
+                $prev_wpinv_quote = $wpinv_quote;
+                $prev_post = $post;
+                $wpinv_quote = $quote;
+                $post = get_post($quote_id);
                 wpinv_user_invoice_notification($new_invoice_id);
+                $wpinv_quote = $prev_wpinv_quote;
+                $post = $prev_post;
             }
 
             $this->wpinv_user_quote_accepted_notification($quote_id);
@@ -1169,8 +1166,6 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_user_quote_accepted_notification($quote_id)
     {
-        global $wpinv_email_search, $wpinv_email_replace;
-
         $email_type = 'user_quote_accepted';
 
         if (!wpinv_email_is_enabled($email_type)) {
@@ -1193,23 +1188,11 @@ class Wpinv_Quotes_Admin
             return false;
         }
 
-        $search = array();
-        $search['invoice_number'] = '{quote_number}';
-        $search['invoice_date'] = '{quote_date}';
-        $search['name'] = '{name}';
-
-        $replace = array();
-        $replace['invoice_number'] = $quote->get_number();
-        $replace['invoice_date'] = $quote->get_invoice_date();
-        $replace['name'] = $quote->get_user_full_name();
-
-        $wpinv_email_search = $search;
-        $wpinv_email_replace = $replace;
-
         $subject = wpinv_email_get_subject($email_type, $quote_id, $quote);
         $email_heading = wpinv_email_get_heading($email_type, $quote_id, $quote);
         $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
         $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
+        $message_body   = wpinv_email_get_content( $email_type, $quote_id, $quote );
 
         $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
             'quote' => $quote,
@@ -1217,9 +1200,8 @@ class Wpinv_Quotes_Admin
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
+            'message_body'    => $message_body,
         ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
-        
-        $content = wpinv_email_format_text( $content );
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1277,8 +1259,6 @@ class Wpinv_Quotes_Admin
      */
     function wpinv_user_quote_declined_notification($quote_id)
     {
-        global $wpinv_email_search, $wpinv_email_replace;
-
         $email_type = 'user_quote_declined';
 
         if (!wpinv_email_is_enabled($email_type)) {
@@ -1301,23 +1281,11 @@ class Wpinv_Quotes_Admin
             return false;
         }
 
-        $search = array();
-        $search['invoice_number'] = '{quote_number}';
-        $search['invoice_date'] = '{quote_date}';
-        $search['name'] = '{name}';
-
-        $replace = array();
-        $replace['invoice_number'] = $quote->get_number();
-        $replace['invoice_date'] = $quote->get_invoice_date();
-        $replace['name'] = $quote->get_user_full_name();
-
-        $wpinv_email_search = $search;
-        $wpinv_email_replace = $replace;
-
         $subject = wpinv_email_get_subject($email_type, $quote_id, $quote);
         $email_heading = wpinv_email_get_heading($email_type, $quote_id, $quote);
         $headers = wpinv_email_get_headers($email_type, $quote_id, $quote);
         $attachments = wpinv_email_get_attachments($email_type, $quote_id, $quote);
+        $message_body   = wpinv_email_get_content( $email_type, $quote_id, $quote );
 
         $content = wpinv_get_template_html('emails/wpinv-email-' . $email_type . '.php', array(
             'quote' => $quote,
@@ -1325,9 +1293,8 @@ class Wpinv_Quotes_Admin
             'email_heading' => $email_heading,
             'sent_to_admin' => false,
             'plain_text' => false,
+            'message_body'    => $message_body,
         ), 'invoicing-quotes/', WP_PLUGIN_DIR . '/invoicing-quotes/templates/');
-        
-        $content = wpinv_email_format_text( $content );
 
         $sent = wpinv_mail_send($recipient, $subject, $content, $headers, $attachments);
 
@@ -1374,7 +1341,7 @@ class Wpinv_Quotes_Admin
         $old_status_nicename = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($old_status, $quote);
         $new_status_nicename = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($new_status, $quote);
 
-        $status_change = sprintf(__('Quote status changed from %s to %s by user.', 'invoicing'), $old_status_nicename, $new_status_nicename);
+        $status_change = sprintf(__('Quote status changed from %s to %s by user.', 'wpinv-quotes'), $old_status_nicename, $new_status_nicename);
 
         $quote->add_note($status_change, false, false, true);// Add note
 
@@ -1429,7 +1396,7 @@ class Wpinv_Quotes_Admin
         }
 
         if (!current_user_can('manage_options')) {
-            wp_die(__('You do not have permission to send quote notification', 'invoicing'), __('Error', 'invoicing'), array('response' => 403));
+            wp_die(__('You do not have permission to send quote notification', 'wpinv-quotes'), __('Error', 'wpinv-quotes'), array('response' => 403));
         }
 
         $sent = $this->wpinv_user_quote_notification($quote_id);
@@ -1439,60 +1406,6 @@ class Wpinv_Quotes_Admin
         $redirect = add_query_arg(array('wpinv-message' => $status, 'wpi_action' => false, 'quote_id' => false));
         wp_redirect($redirect);
         exit;
-    }
-
-    /**
-     * Add information before quote email
-     *
-     * @since    1.0.0
-     * @param object $quote quote object
-     * @param string $email_type type of email
-     */
-    function wpinv_email_before_quote_details($quote, $email_type)
-    {
-        if ($quote->post_type == 'wpi_quote' && !empty($email_type)) {
-            switch ($email_type) {
-                case 'user_quote':
-                    if ( $quote->post_status == 'wpi-quote-pending' ) {
-                        $email_output = sprintf(__("<p>Hi {name}, <br><br>We have provided you with our quote on %s. <br>Click on the following link to view it online where you will be able to accept or decline the quote. %s <br><br>Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name(), '<a class="btn btn-success" href="' . esc_url( $quote->get_view_url(true) ) . '">' . __( 'View & Accept / Decline Quote', 'invoicing' ) . '</a>');
-                    } else {
-                        $email_output = sprintf(__("<p>Hi {name}, <br><br>We have provided you with our quote on %s. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
-                    }
-                    break;
-                case 'user_quote_accepted':
-                    $email_output = sprintf(__("<p>Hi There, <br><br>Quote on %s has been accepted. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
-                    break;
-                case 'user_quote_declined':
-                    $email_output = sprintf(__("<p>Hi There, <br><br>Quote on %s has been declined. Quote details are shown below for your reference:</p>", 'invoicing'), wpinv_get_business_name());
-                    break;
-                default:
-                    $email_output = '';
-                    break;
-            }
-        }
-
-        $email_output = apply_filters('wpinv_quote_email_message', $email_output, $quote);
-        echo $email_output;
-    }
-
-    /**
-     * Add information before quote note email
-     *
-     * @since    1.0.0
-     * @param object $quote label of email field
-     * @param string $email_type type of email
-     * @param bool $sent_to_admin if sent to admin
-     * @param string $customer_note customer note to send
-     */
-    function wpinv_quote_email_before_note_details($quote, $email_type, $sent_to_admin, $customer_note)
-    {
-        if ("wpi_quote" === $quote->post_type && !empty($customer_note)) {
-            $before_note = '';
-            $before_note .= __('Hello, a note has just been added to your quote:', 'invoicing');
-            $before_note .= '<blockquote class="wpinv-note">' . wpautop(wptexturize($customer_note)) . '</blockquote>';
-            $before_note .= __('For your reference, your quote details are shown below.', 'invoicing');
-            echo $before_note;
-        }
     }
 
     /**
@@ -1506,7 +1419,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_email_details_title($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
-            $title = __('Quote Details:', 'invoicing');
+            $title = __('Quote Details:', 'wpinv-quotes');
         }
         return $title;
     }
@@ -1522,7 +1435,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_number_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
-            $title = __('Quote Number', 'invoicing');
+            $title = __('Quote Number', 'wpinv-quotes');
         }
         return $title;
     }
@@ -1538,7 +1451,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_date_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
-            $title = __('Quote Date', 'invoicing');
+            $title = __('Quote Date', 'wpinv-quotes');
         }
         return $title;
     }
@@ -1554,11 +1467,11 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_status_label($title, $quote)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
-            $title = __('Quote Status', 'invoicing');
+            $title = __('Quote Status', 'wpinv-quotes');
         }
         return $title;
     }
-    
+
     /**
      * Change quote user vat number title.
      *
@@ -1571,7 +1484,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_user_vat_number_label($title, $quote, $vat_name)
     {
         if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
-            $title = wp_sprintf( __( 'Quote %s Number', 'invoicing' ), $vat_name );
+            $title = wp_sprintf( __( 'Quote %s Number', 'wpinv-quotes' ), $vat_name );
         }
         return $title;
     }
@@ -1613,7 +1526,7 @@ class Wpinv_Quotes_Admin
     function wpinv_quote_admin_notices()
     {
         if (isset($_GET['wpinv-message']) && 'wpinv_quote_converted' == $_GET['wpinv-message'] && current_user_can('manage_options')) {
-            add_settings_error('wpinv-quote-notices', 'wpinv-discount-added', __('Quote converted to invoice successfully.', 'invoicing'), 'updated');
+            add_settings_error('wpinv-quote-notices', 'wpinv-discount-added', __('Quote converted to invoice successfully.', 'wpinv-quotes'), 'updated');
             settings_errors('wpinv-quote-notices');
         }
     }
@@ -1642,144 +1555,45 @@ class Wpinv_Quotes_Admin
 
         return $vars;
     }
-    
+
     function wpinv_quote_post_name_prefix( $prefix, $post_type ) {
         if ( $post_type == 'wpi_quote' ) {
             $prefix = 'quote-';
         }
-        
+
         return $prefix;
-    }
-    
-    function wpinv_get_next_quote_number() {
-        if ( ! Wpinv_Quotes_Shared::wpinv_sequential_number_active() ) {
-            return false;
-        }
-
-        $number = $last_number = get_option( 'wpinv_last_quote_number' );
-        $start  = wpinv_get_option( 'quote_sequence_start' );
-        if ( !absint( $start ) > 0 ) {
-            $start = 1;
-        }
-        $increment_number = true;
-        $save_number = false;
-
-        if ( !empty( $number ) && !is_numeric( $number ) && $number == $this->wpinv_format_quote_number( $number ) ) {
-            $number = $this->wpinv_clean_quote_number( $number );
-        }
-
-        if ( empty( $number ) ) {
-            if ( !( $last_number === 0 || $last_number === '0' ) ) {
-                $quote_statuses = array_keys( Wpinv_Quotes_Shared::wpinv_get_quote_statuses() );
-                $quote_statuses[] = 'trash';
-                $last_quote = Wpinv_Quotes_Shared::wpinv_get_quotes( array( 'limit' => 1, 'order' => 'DESC', 'orderby' => 'ID', 'return' => 'posts', 'fields' => 'ids', 'status' => $quote_statuses ) );
- 
-                if ( !empty( $last_quote[0] ) && $quote_number = wpinv_get_invoice_number( $last_quote[0] ) ) {
-                    if ( is_numeric( $quote_number ) ) {
-                        $number = $quote_number;
-                    } else {
-                        $number = $this->wpinv_clean_quote_number( $quote_number );
-                    }
-                }
-
-                if ( empty( $number ) ) {
-                    $increment_number = false;
-                    $number = $start;
-                    $save_number = ( $number - 1 );
-                } else {
-                    $save_number = $number;
-                }
-            }
-        }
-
-        if ( $start > $number ) {
-            $increment_number = false;
-            $number = $start;
-            $save_number = ( $number - 1 );
-        }
-
-        if ( $save_number !== false ) {
-            update_option( 'wpinv_last_quote_number', $save_number );
-        }
-        
-        $increment_number = apply_filters( 'wpinv_increment_payment_quote_number', $increment_number, $number );
-
-        if ( $increment_number ) {
-            $number++;
-        }
-
-        return apply_filters( 'wpinv_get_next_quote_number', $number );
-    }
-
-    function wpinv_clean_quote_number( $number ) {
-        $prefix  = wpinv_get_option( 'quote_number_prefix' );
-        $postfix = wpinv_get_option( 'quote_number_postfix' );
-
-        $number = preg_replace( '/' . $prefix . '/', '', $number, 1 );
-
-        $length      = strlen( $number );
-        $postfix_pos = strrpos( $number, $postfix );
-        
-        if ( false !== $postfix_pos ) {
-            $number      = substr_replace( $number, '', $postfix_pos, $length );
-        }
-
-        $number = intval( $number );
-
-        return apply_filters( 'wpinv_clean_quote_number', $number, $prefix, $postfix );
     }
 
     function wpinv_save_number_post_saved( $post_ID, $post, $update ) {
         global $wpdb;
 
         if ( !$update && !get_post_meta( $post_ID, '_wpinv_number', true ) ) {
-            $this->wpinv_update_quote_number( $post_ID, $post->post_status != 'auto-draft' );
+            Wpinv_Quotes_Shared::wpinv_update_quote_number( $post_ID, $post->post_status != 'auto-draft' );
         }
 
         if ( !$update ) {
             $wpdb->update( $wpdb->posts, array( 'post_name' => wpinv_generate_post_name( $post_ID ) ), array( 'ID' => $post_ID ) );
             clean_post_cache( $post_ID );
         }
+
+        $valid_date = isset( $_POST['wpinv_valid_date'] ) ? sanitize_text_field( $_POST['wpinv_valid_date'] ) : '';
+        update_post_meta($post_ID, 'wpinv_quote_valid_until', $valid_date);
     }
 
     function wpinv_save_number_post_updated( $post_ID, $post_after, $post_before ) {
         if ( !empty( $post_after->post_type ) && $post_after->post_type == 'wpi_quote' && $post_before->post_status == 'auto-draft' && $post_after->post_status != $post_before->post_status ) {
-            $this->wpinv_update_quote_number( $post_ID, true );
+            Wpinv_Quotes_Shared::wpinv_update_quote_number( $post_ID, true );
         }
     }
 
-    function wpinv_update_quote_number( $post_ID, $save_sequential = false ) {
-        global $wpdb;
-
-        if ( Wpinv_Quotes_Shared::wpinv_sequential_number_active() ) {
-            $number = $this->wpinv_get_next_quote_number();
-
-            if ( $save_sequential ) {
-                update_option( 'wpinv_last_quote_number', $number );
-            }
-        } else {
-            $number = $post_ID;
-        }
-
-        $number = $this->wpinv_format_quote_number( $number );
-
-        update_post_meta( $post_ID, '_wpinv_number', $number );
-
-        $wpdb->update( $wpdb->posts, array( 'post_title' => $number ), array( 'ID' => $post_ID ) );
-
-        clean_post_cache( $post_ID );
-
-        return $number;
-    }
-    
     function wpinv_pre_format_quote_number( $value, $number, $type ) {
         if ( $type == 'wpi_quote' ) {
-            $value = $this->wpinv_format_quote_number( $number );
+            $value = Wpinv_Quotes_Shared::wpinv_format_quote_number( $number );
         }
 
         return $value;
     }
-    
+
     function wpinv_pre_check_sequential_number_active( $value, $type ) {
         if ( $type == 'wpi_quote' ) {
             $value = Wpinv_Quotes_Shared::wpinv_sequential_number_active();
@@ -1787,31 +1601,31 @@ class Wpinv_Quotes_Admin
 
         return $value;
     }
-    
+
     function wpinv_get_pre_next_quote_number( $value, $type ) {
         if ( $type == 'wpi_quote' ) {
-            $value = $this->wpinv_get_next_quote_number();
+            $value = Wpinv_Quotes_Shared::wpinv_get_next_quote_number();
         }
 
         return $value;
     }
-    
+
     function wpinv_pre_clean_quote_number( $value, $number, $type ) {
         if ( $type == 'wpi_quote' ) {
-            $value = $this->wpinv_clean_quote_number( $number );
+            $value = Wpinv_Quotes_Shared::wpinv_clean_quote_number( $number );
         }
 
         return $value;
     }
-    
+
     function wpinv_pre_update_quote_number( $value, $post_ID, $save_sequential, $type ) {
         if ( $type == 'wpi_quote' ) {
-            $value = $this->wpinv_update_quote_number( $post_ID, $save_sequential );
+            $value = Wpinv_Quotes_Shared::wpinv_update_quote_number( $post_ID, $save_sequential );
         }
 
         return $value;
     }
-    
+
     function quote_to_invoice_redirect() {
         if ( !empty( $_GET['invoice_key'] ) && is_404() && get_query_var( 'post_type' ) == 'wpi_quote' ) {
             if ( $invoice_id = wpinv_get_invoice_id_by_key( sanitize_text_field( $_GET['invoice_key'] ) ) ) {
@@ -1821,5 +1635,134 @@ class Wpinv_Quotes_Admin
                 exit;
             }
         }
+    }
+
+    function wpinv_quote_email_format_text( $replace_array, $content, $quote ) {
+        if ( empty( $quote ) ) {
+            return $replace_array;
+        }
+        
+        if ( is_int( $quote ) ) {
+            $quote = wpinv_get_invoice( $quote );
+        }
+        
+        if ( ! ( ! empty( $quote ) && is_object( $quote ) && ! empty( $quote->ID ) ) ) {
+            return $replace_array;
+        }
+
+        if ( 'wpi_quote' != $quote->post_type ) {
+            return $replace_array;
+        }
+
+        $replace_array['{quote_number}']    = $quote->get_number();
+        $replace_array['{quote_date}']      = $quote->get_invoice_date();
+        $replace_array['{quote_link}']      = $quote->get_view_url( true );
+        $replace_array['{valid_until}']     = $this->get_valid_date( true, $quote->ID );
+
+        return $replace_array;
+    }
+
+    function get_valid_date( $display = false, $quote_id ) {
+        $valid_date = get_post_meta($quote_id, 'wpinv_quote_valid_until', true);
+        $valid_date = apply_filters( 'wpinv_valid_date', $valid_date, $quote_id );
+
+        if ( !$display || empty( $valid_date ) ) {
+            return $valid_date;
+        }
+
+        return date_i18n( get_option( 'date_format' ), strtotime( $valid_date ) );
+    }
+
+    function wpinv_meta_box_details_after_due_date($quote_id = 0) {
+        $quote = wpinv_get_invoice($quote_id);
+        if ( $quote && 'wpi_quote' != $quote->post_type ) {
+            return;
+        }
+
+        $date_created       = $quote->get_created_date();
+        $datetime_created   = strtotime( $date_created );
+        $date_completed     = $quote->get_completed_date();
+        $date_completed     = $date_completed != '' && $date_completed != '0000-00-00 00:00:00' ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $date_completed ) ) : 'n/a';
+        $valid = $this->get_valid_date(false, $quote_id);
+
+        if($quote->has_status( array( 'auto-draft', 'wpi-quote-pending' ) )){
+        ?>
+        <div class="gdmbx-row gdmbx-type-select gdmbx2-id-wpinv-date-valid">
+            <div class="gdmbx-th"><label for="wpinv_valid_date"><?php _e( 'Valid Until Date:', 'wpinv-quotes' );?></label></div>
+            <div class="gdmbx-td">
+                <input type="text" placeholder="<?php esc_attr_e( 'yyyy-mm-dd', 'wpinv-quotes' );?>" value="<?php echo esc_attr( $valid );?>" id="wpinv_valid_date" name="wpinv_valid_date" class="regular-text wpiDatepicker" data-minDate="<?php echo esc_attr( date_i18n( 'Y-m-d', $datetime_created ) );?>" data-dateFormat="yy-mm-dd">
+            </div>
+        </div>
+        <?php }
+        if ( $date_completed && $date_completed != 'n/a' ) {
+            $valid_display = $this->get_valid_date(false, $quote_id);
+            ?>
+            <div class="gdmbx-row gdmbx-type-select gdmbx2-id-wpinv-date-completed">
+                <div class="gdmbx-th"><label><?php _e( 'Valid Untill Date:', 'wpinv-quotes' );?></label></div>
+                <div class="gdmbx-td"><?php echo $valid_display;?></div>
+            </div>
+        <?php }
+    }
+
+    function wpinv_display_details_after_due_date( $quote_id = 0 ) {
+        $quote = wpinv_get_invoice($quote_id);
+        if ( $quote && 'wpi_quote' != $quote->post_type ) {
+            return;
+        }
+        $valid = $this->get_valid_date(true, $quote_id);
+        if(isset($valid) && !empty($valid)) {
+            ?>
+            <tr class="wpi-row-date">
+                <th><?php echo apply_filters('wpinv_quote_valid_until_date_label', __('Valid Until Date', 'wpinv-quotes'), $quote); ?></th>
+                <td><?php echo $valid; ?></td>
+            </tr>
+            <?php
+        }
+    }
+
+    function wpinv_email_invoice_details_after_due_date( $quote_id = 0 ) {
+        $quote = wpinv_get_invoice($quote_id);
+        if ( $quote && 'wpi_quote' != $quote->post_type ) {
+            return;
+        }
+        $valid = $this->get_valid_date(true, $quote_id);
+        if(isset($valid) && !empty($valid)) {
+            ?>
+            <tr>
+                <td><?php echo apply_filters('wpinv_quote_valid_until_date_label', __('Valid Until Date', 'wpinv-quotes'), $quote); ?></td>
+                <td><?php echo wp_sprintf('<time datetime="%s">%s</time>', date_i18n('c', strtotime($valid)), $valid); ?></td>
+            </tr>
+            <?php
+        }
+    }
+
+    function wpinv_settings_email_wildcards_description( $description, $active_tab, $section ) {
+
+        if ( 'emails' == $active_tab && in_array($section, array('user_quote','user_quote_accepted','user_quote_declined','user_note')) ) {
+            $description .= __( '<strong>{quote_number} :</strong> The quote number<br>
+                <strong>{quote_link} :</strong> The quote link<br>
+                <strong>{quote_date} :</strong> The date the quote was created<br>
+                <strong>{valid_until} :</strong> The date the quote is valid until<br>', 'wpinv-quotes' );
+        }
+
+        return $description;
+    }
+    
+    function wpinv_quote_items_actions($item_actions, $quote, $post){
+        if (!empty($post->ID) && 'wpi_quote' == $post->post_type || !empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
+            if($quote->has_status(array('wpi-quote-accepted','wpi-quote-declined')) || in_array($post->post_status, array('wpi-quote-accepted','wpi-quote-declined'))){
+                return '';
+            }
+        }
+        return $item_actions;
+    }
+
+    function wpinv_quote_disable_apply_discount($disable_discount, $quote){
+        if (!empty($quote->ID) && 'wpi_quote' == $quote->post_type) {
+            if($quote->has_status(array('wpi-quote-accepted','wpi-quote-declined'))){
+                return true;
+            }
+        }
+        return $disable_discount;
     }
 }

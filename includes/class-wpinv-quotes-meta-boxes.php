@@ -32,7 +32,7 @@ class WPInv_Quote_Meta_Box
         $action_url = esc_url(wp_nonce_url($action_url, 'convert', 'wpinv_convert_quote'));
 
         do_action('wpinv_metabox_quote_to_invoice_before', $post);
-        echo '<p><a id="wpinv_convert_quote" title="Convert Quote to Invoice" class="button ui-tip" href="' . $action_url . '"><span class="dashicons dashicons-controls-repeat"></span> Convert to Invoice</a></p>';
+        echo '<p><a id="wpinv_convert_quote" title="'. __("Convert Quote to Invoice", "wpinv-quotes") .'" class="button ui-tip" href="' . $action_url . '"><span class="dashicons dashicons-controls-repeat"></span>' . __("Convert to Invoice", "wpinv-quotes") . '</a></p>';
         do_action('wpinv_metabox_quote_to_invoice_after', $post);
     }
 

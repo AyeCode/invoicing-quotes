@@ -77,8 +77,8 @@
                             if (res.success) {
                                 if ('done' == res.data.step || res.data.done >= 100) {
                                     $form.find('input[type="submit"]').removeAttr('disabled');
-                                    $('.wpi-progress > span').text(parseInt(res.data.done) + '%');
-                                    $('.wpi-progress div').animate({
+                                    $('#wpi-export-quotes .wpi-progress > span').text(parseInt(res.data.done) + '%');
+                                    $('#wpi-export-quotes .wpi-progress div').animate({
                                         width: res.data.done + '%'
                                     }, 100, function() {});
                                     if (res.msg) {
@@ -90,8 +90,8 @@
                                     message.find('.wpi-export-loader').html('<i class="fa fa-check-circle"></i>');
                                 } else {
                                     var next = parseInt(res.data.step) > 0 ? parseInt(res.data.step) : 1;
-                                    $('.wpi-progress > span').text(parseInt(res.data.done) + '%');
-                                    $('.wpi-progress div').animate({
+                                    $('#wpi-export-quotes .wpi-progress > span').text(parseInt(res.data.done) + '%');
+                                    $('#wpi-export-quotes .wpi-progress div').animate({
                                         width: res.data.done + '%'
                                     }, 100, function() {});
                                     $this.step(parseInt(next), data, $form, $this);

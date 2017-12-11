@@ -51,7 +51,7 @@ class WPInv_Quote_Reports
 
         $this->export_dir = $this->quote_export_location();
         $this->export_url = $this->quote_export_location(true);
-        $this->export = apply_filters('wpinv_export_type', 'invoicing');
+        $this->export = apply_filters('wpinv_export_type', 'wpinv-quotes');
         $this->filetype = 'csv';
         $this->per_page = 2;
 
@@ -105,12 +105,12 @@ class WPInv_Quote_Reports
     public function quote_export()
     {
         $statuses = Wpinv_Quotes_Shared::wpinv_get_quote_statuses();
-        $statuses = array_merge(array('any' => __('All Statuses', 'invoicing')), $statuses);
+        $statuses = array_merge(array('any' => __('All Statuses', 'wpinv-quotes')), $statuses);
         ?>
         <div class="postbox wpi-export-invoices">
-            <h2 class="hndle ui-sortabled-handle"><span><?php _e('Quotes', 'invoicing'); ?></span></h2>
+            <h2 class="hndle ui-sortabled-handle"><span><?php _e('Quotes', 'wpinv-quotes'); ?></span></h2>
             <div class="inside">
-                <p><?php _e('Download a CSV of all quotes.', 'invoicing'); ?></p>
+                <p><?php _e('Download a CSV of all quotes.', 'wpinv-quotes'); ?></p>
                 <form id="wpi-export-quotes" class="wpi-quote-export-form" method="post">
                     <?php echo wpinv_html_date_field(array(
                             'id' => 'wpi_quote_export_from_date',
@@ -118,7 +118,7 @@ class WPInv_Quote_Reports
                             'data' => array(
                                 'dateFormat' => 'yy-mm-dd'
                             ),
-                            'placeholder' => __('From date', 'invoicing'))
+                            'placeholder' => __('From date', 'wpinv-quotes'))
                     ); ?>
                     <?php echo wpinv_html_date_field(array(
                             'id' => 'wpi_quote_export_to_date',
@@ -126,7 +126,7 @@ class WPInv_Quote_Reports
                             'data' => array(
                                 'dateFormat' => 'yy-mm-dd'
                             ),
-                            'placeholder' => __('To date', 'invoicing'))
+                            'placeholder' => __('To date', 'wpinv-quotes'))
                     ); ?>
                     <span id="wpinv-status-wrap">
                                 <?php echo wpinv_html_select(array(
@@ -141,7 +141,7 @@ class WPInv_Quote_Reports
                                 </span>
                     <span id="wpinv-submit-wrap">
                         <input type="hidden" value="quotes" name="export"/>
-                        <input type="submit" value="<?php _e('Generate CSV', 'invoicing'); ?>" class="button-primary"/>
+                        <input type="submit" value="<?php _e('Generate CSV', 'wpinv-quotes'); ?>" class="button-primary"/>
                     </span>
                 </form>
             </div>
@@ -159,7 +159,7 @@ class WPInv_Quote_Reports
     {
         $response = array();
         $response['success'] = false;
-        $response['msg'] = __('Invalid export request found.', 'invoicing');
+        $response['msg'] = __('Invalid export request found.', 'wpinv-quotes');
 
         if (empty($_POST['data']) || !current_user_can('manage_options')) {
             wp_send_json($response);
@@ -171,12 +171,12 @@ class WPInv_Quote_Reports
 
         $_REQUEST = (array)$data;
         if (!(!empty($_REQUEST['wpi_ajax_quote_export']) && wp_verify_nonce($_REQUEST['wpi_ajax_quote_export'], 'wpi_ajax_quote_export'))) {
-            $response['msg'] = __('Security check failed.', 'invoicing');
+            $response['msg'] = __('Security check failed.', 'wpinv-quotes');
             wp_send_json($response);
         }
 
         if (($error = $this->check_quote_export_location(true)) !== true) {
-            $response['msg'] = __('Filesystem ERROR: ' . $error, 'invoicing');
+            $response['msg'] = __('Filesystem ERROR: ' . $error, 'wpinv-quotes');
             wp_send_json($response);
         }
 
@@ -208,7 +208,7 @@ class WPInv_Quote_Reports
             $response['data']['step'] = $this->step;
             $response['data']['done'] = $done;
         } else {
-            $response['msg'] = __('No data found for export.', 'invoicing');
+            $response['msg'] = __('No data found for export.', 'wpinv-quotes');
         }
 
         wp_send_json($response);
@@ -225,11 +225,11 @@ class WPInv_Quote_Reports
     {
         try {
             if (empty($this->wp_filesystem)) {
-                return __('Filesystem ERROR: Could not access filesystem.', 'invoicing');
+                return __('Filesystem ERROR: Could not access filesystem.', 'wpinv-quotes');
             }
 
             if (is_wp_error($this->wp_filesystem)) {
-                return __('Filesystem ERROR: ' . $this->wp_filesystem->get_error_message(), 'invoicing');
+                return __('Filesystem ERROR: ' . $this->wp_filesystem->get_error_message(), 'wpinv-quotes');
             }
 
             $is_dir = $this->wp_filesystem->is_dir($this->export_dir);
@@ -239,13 +239,13 @@ class WPInv_Quote_Reports
                 return true;
             } else if ($is_dir && !$is_writeable) {
                 if (!$this->wp_filesystem->chmod($this->export_dir, FS_CHMOD_DIR)) {
-                    return wp_sprintf(__('Filesystem ERROR: Export location %s is not writable, check your file permissions.', 'invoicing'), $this->export_dir);
+                    return wp_sprintf(__('Filesystem ERROR: Export location %s is not writable, check your file permissions.', 'wpinv-quotes'), $this->export_dir);
                 }
 
                 return true;
             } else {
                 if (!$this->wp_filesystem->mkdir($this->export_dir, FS_CHMOD_DIR)) {
-                    return wp_sprintf(__('Filesystem ERROR: Could not create directory %s. This is usually due to inconsistent file permissions.', 'invoicing'), $this->export_dir);
+                    return wp_sprintf(__('Filesystem ERROR: Could not create directory %s. This is usually due to inconsistent file permissions.', 'wpinv-quotes'), $this->export_dir);
                 }
 
                 return true;
@@ -331,8 +331,8 @@ class WPInv_Quote_Reports
     public function get_quotes_columns()
     {
         $columns = array(
-            'id' => __('ID', 'invoicing'),
-            'date' => __('Date', 'invoicing')
+            'id' => __('ID', 'wpinv-quotes'),
+            'date' => __('Date', 'wpinv-quotes')
         );
 
         return apply_filters('wpinv_export_get_columns_' . $this->export, $columns);
@@ -475,32 +475,32 @@ class WPInv_Quote_Reports
     public function get_quotes_columns_cb($columns = array())
     {
         $columns = array(
-            'id' => __('ID', 'invoicing'),
-            'number' => __('Number', 'invoicing'),
-            'date' => __('Date', 'invoicing'),
-            'amount' => __('Amount', 'invoicing'),
-            'status_nicename' => __('Status Nicename', 'invoicing'),
-            'status' => __('Status', 'invoicing'),
-            'tax' => __('Tax', 'invoicing'),
-            'discount' => __('Discount', 'invoicing'),
-            'user_id' => __('User ID', 'invoicing'),
-            'email' => __('Email', 'invoicing'),
-            'first_name' => __('First Name', 'invoicing'),
-            'last_name' => __('Last Name', 'invoicing'),
-            'address' => __('Address', 'invoicing'),
-            'city' => __('City', 'invoicing'),
-            'state' => __('State', 'invoicing'),
-            'country' => __('Country', 'invoicing'),
-            'zip' => __('Zipcode', 'invoicing'),
-            'phone' => __('Phone', 'invoicing'),
-            'company' => __('Company', 'invoicing'),
-            'vat_number' => __('Vat Number', 'invoicing'),
-            'ip' => __('IP', 'invoicing'),
-            'gateway' => __('Gateway', 'invoicing'),
-            'gateway_nicename' => __('Gateway Nicename', 'invoicing'),
-            'transaction_id' => __('Transaction ID', 'invoicing'),
-            'currency' => __('Currency', 'invoicing'),
-            'due_date' => __('Due Date', 'invoicing'),
+            'id' => __('ID', 'wpinv-quotes'),
+            'number' => __('Number', 'wpinv-quotes'),
+            'date' => __('Date', 'wpinv-quotes'),
+            'amount' => __('Amount', 'wpinv-quotes'),
+            'status_nicename' => __('Status Nicename', 'wpinv-quotes'),
+            'status' => __('Status', 'wpinv-quotes'),
+            'tax' => __('Tax', 'wpinv-quotes'),
+            'discount' => __('Discount', 'wpinv-quotes'),
+            'user_id' => __('User ID', 'wpinv-quotes'),
+            'email' => __('Email', 'wpinv-quotes'),
+            'first_name' => __('First Name', 'wpinv-quotes'),
+            'last_name' => __('Last Name', 'wpinv-quotes'),
+            'address' => __('Address', 'wpinv-quotes'),
+            'city' => __('City', 'wpinv-quotes'),
+            'state' => __('State', 'wpinv-quotes'),
+            'country' => __('Country', 'wpinv-quotes'),
+            'zip' => __('Zipcode', 'wpinv-quotes'),
+            'phone' => __('Phone', 'wpinv-quotes'),
+            'company' => __('Company', 'wpinv-quotes'),
+            'vat_number' => __('Vat Number', 'wpinv-quotes'),
+            'ip' => __('IP', 'wpinv-quotes'),
+            'gateway' => __('Gateway', 'wpinv-quotes'),
+            'gateway_nicename' => __('Gateway Nicename', 'wpinv-quotes'),
+            'transaction_id' => __('Transaction ID', 'wpinv-quotes'),
+            'currency' => __('Currency', 'wpinv-quotes'),
+            'valid_date' => __('Valid Until Date', 'wpinv-quotes'),
         );
 
         return $columns;
@@ -544,6 +544,7 @@ class WPInv_Quote_Reports
 
         if (!empty($quotes)) {
             foreach ($quotes as $quote) {
+                $valid_date = get_post_meta($quote->ID, 'wpinv_quote_valid_until', true);
                 $row = array(
                     'id' => $quote->ID,
                     'number' => $quote->get_number(),
@@ -570,7 +571,7 @@ class WPInv_Quote_Reports
                     'gateway_nicename' => $quote->get_gateway_title(),
                     'transaction_id' => $quote->gateway ? $quote->get_transaction_id() : '',
                     'currency' => $quote->get_currency(),
-                    'due_date' => $quote->needs_payment() ? $quote->get_due_date() : '',
+                    'valid_date' => ($valid_date != '') ? date_i18n( get_option( 'date_format' ), strtotime( $valid_date ) ) : '',
                 );
 
                 $data[] = apply_filters('wpinv_export_quote_row', $row, $quote);
