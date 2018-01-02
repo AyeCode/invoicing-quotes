@@ -258,8 +258,9 @@ class Wpinv_Quotes
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_action('wpinv_invoice_display_left_actions', $plugin_public, 'wpinv_quote_display_left_actions');
         $this->loader->add_action('wpinv_invoice_display_right_actions', $plugin_public, 'wpinv_quote_display_right_actions', 10, 1);
-        $this->loader->add_action('wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles');
+        $this->loader->add_action('wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles', 10, 1);
         $this->loader->add_filter('pre_get_posts', $plugin_public, 'wpinv_quote_pre_get_posts');
+        $this->loader->add_action('wpinv_after_user_quotes', $plugin_public, 'wpinv_user_quotes_decline_box', 10, 1);
     }
 
     /**

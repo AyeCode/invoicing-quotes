@@ -64,6 +64,7 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 = 1.0.2 =
 Subscription functionality improved - CHANGED
+Add field for asking reason for rejection - ADDED
 
 = 1.0.1 =
 Problem in sending quote notification emails - FIXED

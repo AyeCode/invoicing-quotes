@@ -839,7 +839,7 @@ class Wpinv_Quotes_Admin
                     'name' => __( 'Email Content', 'wpinv-quotes' ),
                     'desc' => __( 'The content of the email (wildcards and HTML are allowed).', 'wpinv-quotes' ),
                     'type' => 'rich_editor',
-                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been declined. </p>', 'wpinv-quotes' ),
+                    'std'  => __( '<p>Hi {name},</p><p>Quote on {site_title} has been declined.</p><p><b>Reason:</b> {quote_decline_reason}</p>', 'wpinv-quotes' ),
                     'class' => 'large',
                     'size' => '10'
                 ),
@@ -1214,18 +1214,18 @@ class Wpinv_Quotes_Admin
      * @since    1.0.0
      * @param int $quote_id ID of post/quote
      */
-    function process_quote_declined($quote_id = 0)
+    function process_quote_declined($quote_id = 0, $reason = '')
     {
         if (empty($quote_id)) return;
-        do_action('wpinv_quote_before_process_declined', $quote_id);
+        do_action('wpinv_quote_before_process_declined', $quote_id, $reason);
         $this->wpinv_quote_decrease_the_discounts($quote_id);
         // make the quote as declined
         wp_update_post(array(
             'ID' => $quote_id,
             'post_status' => 'wpi-quote-declined',
         ));
-        $this->wpinv_user_quote_declined_notification($quote_id);
-        do_action('wpinv_quote_after_process_declined', $quote_id);
+        $this->wpinv_user_quote_declined_notification($quote_id, $reason);
+        do_action('wpinv_quote_after_process_declined', $quote_id, $reason);
     }
 
     /**
@@ -1257,7 +1257,7 @@ class Wpinv_Quotes_Admin
      * @param int $quote_id ID of post/quote
      * @return bool $sent is mail sent or not
      */
-    function wpinv_user_quote_declined_notification($quote_id)
+    function wpinv_user_quote_declined_notification($quote_id, $reason = '')
     {
         $email_type = 'user_quote_declined';
 
@@ -1320,6 +1320,7 @@ class Wpinv_Quotes_Admin
         }
 
         $old_status = 'wpi-quote-pending';
+        $reason = '';
 
         if ($data['action'] == 'accept') {
             $new_status = 'wpi-quote-accepted';
@@ -1328,6 +1329,7 @@ class Wpinv_Quotes_Admin
         } elseif ($data['action'] == 'decline') {
             $new_status = 'wpi-quote-declined';
             $check_nonce = 'wpinv_client_decline_quote_nonce';
+            $reason = ! empty( $_POST['wpq_decline_reason'] ) ? esc_textarea( $_POST['wpq_decline_reason'] ) : '';
         }
 
         if (!wp_verify_nonce($data['_wpnonce'], $check_nonce)) {
@@ -1341,7 +1343,11 @@ class Wpinv_Quotes_Admin
         $old_status_nicename = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($old_status, $quote);
         $new_status_nicename = Wpinv_Quotes_Shared::wpinv_quote_status_nicename($new_status, $quote);
 
-        $status_change = sprintf(__('Quote status changed from %s to %s by user.', 'wpinv-quotes'), $old_status_nicename, $new_status_nicename);
+        if ( $reason && $new_status == 'wpi-quote-declined') {
+            $status_change = wp_sprintf(__('Quote was %s by user. Reason: %s', 'wpinv-quotes'), $new_status_nicename, $reason);
+        } else {
+            $status_change = wp_sprintf(__('Quote status changed from %s to %s by user.', 'wpinv-quotes'), $old_status_nicename, $new_status_nicename);
+        }
 
         $quote->add_note($status_change, false, false, true);// Add note
 
@@ -1350,7 +1356,8 @@ class Wpinv_Quotes_Admin
                 $this->process_quote_published($quote_id);
                 break;
             case 'wpi-quote-declined':
-                $this->process_quote_declined($quote_id);
+                update_post_meta( $quote_id, '_wpinv_quote_decline_reason', $reason );
+                $this->process_quote_declined($quote_id, $reason);
                 break;
         }
 
@@ -1654,10 +1661,11 @@ class Wpinv_Quotes_Admin
             return $replace_array;
         }
 
-        $replace_array['{quote_number}']    = $quote->get_number();
-        $replace_array['{quote_date}']      = $quote->get_invoice_date();
-        $replace_array['{quote_link}']      = $quote->get_view_url( true );
-        $replace_array['{valid_until}']     = $this->get_valid_date( true, $quote->ID );
+        $replace_array['{quote_number}']            = $quote->get_number();
+        $replace_array['{quote_date}']              = $quote->get_invoice_date();
+        $replace_array['{quote_link}']              = $quote->get_view_url( true );
+        $replace_array['{valid_until}']             = $this->get_valid_date( true, $quote->ID );
+        $replace_array['{quote_decline_reason}']    = $quote->post_status == 'wpi-quote-declined' ? get_post_meta( $quote->ID, '_wpinv_quote_decline_reason', true ) : '';
 
         return $replace_array;
     }
@@ -1743,6 +1751,9 @@ class Wpinv_Quotes_Admin
                 <strong>{quote_link} :</strong> The quote link<br>
                 <strong>{quote_date} :</strong> The date the quote was created<br>
                 <strong>{valid_until} :</strong> The date the quote is valid until<br>', 'wpinv-quotes' );
+        }
+        if ( 'emails' == $active_tab && in_array($section, array('user_quote', 'user_quote_declined', 'user_note')) ) {
+            $description .= __( '<strong>{quote_decline_reason} :</strong> The reason for declining the quote<br>', 'wpinv-quotes' );
         }
 
         return $description;
