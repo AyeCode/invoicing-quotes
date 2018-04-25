@@ -111,6 +111,10 @@ class Wpinv_Quotes_Public
      */
     public function wpinv_quote_print_head_styles()
     {
+        if ( ! ( ! empty( $quote ) && $quote->post_type == 'wpi_quote' ) ) {
+            return;
+        }
+        
         wp_register_style('wpinv-quotes-single-style', plugin_dir_url(__FILE__) . 'css/wpinv-quotes-public.css', array(), $this->version, 'all');
         wp_print_styles('wpinv-quotes-single-style');
     }
@@ -134,32 +138,46 @@ class Wpinv_Quotes_Public
         if ($quote->post_status == 'wpi-quote-pending') {
             remove_query_arg('wpi_action');
             $quote_id = $quote->ID;
+            $accept_text = 'do_nothing' === $accepted_action ? _e('Click on continue to accept this quotation.', 'wpinv-quotes') : __('An invoice will be generated on acceptance.', 'wpinv-quotes');
             ?>
-            <button class="btn btn-success btn-sm accept-quote"
-                    title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>"
-                    onclick="showAlert('accept')"><?php _e('Accept Quotation', 'wpinv-quotes'); ?></button> &nbsp;
-            <button class="btn btn-danger btn-sm decline-quote"
-                    title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"
-                    onclick="showAlert('decline')"><?php _e('Decline Quotation', 'wpinv-quotes'); ?></button>
-            <p id="accept-alert" class="alert alert-success"><?php if('do_nothing' === $accepted_action) { _e('Click on continue to accept this quotation. ', 'wpinv-quotes'); } else { _e('An invoice will be generated on acceptance. ', 'wpinv-quotes'); } ?>
-                <a class="btn btn-success btn-xs accept-quote"
-                   title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>"
-                   href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>
-            </p>
-            <p id="decline-alert" class="alert alert-danger"><?php _e('You are going to decline this quotation. ', 'wpinv-quotes') ?> <a
-                    class="btn btn-danger btn-xs decline-quote"
-                    title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"
-                    href="<?php echo Wpinv_Quotes_Shared::get_decline_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>
-            <script>
-                function showAlert(action) {
-                    var x = document.getElementById('accept-alert');
-                    var y = document.getElementById('decline-alert');
+            <button class="btn btn-success btn-sm accept-quote" title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>" onclick="wpiQuiteAction('accept', this);"><?php _e('Accept Quotation', 'wpinv-quotes'); ?></button> &nbsp;
+            <button class="btn btn-danger btn-sm decline-quote" title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>" onclick="wpiQuiteAction('decline', this);"><?php _e('Decline Quotation', 'wpinv-quotes'); ?></button>
+            <div id="wpq-accept-box" class="wpq-decline alert alert-success" style="display:none">
+                <p><?php _e('You are going to accept this quotation.', 'wpinv-quotes'); ?></p>
+                <?php do_action( 'wpinv_quote_accept_form_before', $quote ); ?>
+                <p><?php echo $accept_text; ?></p>
+                <a class="btn btn-success btn-sm accept-quote" title="<?php esc_attr_e('Accept This Quotation', 'wpinv-quotes'); ?>" href="<?php echo Wpinv_Quotes_Shared::get_accept_quote_url($quote_id); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></a>&nbsp;&nbsp;
+                <button type="button" class="btn btn-warning btn-sm" onclick="wpiQuiteAction('close', this);"><?php _e('Cancel', 'wpinv-quotes'); ?></button>
+            </div>
+            <div id="wpq-decline-box" class="wpq-decline alert alert-danger" style="display:none">
+                <p><?php _e('You are going to decline this quotation.', 'wpinv-quotes'); ?></p>
+                <?php do_action( 'wpinv_quote_decline_form_before', $quote ); ?>
+                <form method="POST" action="<?php echo esc_url( Wpinv_Quotes_Shared::get_decline_quote_url($quote_id) ); ?>">
+                    <?php do_action( 'wpinv_quote_decline_form_top', $quote ); ?>
+                    <div class="form-group required">
+                      <label for="wpq_decline_reason"><?php _e('Reason for declining quotation', 'wpinv-quotes'); ?><span class="wpi-required">*</span>:</label>
+                      <textarea class="form-control" name="wpq_decline_reason" id="wpq_decline_reason" required="required" cols="30" rows="3"></textarea>
+                    </div>
+                    <?php do_action( 'wpinv_quote_decline_form_center', $quote ); ?>
+                    <button type="submit" class="btn btn-danger btn-sm decline-quote" title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-warning btn-sm" onclick="wpiQuiteAction('close', this);"><?php _e('Cancel', 'wpinv-quotes'); ?></button>
+                    <?php do_action( 'wpinv_quote_decline_form_bottom', $quote ); ?>
+                </form>
+                <?php do_action( 'wpinv_quote_decline_form_after', $quote ); ?>
+            </div>
+            <script type="text/javascript">
+                function wpiQuiteAction(action, el) {
+                    var $accpet = document.getElementById('wpq-accept-box');
+                    var $decline = document.getElementById('wpq-decline-box');
                     if (action == 'accept') {
-                        y.style.display = 'none';
-                        x.style.display = 'block';
+                        $decline.style.display = 'none';
+                        $accpet.style.display = 'block';
+                    } else if (action == 'decline') {
+                        $accpet.style.display = 'none';
+                        $decline.style.display = 'block';
                     } else {
-                        x.style.display = 'none';
-                        y.style.display = 'block';
+                        $accpet.style.display = 'none';
+                        $decline.style.display = 'none';
                     }
                 }
             </script>
@@ -205,6 +223,50 @@ class Wpinv_Quotes_Public
         }
 
         return $wp_query;
+    }
+    
+    public function wpinv_user_quotes_decline_box( $quotes_found = false ) {
+        if ( ! empty( $quotes_found ) ) {
+            ?>
+            <div id="wpq-decline-box" class="wpq-decline alert alert-danger wpq-action-box" style="display:none">
+                <p><?php _e('You are going to decline this quotation.', 'wpinv-quotes'); ?></p>
+                <?php do_action( 'wpinv_quotes_history_decline_form_before' ); ?>
+                <form method="POST" action="">
+                    <?php do_action( 'wpinv_quotes_history_decline_form_top' ); ?>
+                    <div class="form-group required">
+                      <label for="wpq_decline_reason"><?php _e('Reason for declining quotation', 'wpinv-quotes'); ?><span class="wpi-required">*</span>:</label>
+                      <textarea class="form-control" name="wpq_decline_reason" id="wpq_decline_reason" required="required" cols="30" rows="3"></textarea>
+                    </div>
+                    <?php do_action( 'wpinv_quotes_history_decline_form_center' ); ?>
+                    <button type="submit" class="btn btn-danger btn-sm decline-quote" title="<?php esc_attr_e('Decline This Quotation', 'wpinv-quotes'); ?>"><?php _e('Continue', 'wpinv-quotes'); ?></button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-warning btn-sm" onclick="wpiQuiteAction('close', this);"><?php _e('Cancel', 'wpinv-quotes'); ?></button>
+                    <?php do_action( 'wpinv_quotes_history_decline_form_bottom' ); ?>
+                </form>
+                <?php do_action( 'wpinv_quotes_history_decline_form_after' ); ?>
+            </div>
+            <script type="text/javascript">
+                function wpiQuiteAction(action, url, el) {
+                    jQuery('.wpq-action-tr').remove();
+                    $tr = jQuery(el).closest('tr');
+                    $tds = $tr.children('td').length;
+                    $tr.after('<tr class="wpinv-item wpq-action-tr"><td colspan="' + $tds + '"></td></tr>');
+                    jQuery('.wpi-g > #wpq-decline-box').clone().clone().appendTo('.wpq-action-tr td');
+                    var $accpet = jQuery('.wpi-user-quotes #wpq-accept-box');
+                    var $decline = jQuery('.wpi-user-quotes #wpq-decline-box');
+                    $decline.find('form').attr('action', '');
+                    if (action == 'accept') {
+                    } else if (action == 'decline') {
+                        $accpet.remove();
+                        $decline.find('form').attr('action', url);
+                        $decline.show();
+                        $decline.find('#wpq_decline_reason').focus();
+                    } else {
+                        jQuery('.wpq-action-tr').remove();
+                    }
+                }
+            </script>
+            <?php
+        }
     }
 
 }

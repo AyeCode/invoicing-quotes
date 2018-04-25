@@ -70,14 +70,15 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                             if ($quote->post_status == 'wpi-quote-pending') {
                                 $quote_actions = array(
                                     'accept' => array(
-                                        'url' => Wpinv_Quotes_Shared::get_accept_quote_url($quote_id),
+                                        'url' => esc_url(Wpinv_Quotes_Shared::get_accept_quote_url($quote_id)),
                                         'name' => __('Accept', 'wpinv-quotes'),
                                         'class' => 'btn-success'
                                     ),
                                     'decline' => array(
-                                        'url' => Wpinv_Quotes_Shared::get_decline_quote_url($quote_id),
+                                        'url' => 'javascript:void(0)',
                                         'name' => __('Decline', 'wpinv-quotes'),
-                                        'class' => 'btn-danger'
+                                        'class' => 'btn-danger',
+                                        'attrs' => ' onclick="wpiQuiteAction(\'decline\', \'' . Wpinv_Quotes_Shared::get_decline_quote_url($quote_id) . '\', this);"'
                                     ),
                                 );
                                 $actions = array_merge($actions, $quote_actions);
@@ -86,7 +87,7 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
                             if ($actions = apply_filters('wpinv_user_quotes_actions', $actions, $quote)) {
                                 foreach ($actions as $key => $action) {
                                     $class = !empty($action['class']) ? sanitize_html_class($action['class']) : '';
-                                    echo '<a href="' . esc_url($action['url']) . '" class="btn btn-sm ' . $class . ' ' . sanitize_html_class($key) . '" ' . (!empty($action['attrs']) ? $action['attrs'] : '') . '>' . $action['name'] . '</a>';
+                                    echo '<a href="' . $action['url'] . '" class="btn btn-sm ' . $class . ' ' . sanitize_html_class($key) . '" ' . (!empty($action['attrs']) ? $action['attrs'] : '') . '>' . $action['name'] . '</a>';
                                 }
                             }
                             ?>
@@ -122,6 +123,10 @@ do_action('wpinv_before_user_quotes', $has_quotes); ?>
         </div>
     <?php endif; ?>
 
+<?php } else { ?>
+    <div class="wpinv-empty alert-info">
+        <?php _e( 'No quotes found.', 'wpinv-quotes' ); ?>
+    </div>
 <?php } ?>
 
 <?php do_action('wpinv_after_user_quotes', $has_quotes); ?>
