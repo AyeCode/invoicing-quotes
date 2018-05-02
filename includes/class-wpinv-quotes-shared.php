@@ -111,6 +111,23 @@ class Wpinv_Quotes_Shared
                 return $status;
             }
         }
+        if (!empty($quote->ID) && 'wpi_invoice' === $quote->post_type) {
+            $invoice_statuses = array(
+                'wpi-pending' => __( 'Pending Payment', 'invoicing' ),
+                'publish' => __( 'Paid', 'invoicing'),
+                'wpi-processing' => __( 'Processing', 'invoicing' ),
+                'wpi-onhold' => __( 'On Hold', 'invoicing' ),
+                'wpi-refunded' => __( 'Refunded', 'invoicing' ),
+                'wpi-cancelled' => __( 'Cancelled', 'invoicing' ),
+                'wpi-failed' => __( 'Failed', 'invoicing' ),
+                'wpi-renewal' => __( 'Renewal Payment', 'invoicing' )
+            );
+            if($nicename){
+                return $invoice_statuses[$status];
+            } else {
+                return $status;
+            }
+        }
         return $status;
     }
 
