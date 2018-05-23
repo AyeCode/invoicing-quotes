@@ -123,7 +123,11 @@ class Wpinv_Quotes_Shared
                 'wpi-renewal' => __( 'Renewal Payment', 'invoicing' )
             );
             if($nicename){
-                return $invoice_statuses[$status];
+                if(isset($invoice_statuses[$status]) && !empty($invoice_statuses[$status])){
+                    return $invoice_statuses[$status];
+                } else {
+                    return $status;
+                }
             } else {
                 return $status;
             }
