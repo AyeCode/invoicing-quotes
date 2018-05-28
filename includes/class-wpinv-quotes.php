@@ -116,7 +116,7 @@ class Wpinv_Quotes
         require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-reports.php');
         require_once(WPINV_QUOTES_PATH . 'includes/shortcodes/class-wpinv-quote-shortcodes.php');
         require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-shared.php');
-
+        require_once( WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-privacy.php' );
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
