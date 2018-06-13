@@ -66,6 +66,7 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 Subscription functionality improved - CHANGED
 Add field for asking reason for rejection - ADDED
 Invoice status nice name not showing in email when convert quote to invoice - FIXED
+GDPR Compliance - ADDED
 
 = 1.0.1 =
 Problem in sending quote notification emails - FIXED
