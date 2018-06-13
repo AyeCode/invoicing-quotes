@@ -313,7 +313,7 @@ class WPInv_Quote_Reports
             $column_data .= $i == count($columns) ? '' : ',';
             $i++;
         }
-        $column_data .= "\r\n";
+        $column_data .= "\n";
 
         $this->attach_export_data($column_data);
 
@@ -401,7 +401,7 @@ class WPInv_Quote_Reports
                         $i++;
                     }
                 }
-                $row_data .= "\r\n";
+                $row_data .= "\n";
             }
 
             $this->attach_export_data($row_data);
