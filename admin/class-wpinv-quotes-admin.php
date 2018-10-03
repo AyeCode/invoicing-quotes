@@ -1776,4 +1776,25 @@ class Wpinv_Quotes_Admin
         }
         return $disable_discount;
     }
+
+    function wpinv_quote_user_invoice_content($output, $user_id){
+        $output .= '<br>';
+        $wp_query_args = array(
+            'post_type'      => 'wpi_quote',
+            'post_status'    => array_keys(Wpinv_Quotes_Shared::wpinv_get_quote_statuses()),
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'author'         => $user_id,
+        );
+        $quotes = new WP_Query( $wp_query_args );
+        $count = absint( $quotes->found_posts );
+
+        if($count > 0){
+            $link_url = admin_url( "edit.php?post_type=wpi_quote&author=".absint($user_id) );
+            $link_text = sprintf( __('Quotes ( %d )', 'wpinv-quotes'), $count );
+            $output .= "<a href='$link_url' >$link_text</a>";
+        }
+
+        return apply_filters('wpinv_user_quote_content', $output, $user_id);
+    }
 }
