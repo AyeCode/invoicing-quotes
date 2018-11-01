@@ -262,6 +262,8 @@ class Wpinv_Quotes
         $this->loader->add_action('wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles', 10, 1);
         $this->loader->add_filter('pre_get_posts', $plugin_public, 'wpinv_quote_pre_get_posts');
         $this->loader->add_action('wpinv_after_user_quotes', $plugin_public, 'wpinv_user_quotes_decline_box', 10, 1);
+        $this->loader->add_action('wpinv_display_line_item_action', $plugin_public, 'wpinv_quotes_display_line_item', 10, 3);
+        $this->loader->add_action('wpinv_loaded', $plugin_public, 'wpinv_quotes_handle_item');
     }
 
     /**

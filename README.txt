@@ -63,7 +63,8 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 == Changelog ==
 
 = 1.0.3 =
-Column displaying quote count in admin side users listing- ADDED
+Column displaying quote count in admin side users listing - ADDED
+Allow customer to delete items from quote before accepting - ADDED
 
 = 1.0.2 =
 Subscription functionality improved - CHANGED
