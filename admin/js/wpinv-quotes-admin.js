@@ -52,7 +52,7 @@
                         var data = $form.serialize();
                         submitBtn.attr('disabled', true);
                         $form.find('.wpi-msg-wrap').remove();
-                        $form.append('<div class="wpi-msg-wrap"><div class="wpi-progress"><div></div><span>0%</span></div><span class="wpi-export-loader"><i class="fa fa-spin fa-spinner"></i></span></div>');
+                        $form.append('<div class="wpi-msg-wrap"><div class="wpi-progress"><div></div><span>0%</span></div><span class="wpi-export-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
                         // start the process
                         $this.step(1, data, $form, $this);
                     }
@@ -85,9 +85,9 @@
                                         message.html('<div id="wpi-export-success" class="updated notice is-dismissible"><p>' + msg + '<span class="notice-dismiss"></span></p></div>');
                                     }
                                     if (res.data.file && res.data.file.u) {
-                                        message.append('<span class="wpi-export-file"><a href="' + res.data.file.u + '" target="_blank"><i class="fa fa-download"></i> ' + res.data.file.u + '</a><span> - ' + res.data.file.s + '<span><span>');
+                                        message.append('<span class="wpi-export-file"><a href="' + res.data.file.u + '" target="_blank"><i class="fas fa-download"></i> ' + res.data.file.u + '</a><span> - ' + res.data.file.s + '<span><span>');
                                     }
-                                    message.find('.wpi-export-loader').html('<i class="fa fa-check-circle"></i>');
+                                    message.find('.wpi-export-loader').html('<i class="fas fa-check-circle"></i>');
                                 } else {
                                     var next = parseInt(res.data.step) > 0 ? parseInt(res.data.step) : 1;
                                     $('#wpi-export-quotes .wpi-progress > span').text(parseInt(res.data.done) + '%');

@@ -356,7 +356,7 @@ class Wpinv_Quotes_Admin
             case 'wpi_actions' :
                 $value = '';
                 if (!empty($post->post_name)) {
-                    $value .= '<a title="' . esc_attr__('Print quote', 'wpinv-quotes') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fa fa-print"></i></span></a>';
+                    $value .= '<a title="' . esc_attr__('Print quote', 'wpinv-quotes') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fas fa-print"></i></span></a>';
                 }
 
                 if ($email = $wpi_invoice->get_email()) {

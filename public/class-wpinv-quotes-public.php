@@ -302,7 +302,8 @@ class Wpinv_Quotes_Public
         if ( !empty( $cart_item['id'] ) && !wpinv_is_recurring_item( $cart_item['id'] ) ) {
             $url = get_permalink($quote->ID);
             $url .= '?action=remove_quote_item&item_id='.$cart_item['id'].'&quote_id='.$quote->ID.'&_nonce='.$nonce;
-            $line_item .= '<a href="'.$url.'" class="wpinv-item-remove no-print">x </a>';
+            $msg = apply_filters('wpinv_quote_delete_item_text', __( 'Are you sure you wish to delete this item?', 'wpinv-quotes' ));
+            $line_item .= '<a href="'.$url.'" class="wpinv-print-item-remove no-print" style="color: #f00;text-decoration: none;" onclick="return confirm('.$msg.')">x </a>';
         }
         return $line_item;
     }
@@ -353,6 +354,9 @@ class Wpinv_Quotes_Public
             $quote->recalculate_totals(true);
 
             wpinv_set_checkout_session($checkout_session);
+
+            $arr_params = array( 'action', 'item_id', 'quote_id', '_nonce');
+            wp_redirect(esc_url( remove_query_arg( $arr_params ) ));exit;
 
         }
     }

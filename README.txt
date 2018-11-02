@@ -65,6 +65,7 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 = 1.0.3 =
 Column displaying quote count in admin side users listing - ADDED
 Allow customer to delete items from quote before accepting - ADDED
+Updated to use Font Awesome 5 JS version - CHANGED
 
 = 1.0.2 =
 Subscription functionality improved - CHANGED
