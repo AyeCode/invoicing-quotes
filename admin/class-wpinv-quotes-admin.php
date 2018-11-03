@@ -356,7 +356,7 @@ class Wpinv_Quotes_Admin
             case 'wpi_actions' :
                 $value = '';
                 if (!empty($post->post_name)) {
-                    $value .= '<a title="' . esc_attr__('Print quote', 'wpinv-quotes') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fa fa-print"></i></span></a>';
+                    $value .= '<a title="' . esc_attr__('Print quote', 'wpinv-quotes') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fas fa-print"></i></span></a>';
                 }
 
                 if ($email = $wpi_invoice->get_email()) {
@@ -1747,10 +1747,7 @@ class Wpinv_Quotes_Admin
     function wpinv_settings_email_wildcards_description( $description, $active_tab, $section ) {
 
         if ( 'emails' == $active_tab && in_array($section, array('user_quote','user_quote_accepted','user_quote_declined','user_note')) ) {
-            $description .= __( '<strong>{quote_number} :</strong> The quote number<br>
-                <strong>{quote_link} :</strong> The quote link<br>
-                <strong>{quote_date} :</strong> The date the quote was created<br>
-                <strong>{valid_until} :</strong> The date the quote is valid until<br>', 'wpinv-quotes' );
+            $description .= __( '<strong>{quote_number} :</strong> The quote number<br><strong>{quote_link} :</strong> The quote link<br><strong>{quote_date} :</strong> The date the quote was created<br><strong>{valid_until} :</strong> The date the quote is valid until<br>', 'wpinv-quotes' );
         }
         if ( 'emails' == $active_tab && in_array($section, array('user_quote', 'user_quote_declined', 'user_note')) ) {
             $description .= __( '<strong>{quote_decline_reason} :</strong> The reason for declining the quote<br>', 'wpinv-quotes' );
@@ -1775,5 +1772,26 @@ class Wpinv_Quotes_Admin
             }
         }
         return $disable_discount;
+    }
+
+    function wpinv_quote_user_invoice_content($output, $user_id){
+        $output .= '<br>';
+        $wp_query_args = array(
+            'post_type'      => 'wpi_quote',
+            'post_status'    => array_keys(Wpinv_Quotes_Shared::wpinv_get_quote_statuses()),
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'author'         => $user_id,
+        );
+        $quotes = new WP_Query( $wp_query_args );
+        $count = absint( $quotes->found_posts );
+
+        if($count > 0){
+            $link_url = admin_url( "edit.php?post_type=wpi_quote&author=".absint($user_id) );
+            $link_text = sprintf( __('Quotes ( %d )', 'wpinv-quotes'), $count );
+            $output .= "<a href='$link_url' >$link_text</a>";
+        }
+
+        return apply_filters('wpinv_user_quote_content', $output, $user_id);
     }
 }

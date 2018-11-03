@@ -269,4 +269,95 @@ class Wpinv_Quotes_Public
         }
     }
 
+    public function wpinv_quotes_display_line_item($line_item, $cart_item, $quote){
+
+        if ( empty( $quote ) ) {
+            return $line_item;
+        }
+
+        if ( !('wpi-quote-pending' == $quote->get_status()) ) {
+            return $line_item;
+        }
+
+        $item = new WPInv_Item( $cart_item['id'] );
+        if ( !( !empty( $item ) && $item->post_type == 'wpi_item' ) ) {
+            return $line_item;
+        }
+
+        $quantity = !empty( $cart_item['quantity'] ) && $cart_item['quantity'] > 0 ? $cart_item['quantity'] : 1;
+
+        $cart_items = $quote->get_cart_details();
+        $item_quantities    = wpinv_item_quantities_enabled();
+        if ( $item_quantities ) {
+            if (count($cart_items) == 1 && $quantity <= 1) {
+                return $line_item;
+            }
+        } else {
+            if ( count( $cart_items ) == 1 ) {
+                return $line_item;
+            }
+        }
+
+        $nonce = wp_create_nonce( 'quote-item' );
+        if ( !empty( $cart_item['id'] ) && !wpinv_is_recurring_item( $cart_item['id'] ) ) {
+            $url = get_permalink($quote->ID);
+            $url .= '?action=remove_quote_item&item_id='.$cart_item['id'].'&quote_id='.$quote->ID.'&_nonce='.$nonce;
+            $msg = apply_filters('wpinv_quote_delete_item_text', __( 'Are you sure you wish to delete this item?', 'wpinv-quotes' ));
+            $line_item .= '<a href="'.$url.'" class="wpinv-print-item-remove no-print" style="color: #f00;text-decoration: none;" onclick="return confirm('.$msg.')">x </a>';
+        }
+        return $line_item;
+    }
+
+    public function wpinv_quotes_handle_item(){
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'remove_quote_item'){
+
+            if ( ! wp_verify_nonce( $_REQUEST['_nonce'], 'quote-item' ) ) {
+                return;
+            }
+
+            $item_id    = sanitize_text_field( $_REQUEST['item_id'] );
+            $quote_id   = sanitize_text_field( $_REQUEST['quote_id'] );
+
+            if(empty($item_id) || empty($quote_id)){
+                return;
+            }
+
+            $quote = wpinv_get_invoice( $quote_id );
+            if ( empty( $quote ) ) {
+                return;
+            }
+
+            if ( $quote->is_paid() || $quote->is_refunded() ) {
+                return;
+            }
+
+            $item = new WPInv_Item( $item_id );
+            if ( !( !empty( $item ) && $item->post_type == 'wpi_item' ) ) {
+                return;
+            }
+
+            $checkout_session = wpinv_get_checkout_session();
+
+            $data                   = array();
+            $data['invoice_id']     = $quote_id;
+            $data['cart_discounts'] = $quote->get_discounts( true );
+
+            wpinv_set_checkout_session( $data );
+
+            $args = array(
+                'id'         => $item_id,
+                'quantity'   => 1,
+            );
+
+            $quote->remove_item( $item_id, $args );
+            $quote->save();
+            $quote->recalculate_totals(true);
+
+            wpinv_set_checkout_session($checkout_session);
+
+            $arr_params = array( 'action', 'item_id', 'quote_id', '_nonce');
+            wp_redirect(esc_url( remove_query_arg( $arr_params ) ));exit;
+
+        }
+    }
 }

@@ -220,6 +220,7 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_settings_email_wildcards_description', $plugin_admin, 'wpinv_settings_email_wildcards_description', 10, 3);
         $this->loader->add_filter('wpinv_invoice_items_actions_content', $plugin_admin, 'wpinv_quote_items_actions', 10, 3);
         $this->loader->add_filter('wpinv_disable_apply_discount', $plugin_admin, 'wpinv_quote_disable_apply_discount', 10, 2);
+        $this->loader->add_filter('wpinv_user_invoice_content', $plugin_admin, 'wpinv_quote_user_invoice_content', 10, 2);
 
         add_action( 'wpinv_settings_tab_bottom_emails_user_quote', 'wpinv_settings_tab_bottom_emails', 10, 2 );
         add_action( 'wpinv_settings_tab_bottom_emails_user_quote_accepted', 'wpinv_settings_tab_bottom_emails', 10, 2 );
@@ -261,6 +262,8 @@ class Wpinv_Quotes
         $this->loader->add_action('wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles', 10, 1);
         $this->loader->add_filter('pre_get_posts', $plugin_public, 'wpinv_quote_pre_get_posts');
         $this->loader->add_action('wpinv_after_user_quotes', $plugin_public, 'wpinv_user_quotes_decline_box', 10, 1);
+        $this->loader->add_action('wpinv_display_line_item_action', $plugin_public, 'wpinv_quotes_display_line_item', 10, 3);
+        $this->loader->add_action('wpinv_loaded', $plugin_public, 'wpinv_quotes_handle_item');
     }
 
     /**
