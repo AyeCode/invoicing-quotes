@@ -2,9 +2,9 @@
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpinvoicing.com
 Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
-Requires at least: 3.1
-Tested up to: 5.0
-Stable tag: 1.0.3
+Requires at least: 4.9
+Tested up to: 5.2
+Stable tag: 1.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,7 +31,7 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 
 = Minimum Requirements =
 
-* WordPress 3.1 or greater
+* WordPress 4.9 or greater
 * PHP version 5.3 or greater
 * MySQL version 5.0 or greater
 
@@ -61,6 +61,10 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 3. Quote view.
 
 == Changelog ==
+
+= 1.0.4 =
+Export items to CSV export in reports page - ADDED
+General function to send new quote notification via other add ons - ADDED
 
 = 1.0.3 =
 Column displaying quote count in admin side users listing - ADDED

@@ -478,7 +478,10 @@ class WPInv_Quote_Reports
             'id' => __('ID', 'wpinv-quotes'),
             'number' => __('Number', 'wpinv-quotes'),
             'date' => __('Date', 'wpinv-quotes'),
+            'valid_date'      => __( 'Valid Until Date', 'wpinv-quotes' ),
             'amount' => __('Amount', 'wpinv-quotes'),
+            'currency' => __('Currency', 'wpinv-quotes'),
+            'items'        => __( 'Items', 'invoicing' ),
             'status_nicename' => __('Status Nicename', 'wpinv-quotes'),
             'status' => __('Status', 'wpinv-quotes'),
             'tax' => __('Tax', 'wpinv-quotes'),
@@ -499,8 +502,6 @@ class WPInv_Quote_Reports
             'gateway' => __('Gateway', 'wpinv-quotes'),
             'gateway_nicename' => __('Gateway Nicename', 'wpinv-quotes'),
             'transaction_id' => __('Transaction ID', 'wpinv-quotes'),
-            'currency' => __('Currency', 'wpinv-quotes'),
-            'valid_date' => __('Valid Until Date', 'wpinv-quotes'),
         );
 
         return $columns;
@@ -545,11 +546,15 @@ class WPInv_Quote_Reports
         if (!empty($quotes)) {
             foreach ($quotes as $quote) {
                 $valid_date = get_post_meta($quote->ID, 'wpinv_quote_valid_until', true);
+                $items = $this->get_quote_items($quote);
                 $row = array(
                     'id' => $quote->ID,
                     'number' => $quote->get_number(),
                     'date' => $quote->get_invoice_date(false),
+                    'valid_date' => ($valid_date != '') ? date_i18n( get_option( 'date_format' ), strtotime( $valid_date ) ) : '',
                     'amount' => wpinv_format_amount($quote->get_total(), NULL, true),
+                    'currency' => $quote->get_currency(),
+                    'items'         => $items,
                     'status_nicename' => $quote->get_status(true),
                     'status' => $quote->get_status(),
                     'tax' => $quote->get_tax() > 0 ? wpinv_format_amount($quote->get_tax(), NULL, true) : '',
@@ -570,8 +575,6 @@ class WPInv_Quote_Reports
                     'gateway' => $quote->get_gateway(),
                     'gateway_nicename' => $quote->get_gateway_title(),
                     'transaction_id' => $quote->gateway ? $quote->get_transaction_id() : '',
-                    'currency' => $quote->get_currency(),
-                    'valid_date' => ($valid_date != '') ? date_i18n( get_option( 'date_format' ), strtotime( $valid_date ) ) : '',
                 );
 
                 $data[] = apply_filters('wpinv_export_quote_row', $row, $quote);
@@ -626,5 +629,20 @@ class WPInv_Quote_Reports
         }
 
         return $status;
+    }
+
+    public function get_quote_items($quote){
+        if(!$quote){
+            return '';
+        }
+
+        $cart_details = $quote->get_cart_details();
+        if(!empty($cart_details)){
+            $cart_details = maybe_serialize($cart_details);
+        } else {
+            $cart_details = '';
+        }
+
+        return $cart_details;
     }
 }
