@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quotes for Invoicing 1.0.3\n"
+"Project-Id-Version: Quotes for Invoicing 1.0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-02 13:49+0000\n"
-"PO-Revision-Date: 2018-11-02 13:51+0000\n"
+"POT-Creation-Date: 2019-07-09 15:26+0530\n"
+"PO-Revision-Date: 2019-07-09 15:26+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin/class-wpinv-quotes-admin.php:86
@@ -79,7 +79,7 @@ msgid "Customer"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:259
-#: includes/class-wpinv-quotes-reports.php:481
+#: includes/class-wpinv-quotes-reports.php:482
 msgid "Amount"
 msgstr ""
 
@@ -92,7 +92,7 @@ msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:261
 #: includes/class-tgm-plugin-activation.php:2647
-#: includes/class-wpinv-quotes-reports.php:483
+#: includes/class-wpinv-quotes-reports.php:486
 #: includes/class-wpinv-quotes-shared.php:213
 msgid "Status"
 msgstr ""
@@ -220,7 +220,7 @@ msgid "( Last Quote's sequential number: <b>%s</b> )"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:606
-#: admin/class-wpinv-quotes-admin.php:1445
+#: admin/class-wpinv-quotes-admin.php:1383
 #: includes/class-wpinv-quotes-privacy-exporters.php:72
 msgid "Quote Number"
 msgstr ""
@@ -480,94 +480,86 @@ msgid ""
 "</b> {quote_decline_reason}</p>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:918
-msgid "Quote has been emailed to the user."
-msgstr ""
-
 #: admin/class-wpinv-quotes-admin.php:920
-msgid "Fail to send quote to the user!"
-msgstr ""
-
-#: admin/class-wpinv-quotes-admin.php:982
 #, php-format
 msgid "Quote status changed from %s to %s"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1047
+#: admin/class-wpinv-quotes-admin.php:985
 #, php-format
 msgid "Converted from Quote #%s to Invoice."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1107
+#: admin/class-wpinv-quotes-admin.php:1045
 #, php-format
 msgid "Created Invoice from Quote #%s."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1128
+#: admin/class-wpinv-quotes-admin.php:1066
 #, php-format
 msgid "Converted from Quote to Invoice #%s."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1347
+#: admin/class-wpinv-quotes-admin.php:1285
 #, php-format
 msgid "Quote was %s by user. Reason: %s"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1349
+#: admin/class-wpinv-quotes-admin.php:1287
 #, php-format
 msgid "Quote status changed from %s to %s by user."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1406
+#: admin/class-wpinv-quotes-admin.php:1344
 msgid "You do not have permission to send quote notification"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1406
+#: admin/class-wpinv-quotes-admin.php:1344
 msgid "Error"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1429
+#: admin/class-wpinv-quotes-admin.php:1367
 msgid "Quote Details:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1461
+#: admin/class-wpinv-quotes-admin.php:1399
 #: includes/class-wpinv-quotes-privacy-exporters.php:73
 msgid "Quote Date"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1477
+#: admin/class-wpinv-quotes-admin.php:1415
 #: includes/class-wpinv-quotes-privacy-exporters.php:75
 msgid "Quote Status"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1494
+#: admin/class-wpinv-quotes-admin.php:1432
 #, php-format
 msgid "Quote %s Number"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1536
+#: admin/class-wpinv-quotes-admin.php:1474
 msgid "Quote converted to invoice successfully."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1699
+#: admin/class-wpinv-quotes-admin.php:1637
 msgid "Valid Until Date:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1701
+#: admin/class-wpinv-quotes-admin.php:1639
 msgid "yyyy-mm-dd"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1709
+#: admin/class-wpinv-quotes-admin.php:1647
 msgid "Valid Untill Date:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1724
-#: admin/class-wpinv-quotes-admin.php:1740
-#: includes/class-wpinv-quotes-reports.php:503
+#: admin/class-wpinv-quotes-admin.php:1662
+#: admin/class-wpinv-quotes-admin.php:1678
+#: includes/class-wpinv-quotes-reports.php:481
 msgid "Valid Until Date"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1750
+#: admin/class-wpinv-quotes-admin.php:1688
 msgid ""
 "<strong>{quote_number} :</strong> The quote number<br><strong>{quote_link} :"
 "</strong> The quote link<br><strong>{quote_date} :</strong> The date the "
@@ -575,13 +567,13 @@ msgid ""
 "valid until<br>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1753
+#: admin/class-wpinv-quotes-admin.php:1691
 msgid ""
 "<strong>{quote_decline_reason} :</strong> The reason for declining the "
 "quote<br>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1791
+#: admin/class-wpinv-quotes-admin.php:1729
 #, php-format
 msgid "Quotes ( %d )"
 msgstr ""
@@ -959,12 +951,12 @@ msgid "Quote Total"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:78
-#: includes/class-wpinv-quotes-reports.php:488
+#: includes/class-wpinv-quotes-reports.php:491
 msgid "First Name"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:79
-#: includes/class-wpinv-quotes-reports.php:489
+#: includes/class-wpinv-quotes-reports.php:492
 msgid "Last Name"
 msgstr ""
 
@@ -973,7 +965,7 @@ msgid "Email Address"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:81
-#: includes/class-wpinv-quotes-reports.php:496
+#: includes/class-wpinv-quotes-reports.php:499
 msgid "Company"
 msgstr ""
 
@@ -982,22 +974,22 @@ msgid "Phone Number"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:83
-#: includes/class-wpinv-quotes-reports.php:490
+#: includes/class-wpinv-quotes-reports.php:493
 msgid "Address"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:84
-#: includes/class-wpinv-quotes-reports.php:491
+#: includes/class-wpinv-quotes-reports.php:494
 msgid "City"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:85
-#: includes/class-wpinv-quotes-reports.php:493
+#: includes/class-wpinv-quotes-reports.php:496
 msgid "Country"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:86
-#: includes/class-wpinv-quotes-reports.php:492
+#: includes/class-wpinv-quotes-reports.php:495
 msgid "State"
 msgstr ""
 
@@ -1076,56 +1068,60 @@ msgid ""
 "inconsistent file permissions."
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:482
-msgid "Status Nicename"
+#: includes/class-wpinv-quotes-reports.php:483
+msgid "Currency"
 msgstr ""
 
 #: includes/class-wpinv-quotes-reports.php:484
-msgid "Tax"
+msgid "Items"
 msgstr ""
 
 #: includes/class-wpinv-quotes-reports.php:485
-msgid "Discount"
-msgstr ""
-
-#: includes/class-wpinv-quotes-reports.php:486
-msgid "User ID"
+msgid "Status Nicename"
 msgstr ""
 
 #: includes/class-wpinv-quotes-reports.php:487
+msgid "Tax"
+msgstr ""
+
+#: includes/class-wpinv-quotes-reports.php:488
+msgid "Discount"
+msgstr ""
+
+#: includes/class-wpinv-quotes-reports.php:489
+msgid "User ID"
+msgstr ""
+
+#: includes/class-wpinv-quotes-reports.php:490
 msgid "Email"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:494
+#: includes/class-wpinv-quotes-reports.php:497
 msgid "Zipcode"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:495
+#: includes/class-wpinv-quotes-reports.php:498
 msgid "Phone"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:497
+#: includes/class-wpinv-quotes-reports.php:500
 msgid "Vat Number"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:498
+#: includes/class-wpinv-quotes-reports.php:501
 msgid "IP"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:499
+#: includes/class-wpinv-quotes-reports.php:502
 msgid "Gateway"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:500
+#: includes/class-wpinv-quotes-reports.php:503
 msgid "Gateway Nicename"
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:501
+#: includes/class-wpinv-quotes-reports.php:504
 msgid "Transaction ID"
-msgstr ""
-
-#: includes/class-wpinv-quotes-reports.php:502
-msgid "Currency"
 msgstr ""
 
 #: includes/class-wpinv-quotes-shared.php:116
@@ -1162,6 +1158,18 @@ msgstr ""
 
 #: includes/class-wpinv-quotes-shared.php:214
 msgid "Total"
+msgstr ""
+
+#: includes/general-functions.php:49
+msgid "Quote has been emailed to the user."
+msgstr ""
+
+#: includes/general-functions.php:51
+msgid "Fail to send quote to the user!"
+msgstr ""
+
+#: includes/general-functions.php:57
+msgid " - ADMIN BCC COPY"
 msgstr ""
 
 #: public/class-wpinv-quotes-public.php:141
