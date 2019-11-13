@@ -418,6 +418,9 @@ class Wpinv_Quotes_Admin
                 add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'wpinv-quotes'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
                 add_meta_box('wpinv-mb-convert-quote', __('Convert Quote', 'wpinv-quotes'), 'WPInv_Quote_Meta_Box::quote_to_invoice_output', 'wpi_quote', 'side', 'high');
             }
+
+            // Remove Yoast SEO metabox from add/edit quote screen.
+	        remove_meta_box('wpseo_meta', 'wpi_quote', 'normal');
         }
     }
 
