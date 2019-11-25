@@ -62,6 +62,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Changelog ==
 
+= 1.0.5 =
+Remove Yoast SEO metabox from edit invoice screen - FIXED
+
 = 1.0.4 =
 Export items to CSV export in reports page - ADDED
 General function to send new quote notification via other add ons - ADDED
