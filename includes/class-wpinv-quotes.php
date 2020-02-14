@@ -117,7 +117,9 @@ class Wpinv_Quotes
         require_once(WPINV_QUOTES_PATH . 'includes/shortcodes/class-wpinv-quote-shortcodes.php');
         require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-shared.php');
         require_once( WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-privacy.php' );
+        require_once( WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-controller.php' );
         require_once( WPINV_QUOTES_PATH . 'includes/general-functions.php' );
+
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
@@ -222,6 +224,7 @@ class Wpinv_Quotes
         $this->loader->add_filter('wpinv_invoice_items_actions_content', $plugin_admin, 'wpinv_quote_items_actions', 10, 3);
         $this->loader->add_filter('wpinv_disable_apply_discount', $plugin_admin, 'wpinv_quote_disable_apply_discount', 10, 2);
         $this->loader->add_filter('wpinv_user_invoice_content', $plugin_admin, 'wpinv_quote_user_invoice_content', 10, 2);
+        $this->loader->add_action('wpinv_register_rest_routes', $plugin_admin, 'init_api');
 
         add_action( 'wpinv_settings_tab_bottom_emails_user_quote', 'wpinv_settings_tab_bottom_emails', 10, 2 );
         add_action( 'wpinv_settings_tab_bottom_emails_user_quote_accepted', 'wpinv_settings_tab_bottom_emails', 10, 2 );
