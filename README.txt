@@ -62,6 +62,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Changelog ==
 
+= 1.0.6 =
+* Ability to query and manage quotes via the REST API - ADDED
+
 = 1.0.5 =
 Remove Yoast SEO metabox from edit invoice screen - FIXED
 
