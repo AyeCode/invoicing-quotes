@@ -1,13 +1,6 @@
 .post-type-wpi_quote #commentsdiv.postbox,
 .post-type-wpi_quote #commentstatusdiv.postbox,
 .post-type-wpi_quote .subsubsub .mine{display: none !important;}
-.post-type-wpi_quote .wp-list-table.widefat th#ID {width: 70px;}
-.post-type-wpi_quote .wp-list-table.widefat th#number {width: 120px;}
-.post-type-wpi_quote .wp-list-table.widefat th#quote_date {width: 120px;}
-.post-type-wpi_quote .wp-list-table.widefat th#status {width: 120px;}
-.post-type-wpi_quote .wp-list-table.widefat th#amount {width: 110px;}
-.post-type-wpi_quote .wp-list-table.widefat th#customer {width: 170px;}
-.post-type-wpi_quote .wp-list-table.widefat th#wpi_actions {width: 150px;}
 .post-type-wpi_quote form#post #titlediv [name="post_title"] {cursor: not-allowed;opacity: .75;}
 .post-type-wpi_quote form#post #edit-slug-buttons {display: none;}
 .wpi-quote-export-form {position: relative;}

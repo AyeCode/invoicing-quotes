@@ -64,7 +64,8 @@ class Wpinv_Quotes_Admin
     public function enqueue_styles()
     {
 
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/wpinv-quotes-admin.css', array(), $this->version, 'all');
+        $version = filemtime( plugin_dir_path( __FILE__ ) . 'css/wpinv-quotes-admin.css' );
+        wp_enqueue_style( 'wpinv-quotes', plugin_dir_url( __FILE__ ) . 'css/wpinv-quotes-admin.css', array(), $version );
 
     }
 
@@ -244,29 +245,6 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Return columns for admin side quote listing
-     *
-     * @since    1.0.0
-     * @param array $columns get post columns
-     * @return array $columns new columns for quotes listing
-     */
-    function wpinv_quote_columns($columns)
-    {
-        $columns = array(
-            'cb' => $columns['cb'],
-            'number' => __( 'Number', 'wpinv-quotes' ),
-            'customer' => __('Customer', 'wpinv-quotes'),
-            'amount' => __('Amount', 'wpinv-quotes'),
-            'quote_date' => __('Date', 'wpinv-quotes'),
-            'status' => __('Status', 'wpinv-quotes'),
-            'ID' => __('ID', 'wpinv-quotes'),
-            'wpi_actions' => __('Actions', 'wpinv-quotes'),
-        );
-
-        return apply_filters('wpi_quote_table_columns', $columns);
-    }
-
-    /**
      * Remove bulk edit option from admin side quote listing
      *
      * @since    1.0.0
@@ -304,82 +282,163 @@ class Wpinv_Quotes_Admin
     }
 
     /**
-     * Display custom columns for admin side quote listing
-     *
-     * @since    1.0.0
-     * @param string $column_name current column name in quote listing
-     * @return string $value value for current column
-     */
-    function wpinv_quote_posts_custom_column($column_name)
-    {
-        global $post, $wpi_invoice;
+	 * Returns an array of quotes table columns.
+	 */
+	public function quote_columns( $columns ) {
 
-        if (empty($wpi_invoice) || (!empty($wpi_invoice) && $post->ID != $wpi_invoice->ID)) {
-            $wpi_invoice = new WPInv_Invoice($post->ID);
-        }
+		$columns = array(
+			'cb'                => $columns['cb'],
+			'number'            => __( 'Quote', 'wpinv-quotes' ),
+			'customer'          => __( 'Customer', 'wpinv-quotes' ),
+			'invoice_date'      => __( 'Date', 'wpinv-quotes' ),
+			'amount'            => __( 'Amount', 'wpinv-quotes' ),
+			'recurring'         => __( 'Recurring', 'wpinv-quotes' ),
+			'status'            => __( 'Status', 'wpinv-quotes' ),
+			'wpi_actions'       => __( 'Actions', 'wpinv-quotes' ),
+		);
 
-        $value = NULL;
+		return apply_filters( 'wpi_quote_table_columns', $columns );
+    }
 
-        switch ($column_name) {
-            case 'email' :
-                $value = $wpi_invoice->get_email();
-                break;
-            case 'customer' :
-                $customer_name = $wpi_invoice->get_user_full_name();
-                $customer_name = $customer_name != '' ? $customer_name : __('Customer', 'wpinv-quotes');
-                $value = '<a href="' . esc_url(get_edit_user_link($wpi_invoice->get_user_id())) . '">' . $customer_name . '</a>';
-                if ($email = $wpi_invoice->get_email()) {
-                    $value .= '<br><a class="email" href="mailto:' . $email . '">' . $email . '</a>';
+    /**
+	 * Displays quotes table columns.
+	 */
+	public function display_quote_columns( $column_name, $post_id ) {
+
+		$invoice = new WPInv_Invoice( $post_id );
+
+		switch ( $column_name ) {
+
+			case 'invoice_date' :
+				$date_time = esc_attr( $invoice->get_created_date() );
+				$date      = sanitize_text_field( getpaid_format_date_value( $date_time ) );
+				echo "<span title='$date_time'>$date</span>";
+				break;
+
+			case 'amount' :
+
+				$amount = $invoice->get_total();
+				$formated_amount = wpinv_price( $amount, $invoice->get_currency() );
+
+				if ( $invoice->is_refunded() ) {
+					$refunded_amount = wpinv_price( 0, $invoice->get_currency() );
+					echo "<del>$formated_amount</del>&nbsp;<ins>$refunded_amount</ins>";
+				} else {
+
+					$discount = $invoice->get_total_discount();
+
+					if ( ! empty( $discount ) ) {
+						$new_amount = wpinv_price( floatval( $amount + $discount ), $invoice->get_currency() );
+						echo "<del>$new_amount</del>&nbsp;<ins>$formated_amount</ins>";
+					} else {
+						echo $formated_amount;
+					}
+
+				}
+
+				break;
+
+			case 'status' :
+				$status       = sanitize_text_field( $invoice->get_status() );
+				$status_label = sanitize_text_field( $invoice->get_status_nicename() );
+
+				echo "<mark class='getpaid-invoice-status $status'><span>$status_label</span></mark>";
+
+				// Invoice view status.
+                if ( wpinv_is_invoice_viewed( $invoice->get_id() ) ) {
+                    echo '&nbsp;&nbsp;<i class="fa fa-eye wpi-help-tip" title="'. esc_attr__( 'Viewed by Customer', 'invoicing' ).'"></i>';
+                } else {
+                    echo '&nbsp;&nbsp;<i class="fa fa-eye-slash wpi-help-tip" title="'. esc_attr__( 'Not Viewed by Customer', 'invoicing' ).'"></i>';
                 }
-                break;
-            case 'amount' :
-                echo $wpi_invoice->get_total(true);
-                break;
-            case 'quote_date' :
-                $date_format = get_option('date_format');
-                $time_format = get_option('time_format');
-                $date_time_format = $date_format . ' ' . $time_format;
 
-                $t_time = get_the_time($date_time_format);
-                $m_time = $post->post_date;
-                $h_time = mysql2date($date_format, $m_time);
+				break;
 
-                $value = '<abbr title="' . $t_time . '">' . $h_time . '</abbr>';
-                break;
-            case 'status' :
-                $value = $wpi_invoice->get_status(true);
-                break;
-            case 'number' :
-                $edit_link = get_edit_post_link( $post->ID );
-                $value = '<a title="' . esc_attr__( 'View Quote Details', 'wpinv-quotes' ) . '" href="' . esc_url( $edit_link ) . '">' . $wpi_invoice->get_number() . '</a>';
-                break;
-            case 'wpi_actions' :
-                $value = '';
-                if (!empty($post->post_name)) {
-                    $value .= '<a title="' . esc_attr__('Print quote', 'wpinv-quotes') . '" href="' . esc_url(get_permalink($post->ID)) . '" class="button ui-tip column-act-btn" title="" target="_blank"><span class="dashicons dashicons-print"><i style="" class="fas fa-print"></i></span></a>';
+			case 'recurring':
+
+				if ( $invoice->is_recurring() ) {
+					echo '<i class="fa fa-check" style="color:#43850a;"></i>';
+				} else {
+					echo '<i class="fa fa-times" style="color:#616161;"></i>';
+				}
+				break;
+
+			case 'number' :
+
+				$edit_link       = esc_url( get_edit_post_link( $invoice->get_id() ) );
+				$invoice_number  = sanitize_text_field( $invoice->get_number() );
+				$invoice_details = esc_attr__( 'View Quote Details', 'invoicing' );
+
+				echo "<a href='$edit_link' title='$invoice_details'><strong>$invoice_number</strong></a>";
+
+				break;
+
+			case 'customer' :
+	
+				$customer_name = $invoice->get_user_full_name();
+	
+				if ( empty( $customer_name ) ) {
+					$customer_name = $invoice->get_email();
+				}
+	
+				if ( ! empty( $customer_name ) ) {
+					$customer_details = esc_attr__( 'View Customer Details', 'invoicing' );
+					$view_link        = esc_url( add_query_arg( 'user_id', $invoice->get_user_id(), admin_url( 'user-edit.php' ) ) );
+					echo "<a href='$view_link' title='$customer_details'><span>$customer_name</span></a>";
+				} else {
+					echo '<div>&mdash;</div>';
+				}
+
+				break;
+
+			case 'wpi_actions' :
+
+				if ( $invoice->is_draft() ) {
+					return;
+				}
+
+				$url    = esc_url( $invoice->get_view_url() );
+				$print  = esc_attr__( 'Print Quote', 'wpinv-quotes' );
+				echo "&nbsp;<a href='$url' title='$print' target='_blank' style='color:#757575'><i class='fa fa-print' style='font-size: 1.4em;'></i></a>";
+
+				$url    = esc_url(
+					wp_nonce_url(
+						add_query_arg(
+							array(
+								'getpaid-admin-action' => 'send_quote',
+								'invoice_id'           => $invoice->get_id()
+							)
+						),
+						'getpaid-nonce',
+						'getpaid-nonce'
+					)
+				);
+
+				$send   = esc_attr__( 'Send quote to customer', 'invoicing' );
+				echo "&nbsp;&nbsp;<a href='$url' title='$send' style='color:#757575'><i class='fa fa-envelope' style='font-size: 1.4em;'></i></a>";
+
+                if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
+
+                    $print  = esc_attr__( 'Convert quote to invoice', 'wpinv-quotes' );
+                    $url    = esc_url(
+                        wp_nonce_url(
+                            add_query_arg(
+                                array(
+                                    'getpaid-admin-action' => 'convert_quote_to_invoice',
+                                    'invoice_id'           => $invoice->get_id()
+                                )
+                            ),
+                            'getpaid-nonce',
+                            'getpaid-nonce'
+                        )
+                    );
+
+                    echo "&nbsp;&nbsp;<a href='$url' title='$print' style='color:#757575'><i class='fa fa-redo' style='font-size: 1.4em;'></i></a>";
+
                 }
 
-                if ($email = $wpi_invoice->get_email()) {
-                    $value .= '<a title="' . esc_attr__('Send quote to customer', 'wpinv-quotes') . '" href="' . esc_url(add_query_arg(array('wpi_action' => 'send_quote', 'quote_id' => $post->ID))) . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-email-alt"></span></a>';
-                }
+				break;
+		}
 
-                if ("wpi_quote" === $wpi_invoice->post_type && in_array($wpi_invoice->post_status, array('wpi-quote-pending'))) {
-                    $action_url = add_query_arg(array('wpi_action' => 'convert_quote_to_invoice', 'quote_id' => $post->ID));
-                    $action_url = esc_url(wp_nonce_url($action_url, 'convert', 'wpinv_convert_quote'));
-                    $value .= '<a title="' . esc_attr__('Convert quote to invoice', 'wpinv-quotes') . '" href="' . $action_url . '" class="button ui-tip column-act-btn"><span class="dashicons dashicons-controls-repeat"></span></a>';
-                }
-
-                break;
-            default:
-                $value = isset($post->$column_name) ? $post->$column_name : '';
-                break;
-
-        }
-        $value = apply_filters('wpinv_payments_table_column', $value, $post->ID, $column_name);
-
-        if ($value !== NULL) {
-            echo $value;
-        }
     }
 
     /**
