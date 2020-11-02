@@ -30,9 +30,10 @@ class WPInv_Quotes_Post_Type {
         add_action( 'init', array( $this, 'register_post_statuses' ), 5 );
         add_action( 'invoicing_quotes_after_register_post_types', array( $this, 'maybe_flush_rewrite_rules' ) );
         add_filter( 'manage_wpi_quote_posts_columns', array( $this, 'filter_quote_columns' ), 100 );
-        add_filter( 'manage_wpi_quote_posts_custom_column', array( $this, 'display_quote_columns' ), 100 );
+        add_filter( 'manage_wpi_quote_posts_custom_column', array( $this, 'display_quote_columns' ), 100, 2 );
         add_filter( 'manage_edit-wpi_quote_sortable_columns', '__return_empty_array', 100 );
-        add_filter( 'bulk_actions-edit-wpi_quote', array( $this, 'filter_bulk_actions' ) );
+		add_filter( 'post_row_actions', array( $this, 'filter_post_row_actions' ), 10, 2 );
+		add_filter( 'bulk_actions-edit-wpi_quote', array( $this, 'remove_bulk_actions' ) );
 
     }
 
@@ -180,7 +181,6 @@ class WPInv_Quotes_Post_Type {
 			'amount'            => __( 'Amount', 'wpinv-quotes' ),
 			'recurring'         => __( 'Recurring', 'wpinv-quotes' ),
 			'status'            => __( 'Status', 'wpinv-quotes' ),
-			'wpi_actions'       => __( 'Actions', 'wpinv-quotes' ),
 		);
 
 		return apply_filters( 'wpi_quote_table_columns', $columns );
@@ -276,68 +276,96 @@ class WPInv_Quotes_Post_Type {
 
 				break;
 
-			case 'wpi_actions' :
-
-				if ( $invoice->is_draft() ) {
-					return;
-				}
-
-				$url    = esc_url( $invoice->get_view_url() );
-				$print  = esc_attr__( 'Print Quote', 'wpinv-quotes' );
-				echo "&nbsp;<a href='$url' title='$print' target='_blank' style='color:#757575'><i class='fa fa-print' style='font-size: 1.4em;'></i></a>";
-
-				$url    = esc_url(
-					wp_nonce_url(
-						add_query_arg(
-							array(
-								'getpaid-admin-action' => 'send_quote',
-								'invoice_id'           => $invoice->get_id()
-							)
-						),
-						'getpaid-nonce',
-						'getpaid-nonce'
-					)
-				);
-
-				$send   = esc_attr__( 'Send quote to customer', 'invoicing' );
-				echo "&nbsp;&nbsp;<a href='$url' title='$send' style='color:#757575'><i class='fa fa-envelope' style='font-size: 1.4em;'></i></a>";
-
-                if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
-
-                    $print  = esc_attr__( 'Convert quote to invoice', 'wpinv-quotes' );
-                    $url    = esc_url(
-                        wp_nonce_url(
-                            add_query_arg(
-                                array(
-                                    'getpaid-admin-action' => 'convert_quote_to_invoice',
-                                    'invoice_id'           => $invoice->get_id()
-                                )
-                            ),
-                            'getpaid-nonce',
-                            'getpaid-nonce'
-                        )
-                    );
-
-                    echo "&nbsp;&nbsp;<a href='$url' title='$print' style='color:#757575'><i class='fa fa-redo' style='font-size: 1.4em;'></i></a>";
-
-                }
-
-				break;
 		}
 
     }
 
-    /**
+	/**
      * Remove bulk edit option from admin side quote listing
      *
      * @since    1.0.0
      * @param array $actions post actions
      * @return array $actions actions without edit option
      */
-    public function filter_bulk_actions( $actions ) {
+    public function remove_bulk_actions( $actions ) {
 
-        if ( isset( $actions['edit'] ) ) {
-            unset( $actions['edit'] );
+		if ( isset( $actions['edit'] ) ) {
+			unset( $actions['edit'] );
+		}
+	 	return $actions;
+
+	}
+
+    /**
+     * Remove bulk edit option from admin side quote listing
+     *
+     * @since    1.0.0
+     * @param array $actions post actions
+	 * @param WP_Post $post
+     * @return array $actions actions without edit option
+     */
+    public function filter_post_row_actions( $actions, $post ) {
+
+        if ( 'wpi_quote' == $post->post_type ) {
+
+			$actions = array();
+			$invoice = new WPInv_Invoice( $post );
+
+			$actions['edit'] =  sprintf(
+				'<a href="%1$s">%2$s</a>',
+				esc_url( get_edit_post_link( $invoice->get_id() ) ),
+				esc_html( __( 'Edit', 'wpinv_quotes' ) )
+			);
+
+			if ( ! $invoice->is_draft() ) {
+
+				$actions['view'] =  sprintf(
+					'<a href="%1$s">%2$s</a>',
+					esc_url( $invoice->get_view_url() ),
+					esc_html( __( 'View Quote', 'wpinv_quotes' ) )
+				);
+
+				$actions['send'] =  sprintf(
+					'<a href="%1$s">%2$s</a>',
+					esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'getpaid-admin-action' => 'send_quote',
+									'invoice_id'           => $invoice->get_id()
+								)
+							),
+							'getpaid-nonce',
+							'getpaid-nonce'
+						)
+					),
+					esc_html( __( 'Send to Customer', 'wpinv_quotes' ) )
+				);
+
+				if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
+
+					$actions['convert'] =  sprintf(
+						'<a href="%1$s">%2$s</a>',
+						esc_url(
+							wp_nonce_url(
+								add_query_arg(
+									array(
+										'getpaid-admin-action' => 'convert_quote_to_invoice',
+										'invoice_id'           => $invoice->get_id()
+									)
+								),
+								'getpaid-nonce',
+								'getpaid-nonce'
+							)
+						),
+						esc_html( __( 'Convert to Invoice', 'wpinv_quotes' ) )
+					);
+
+				}
+				
+
+			}
+
         }
 
         return $actions;

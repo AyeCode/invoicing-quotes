@@ -27,7 +27,7 @@ class WPInv_Quotes_Metaboxes {
     public function __construct() {
 
 		// Register metaboxes.
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 5, 2 );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 7, 2 );
 
 		// Remove metaboxes.
 		add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 30 );
@@ -55,29 +55,7 @@ class WPInv_Quotes_Metaboxes {
 
 		// Resend quote.
 		if ( ! $invoice->is_draft() && $invoice->has_status( 'wpi-quote-pending' ) ) {
-            add_meta_box('wpinv-mb-convert-quote', __('Quote Actions', 'wpinv-quotes'), 'WPInv_Quotes_Metaboxes::output', 'wpi_quote', 'side', 'low');
-		}
-
-		// Invoice details.
-		add_meta_box( 'wpinv-details', __('Quote Details', 'wpinv-quotes'), 'GetPaid_Meta_Box_Invoice_Details::output', 'wpi_quote', 'side', 'default' );
-			
-		// Payment details.
-		if ( ! $invoice->is_draft() ) {
-			add_meta_box( 'wpinv-payment-meta', __( 'Payment Meta', 'invoicing' ), 'GetPaid_Meta_Box_Invoice_Payment_Meta::output', 'wpi_quote', 'side', 'default' );
-		}
-
-		// Billing details.
-		add_meta_box( 'wpinv-address', __('Billing Details', 'wpinv-quotes'), 'GetPaid_Meta_Box_Invoice_Address::output', 'wpi_quote', 'normal', 'high' );
-			
-		// Invoice items.
-		add_meta_box( 'wpinv-items', __( 'Quote Items', 'wpinv-quotes' ), 'GetPaid_Meta_Box_Invoice_Items::output', 'wpi_quote', 'normal', 'high' );
-			
-		// Invoice notes.
-		add_meta_box( 'wpinv-notes', __( 'Quote Notes', 'wpinv-quotes' ), 'WPInv_Meta_Box_Notes::output', 'wpi_quote', 'side', 'low' );
-
-		// Payment form information.
-		if ( ! empty( $post->ID ) && get_post_meta( $post->ID, 'payment_form_data', true ) ) {
-			add_meta_box( 'wpinv-invoice-payment-form-details', __( 'Payment Form Details', 'invoicing' ), 'WPInv_Meta_Box_Payment_Form::output_details', 'wpi_invoice', 'side', 'high' );
+            add_meta_box( 'wpinv-mb-convert-quote', __( 'Quote Actions', 'wpinv-quotes' ), 'WPInv_Quotes_Metaboxes::output', 'wpi_quote', 'side', 'low' );
 		}
 
 	}
@@ -87,6 +65,10 @@ class WPInv_Quotes_Metaboxes {
 	 */
 	public static function remove_meta_boxes() {
 		remove_meta_box( 'wpseo_meta', 'wpi_quote', 'normal' );
+		remove_meta_box( 'wpinv-mb-resend-invoice', 'wpi_quote', 'side' );
+		remove_meta_box( 'wpinv-mb-subscriptions', 'wpi_quote', 'advanced' );
+		remove_meta_box( 'wpinv-mb-subscription-invoices', 'wpi_quote', 'advanced' );
+		remove_meta_box( 'wpinv-invoice-payment-form-details', 'wpi_quote', 'side' );
 	}
 
 	/**

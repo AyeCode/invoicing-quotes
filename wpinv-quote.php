@@ -63,6 +63,7 @@ add_action( 'admin_notices', 'wpinv_quotes_check_getpaid' );
  */
 function wpinv_quotes_autoload_locations( $locations ) {
     $locations[] = plugin_dir_path( __FILE__ ) . 'includes';
+    $locations[] = plugin_dir_path( __FILE__ ) . 'admin';
     return $locations;
 }
 add_filter( 'getpaid_autoload_locations', 'wpinv_quotes_autoload_locations' );

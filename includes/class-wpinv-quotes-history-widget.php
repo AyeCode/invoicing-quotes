@@ -1,8 +1,7 @@
 <?php
 /**
- * Contains the quote history class.
+ * Contains the quote history widget class.
  *
- * Display the invoice data meta box.
  *
  */
 

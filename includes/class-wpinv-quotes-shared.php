@@ -22,32 +22,13 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 
-/**
- * Calls the class.
- */
-function wpinv_quote_call_shared_class()
-{
-    new Wpinv_Quotes_Shared();
-}
-
-add_action('wpinv_quotes_loaded', 'wpinv_quote_call_shared_class', 2);
-
 class Wpinv_Quotes_Shared
 {
-    /**
-     * @var  object  Instance of this class
-     */
-    protected static $instance;
 
     private static $quote_statuses = array();
 
     public function __construct()
     {
-
-        add_action('wpinv_statuses', array($this, 'wpinv_quote_statuses'), 99);
-        add_action('wpinv_get_status', array($this, 'wpinv_quote_get_status'), 99, 4);
-        add_action('wpinv_setup_invoice', array($this, 'wpinv_quote_setup_quote'), 10, 1);
-        add_action( 'init', array( 'Wpinv_Quote_Shortcodes', 'init' ) );
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'wpi-quote-pending' => __('Pending', 'wpinv-quotes'),
@@ -55,14 +36,6 @@ class Wpinv_Quotes_Shared
             'wpi-quote-declined' => __('Declined', 'wpinv-quotes'),
         ));
 
-    }
-
-    public static function get_instance()
-    {
-        if (!(self::$instance instanceof self)) {
-            self::$instance = new self();
-        }
-        return self::$instance;
     }
 
     /**
@@ -74,65 +47,6 @@ class Wpinv_Quotes_Shared
     public static function wpinv_get_quote_statuses()
     {
         return self::$quote_statuses;
-    }
-
-    /**
-     * Add statuses to the dropdown in quote details metabox
-     *
-     * @since    1.0.0
-     *
-     */
-    public static function wpinv_quote_statuses( $quote_statuses, $quote = array() ) {
-        global $wpinv_quote, $post;
-
-        if ( !empty( $quote ) && 'wpi_invoice' == $quote->post_type ) {
-            return $quote_statuses;
-        }
-
-        if ( ( !empty( $post->ID ) && 'wpi_quote' == $post->post_type ) || ( !empty( $wpinv_quote->ID ) && 'wpi_quote' == $wpinv_quote->post_type ) ) {
-            return self::$quote_statuses;
-        }
-
-        return $quote_statuses;
-    }
-
-    /**
-     * Add statuses to the dropdown in quote details metabox
-     *
-     * @since    1.0.0
-     *
-     */
-    public static function wpinv_quote_get_status($status, $nicename, $quote_id, $quote)
-    {
-        if (!empty($quote->ID) && 'wpi_quote' === $quote->post_type) {
-            if($nicename){
-                return self::wpinv_quote_status_nicename($status);
-            } else {
-                return $status;
-            }
-        }
-        if (!empty($quote->ID) && 'wpi_invoice' === $quote->post_type) {
-            $invoice_statuses = array(
-                'wpi-pending' => __( 'Pending Payment', 'invoicing' ),
-                'publish' => __( 'Paid', 'invoicing'),
-                'wpi-processing' => __( 'Processing', 'invoicing' ),
-                'wpi-onhold' => __( 'On Hold', 'invoicing' ),
-                'wpi-refunded' => __( 'Refunded', 'invoicing' ),
-                'wpi-cancelled' => __( 'Cancelled', 'invoicing' ),
-                'wpi-failed' => __( 'Failed', 'invoicing' ),
-                'wpi-renewal' => __( 'Renewal Payment', 'invoicing' )
-            );
-            if($nicename){
-                if(isset($invoice_statuses[$status]) && !empty($invoice_statuses[$status])){
-                    return $invoice_statuses[$status];
-                } else {
-                    return $status;
-                }
-            } else {
-                return $status;
-            }
-        }
-        return $status;
     }
 
     /**
@@ -148,21 +62,6 @@ class Wpinv_Quotes_Shared
         $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'wpinv-quotes');
 
         return $status;
-    }
-
-    /**
-     * set global variable to use in add-on
-     *
-     * @since    1.0.0
-     * @param object $quote quote object
-     */
-    public static function wpinv_quote_setup_quote($quote)
-    {
-        global $wpinv_quote;
-        $wpinv_quote = $quote;
-        if('wpi_quote' == $wpinv_quote->post_type){
-            $wpinv_quote->status_nicename = self::wpinv_quote_status_nicename( $wpinv_quote->post_status );
-        }
     }
 
     /**
