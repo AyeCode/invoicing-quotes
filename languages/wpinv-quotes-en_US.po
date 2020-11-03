@@ -1,22 +1,23 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quotes for Invoicing 1.0.4\n"
+"Project-Id-Version: Quotes for Invoicing 1.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-09 15:26+0530\n"
-"PO-Revision-Date: 2019-07-09 15:26+0530\n"
-"Last-Translator: \n"
-"Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
+"POT-Creation-Date: 2020-02-27 07:10+0000\n"
+"PO-Revision-Date: 2020-02-27 07:10+0000\n"
+"Last-Translator: Brian Mutende <mutendebrian@gmail.com>\n"
+"Language-Team: English (United States)\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_n:1,2;_n_noop:1,2;"
-"_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_n:1,2;_n_noop:1,2;_nx:1,"
+"2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Loco-Version: 2.3.1; wp-5.3.2"
 
 #: admin/class-wpinv-quotes-admin.php:86
 msgid "Are you sure you want to convert from Quote to Invoice?"
@@ -27,11 +28,12 @@ msgid "Save Quote"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:106
+msgctxt "Page slug"
 msgid "wpi-quotes-history"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:107
-#: public/class-wpinv-quotes-public.php:210
+msgctxt "Page title"
 msgid "Quote History"
 msgstr ""
 
@@ -63,7 +65,7 @@ msgid "Quotes"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:186
-#: admin/class-wpinv-quotes-admin.php:551
+#: admin/class-wpinv-quotes-admin.php:554
 #: includes/class-wpinv-quotes-activator.php:37
 msgid "Quote"
 msgstr ""
@@ -91,7 +93,6 @@ msgid "Date"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:261
-#: includes/class-tgm-plugin-activation.php:2647
 #: includes/class-wpinv-quotes-reports.php:486
 #: includes/class-wpinv-quotes-shared.php:213
 msgid "Status"
@@ -121,7 +122,7 @@ msgid "Send quote to customer"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:369
-#: admin/class-wpinv-quotes-admin.php:676
+#: admin/class-wpinv-quotes-admin.php:679
 msgid "Convert quote to invoice"
 msgstr ""
 
@@ -143,7 +144,7 @@ msgid "Quote Notes"
 msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:418
-#: admin/class-wpinv-quotes-admin.php:437
+#: admin/class-wpinv-quotes-admin.php:440
 msgid "Resend Quote"
 msgstr ""
 
@@ -151,415 +152,415 @@ msgstr ""
 msgid "Convert Quote"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:436
+#: admin/class-wpinv-quotes-admin.php:439
 msgid ""
 "This will send a copy of the quote to the customer&#8217;s email address."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:470
+#: admin/class-wpinv-quotes-admin.php:473
 msgid "Quote Status:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:471
+#: admin/class-wpinv-quotes-admin.php:474
 msgid "Quote Number:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:487
+#: admin/class-wpinv-quotes-admin.php:490
 msgid "Quote Total:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:503
+#: admin/class-wpinv-quotes-admin.php:506
 msgid ""
 "After saving quote, this will send a copy of the quote to the user&#8217;s "
 "email address."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:517
-#: includes/class-wpinv-quotes-shared.php:53
+#: admin/class-wpinv-quotes-admin.php:520
+msgctxt "Quote status"
 msgid "Pending"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:522
+#: admin/class-wpinv-quotes-admin.php:525
 #, php-format
 msgid "Pending <span class=\"count\">(%s)</span>"
 msgid_plural "Pending <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-wpinv-quotes-admin.php:525
-#: includes/class-wpinv-quotes-shared.php:54
+#: admin/class-wpinv-quotes-admin.php:528
+msgctxt "Quote status"
 msgid "Accepted"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:530
+#: admin/class-wpinv-quotes-admin.php:533
 #, php-format
 msgid "Accepted <span class=\"count\">(%s)</span>"
 msgid_plural "Accepted <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-wpinv-quotes-admin.php:533
-#: includes/class-wpinv-quotes-shared.php:55
+#: admin/class-wpinv-quotes-admin.php:536
+msgctxt "Quote status"
 msgid "Declined"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:538
+#: admin/class-wpinv-quotes-admin.php:541
 #, php-format
 msgid "Declined <span class=\"count\">(%s)</span>"
 msgid_plural "Declined <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-wpinv-quotes-admin.php:568
+#: admin/class-wpinv-quotes-admin.php:571
 msgid "Quote Settings"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:597
+#: admin/class-wpinv-quotes-admin.php:600
 #, php-format
 msgid "( Last Quote's sequential number: <b>%s</b> )"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:606
-#: admin/class-wpinv-quotes-admin.php:1383
+#: admin/class-wpinv-quotes-admin.php:609
+#: admin/class-wpinv-quotes-admin.php:1386
 #: includes/class-wpinv-quotes-privacy-exporters.php:72
 msgid "Quote Number"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:611
+#: admin/class-wpinv-quotes-admin.php:614
 msgid "Sequential Quote Numbers"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:612
+#: admin/class-wpinv-quotes-admin.php:615
 msgid "Check this box to enable sequential quote numbers."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:617
+#: admin/class-wpinv-quotes-admin.php:620
 msgid "Sequential Starting Number"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:618
+#: admin/class-wpinv-quotes-admin.php:621
 msgid "The number at which the quote number sequence should begin."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:626
+#: admin/class-wpinv-quotes-admin.php:629
 msgid "Minimum digits"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:627
+#: admin/class-wpinv-quotes-admin.php:630
 msgid ""
 "If the quote number has less digits than this number, it is left padded with "
 "0s. Ex: quote number 108 will padded to 00108 if digits set to 5. The "
 "default 0 means no padding."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:635
+#: admin/class-wpinv-quotes-admin.php:638
 msgid "Quote Number Prefix"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:636
+#: admin/class-wpinv-quotes-admin.php:639
 msgid "A prefix to prepend to all quote numbers. Ex: WPQUO-"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:644
+#: admin/class-wpinv-quotes-admin.php:647
 msgid "Quote Number Postfix"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:645
+#: admin/class-wpinv-quotes-admin.php:648
 msgid "A postfix to append to all quote numbers."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:652
+#: admin/class-wpinv-quotes-admin.php:655
 msgid "Quote Page Settings"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:657
+#: admin/class-wpinv-quotes-admin.php:660
 msgid "Quote History Page"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:658
+#: admin/class-wpinv-quotes-admin.php:661
 msgid ""
 "This page displays history of quotes. The <b>[wpinv_quotes]</b> short code "
 "should be on this page."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:662
+#: admin/class-wpinv-quotes-admin.php:665
 msgid "Select a page"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:666
+#: admin/class-wpinv-quotes-admin.php:669
 msgid "Accept Quote"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:670
+#: admin/class-wpinv-quotes-admin.php:673
 msgid "Accepted Quote Action"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:671
+#: admin/class-wpinv-quotes-admin.php:674
 msgid "Actions to perform automatically when client accepts quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:677
+#: admin/class-wpinv-quotes-admin.php:680
 msgid "Convert quote to invoice and send to client"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:678
+#: admin/class-wpinv-quotes-admin.php:681
 msgid "Create invoice, but keep quote"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:679
+#: admin/class-wpinv-quotes-admin.php:682
 msgid "Create invoice and send to client, but keep quote"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:680
+#: admin/class-wpinv-quotes-admin.php:683
 msgid "Do nothing"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:685
+#: admin/class-wpinv-quotes-admin.php:688
 msgid "Accepted Quote Message"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:686
+#: admin/class-wpinv-quotes-admin.php:689
 msgid "Message to display if client accepts the quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:690
+#: admin/class-wpinv-quotes-admin.php:693
 msgid "You have accepted this quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:693
+#: admin/class-wpinv-quotes-admin.php:696
 msgid "Declined Quote Message"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:694
+#: admin/class-wpinv-quotes-admin.php:697
 msgid "Message to display if client declines the quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:698
+#: admin/class-wpinv-quotes-admin.php:701
 msgid "You have declined this quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:723
+#: admin/class-wpinv-quotes-admin.php:726
 msgid "Customer Quote"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:724
+#: admin/class-wpinv-quotes-admin.php:727
 msgid ""
 "Customer Quote email can be sent to customers containing their quote "
 "information."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:729
-#: admin/class-wpinv-quotes-admin.php:776
-#: admin/class-wpinv-quotes-admin.php:816
+#: admin/class-wpinv-quotes-admin.php:732
+#: admin/class-wpinv-quotes-admin.php:779
+#: admin/class-wpinv-quotes-admin.php:819
 msgid "Enable/Disable"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:730
-#: admin/class-wpinv-quotes-admin.php:777
-#: admin/class-wpinv-quotes-admin.php:817
+#: admin/class-wpinv-quotes-admin.php:733
+#: admin/class-wpinv-quotes-admin.php:780
+#: admin/class-wpinv-quotes-admin.php:820
 msgid "Enable this email notification"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:736
-#: admin/class-wpinv-quotes-admin.php:783
-#: admin/class-wpinv-quotes-admin.php:823
+#: admin/class-wpinv-quotes-admin.php:739
+#: admin/class-wpinv-quotes-admin.php:786
+#: admin/class-wpinv-quotes-admin.php:826
 msgid "Subject"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:737
+#: admin/class-wpinv-quotes-admin.php:740
 msgid "Enter the subject line for the quote receipt email."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:739
+#: admin/class-wpinv-quotes-admin.php:742
 msgid "[{site_title}] Your quote from {quote_date}"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:744
-#: admin/class-wpinv-quotes-admin.php:791
-#: admin/class-wpinv-quotes-admin.php:831
+#: admin/class-wpinv-quotes-admin.php:747
+#: admin/class-wpinv-quotes-admin.php:794
+#: admin/class-wpinv-quotes-admin.php:834
 msgid "Email Heading"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:745
+#: admin/class-wpinv-quotes-admin.php:748
 msgid ""
 "Enter the main heading contained within the email notification for the quote "
 "receipt email."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:747
+#: admin/class-wpinv-quotes-admin.php:750
 msgid "Your quote {quote_number} details"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:752
+#: admin/class-wpinv-quotes-admin.php:755
 msgid "Enable Admin BCC"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:753
+#: admin/class-wpinv-quotes-admin.php:756
 msgid "Check if you want to send this notification email to site Admin."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:759
-#: admin/class-wpinv-quotes-admin.php:799
-#: admin/class-wpinv-quotes-admin.php:839
+#: admin/class-wpinv-quotes-admin.php:762
+#: admin/class-wpinv-quotes-admin.php:802
+#: admin/class-wpinv-quotes-admin.php:842
 msgid "Email Content"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:760
-#: admin/class-wpinv-quotes-admin.php:800
-#: admin/class-wpinv-quotes-admin.php:840
+#: admin/class-wpinv-quotes-admin.php:763
+#: admin/class-wpinv-quotes-admin.php:803
+#: admin/class-wpinv-quotes-admin.php:843
 msgid "The content of the email (wildcards and HTML are allowed)."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:762
+#: admin/class-wpinv-quotes-admin.php:765
 msgid ""
-"<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </"
-"p><p>Click on the following link to view it online where you will be able to "
-"accept or decline the quote. <a class=\"btn btn-success\" href="
-"\"{quote_link}\">View & Accept / Decline Quote</a></p>"
+"<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </p>"
+"<p>Click on the following link to view it online where you will be able to "
+"accept or decline the quote. <a class=\"btn btn-success\" href=\"{quote_link}"
+"\">View & Accept / Decline Quote</a></p>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:770
+#: admin/class-wpinv-quotes-admin.php:773
 msgid "Quote Accepted"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:771
+#: admin/class-wpinv-quotes-admin.php:774
 msgid "This email will be sent to admin if user has accepted quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:784
+#: admin/class-wpinv-quotes-admin.php:787
 msgid "Enter the subject line for the quote accepted email."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:786
+#: admin/class-wpinv-quotes-admin.php:789
 msgid "[{site_title}] User has accepted the quote {quote_number}"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:792
+#: admin/class-wpinv-quotes-admin.php:795
 msgid ""
 "Enter the main heading contained within the email notification for the quote "
 "accepted email."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:794
+#: admin/class-wpinv-quotes-admin.php:797
 msgid "Quote {quote_number} Accepted by user"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:802
+#: admin/class-wpinv-quotes-admin.php:805
 msgid "<p>Hi {name},</p><p>Quote on {site_title} has been accepted. </p>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:810
+#: admin/class-wpinv-quotes-admin.php:813
 msgid "Quote Declined"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:811
+#: admin/class-wpinv-quotes-admin.php:814
 msgid "This email will be sent to admin if user has declined quote."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:824
+#: admin/class-wpinv-quotes-admin.php:827
 msgid "Enter the subject line for the quote declined email."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:826
+#: admin/class-wpinv-quotes-admin.php:829
 msgid "[{site_title}] User has declined the quote {quote_number}"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:832
+#: admin/class-wpinv-quotes-admin.php:835
 msgid ""
 "Enter the main heading contained within the email notification for the quote "
 "declined email."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:834
+#: admin/class-wpinv-quotes-admin.php:837
 msgid "Quote {quote_number} Declined by user"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:842
+#: admin/class-wpinv-quotes-admin.php:845
 msgid ""
 "<p>Hi {name},</p><p>Quote on {site_title} has been declined.</p><p><b>Reason:"
 "</b> {quote_decline_reason}</p>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:920
+#: admin/class-wpinv-quotes-admin.php:923
 #, php-format
 msgid "Quote status changed from %s to %s"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:985
+#: admin/class-wpinv-quotes-admin.php:988
 #, php-format
 msgid "Converted from Quote #%s to Invoice."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1045
+#: admin/class-wpinv-quotes-admin.php:1048
 #, php-format
 msgid "Created Invoice from Quote #%s."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1066
+#: admin/class-wpinv-quotes-admin.php:1069
 #, php-format
 msgid "Converted from Quote to Invoice #%s."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1285
+#: admin/class-wpinv-quotes-admin.php:1288
 #, php-format
 msgid "Quote was %s by user. Reason: %s"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1287
+#: admin/class-wpinv-quotes-admin.php:1290
 #, php-format
 msgid "Quote status changed from %s to %s by user."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1344
+#: admin/class-wpinv-quotes-admin.php:1347
 msgid "You do not have permission to send quote notification"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1344
+#: admin/class-wpinv-quotes-admin.php:1347
 msgid "Error"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1367
+#: admin/class-wpinv-quotes-admin.php:1370
 msgid "Quote Details:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1399
+#: admin/class-wpinv-quotes-admin.php:1402
 #: includes/class-wpinv-quotes-privacy-exporters.php:73
 msgid "Quote Date"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1415
+#: admin/class-wpinv-quotes-admin.php:1418
 #: includes/class-wpinv-quotes-privacy-exporters.php:75
 msgid "Quote Status"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1432
+#: admin/class-wpinv-quotes-admin.php:1435
 #, php-format
 msgid "Quote %s Number"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1474
+#: admin/class-wpinv-quotes-admin.php:1477
 msgid "Quote converted to invoice successfully."
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1637
+#: admin/class-wpinv-quotes-admin.php:1640
 msgid "Valid Until Date:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1639
+#: admin/class-wpinv-quotes-admin.php:1642
 msgid "yyyy-mm-dd"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1647
+#: admin/class-wpinv-quotes-admin.php:1650
 msgid "Valid Untill Date:"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1662
-#: admin/class-wpinv-quotes-admin.php:1678
+#: admin/class-wpinv-quotes-admin.php:1665
+#: admin/class-wpinv-quotes-admin.php:1681
 #: includes/class-wpinv-quotes-reports.php:481
 msgid "Valid Until Date"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1688
+#: admin/class-wpinv-quotes-admin.php:1691
 msgid ""
 "<strong>{quote_number} :</strong> The quote number<br><strong>{quote_link} :"
 "</strong> The quote link<br><strong>{quote_date} :</strong> The date the "
@@ -567,367 +568,161 @@ msgid ""
 "valid until<br>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1691
+#: admin/class-wpinv-quotes-admin.php:1694
 msgid ""
 "<strong>{quote_decline_reason} :</strong> The reason for declining the "
 "quote<br>"
 msgstr ""
 
-#: admin/class-wpinv-quotes-admin.php:1729
+#: admin/class-wpinv-quotes-admin.php:1732
 #, php-format
 msgid "Quotes ( %d )"
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:334
-msgid "Install Required Plugins"
+#: includes/class-wpinv-quotes-controller.php:81
+msgid "The reason for declining this quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:335
-msgid "Install Plugins"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:337
+#: includes/class-wpinv-quotes-controller.php:160
 #, php-format
-msgid "Installing Plugin: %s"
+msgid "Quote was %s via API. Reason: %s"
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:339
+#: includes/class-wpinv-quotes-controller.php:162
 #, php-format
-msgid "Updating Plugin: %s"
+msgid "Quote status changed from %s to %s via API."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:340
-msgid "Something went wrong with the plugin API."
+#: includes/class-wpinv-quotes-controller.php:203
+msgid "The title for the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:343
-#, php-format
-msgid "This theme requires the following plugin: %1$s."
-msgid_plural "This theme requires the following plugins: %1$s."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:349
-#, php-format
-msgid "This theme recommends the following plugin: %1$s."
-msgid_plural "This theme recommends the following plugins: %1$s."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:355
-#, php-format
-msgid ""
-"The following plugin needs to be updated to its latest version to ensure "
-"maximum compatibility with this theme: %1$s."
-msgid_plural ""
-"The following plugins need to be updated to their latest version to ensure "
-"maximum compatibility with this theme: %1$s."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:361
-#, php-format
-msgid "There is an update available for: %1$s."
-msgid_plural "There are updates available for the following plugins: %1$s."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:367
-#, php-format
-msgid "The following required plugin is currently inactive: %1$s."
-msgid_plural "The following required plugins are currently inactive: %1$s."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:373
-#, php-format
-msgid "The following recommended plugin is currently inactive: %1$s."
-msgid_plural "The following recommended plugins are currently inactive: %1$s."
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:378
-msgid "Begin installing plugin"
-msgid_plural "Begin installing plugins"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:383
-msgid "Begin updating plugin"
-msgid_plural "Begin updating plugins"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:388
-msgid "Begin activating plugin"
-msgid_plural "Begin activating plugins"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:392
-msgid "Return to Required Plugins Installer"
+#: includes/class-wpinv-quotes-controller.php:210
+msgid "The user ID of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:393
-msgid "Return to the Dashboard"
+#: includes/class-wpinv-quotes-controller.php:216
+msgid "The email of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:394
-#: includes/class-tgm-plugin-activation.php:3252
-msgid "Plugin activated successfully."
+#: includes/class-wpinv-quotes-controller.php:223
+msgid "The IP of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:395
-#: includes/class-tgm-plugin-activation.php:3045
-msgid "The following plugin was activated successfully:"
-msgid_plural "The following plugins were activated successfully:"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:397
-#, php-format
-msgid "No action taken. Plugin %1$s was already active."
+#: includes/class-wpinv-quotes-controller.php:229
+msgid "Information about the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:399
-#, php-format
-msgid ""
-"Plugin not activated. A higher version of %s is needed for this theme. "
-"Please update the plugin."
+#: includes/class-wpinv-quotes-controller.php:235
+msgid "The first name of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:401
-#, php-format
-msgid "All plugins installed and activated successfully. %1$s"
+#: includes/class-wpinv-quotes-controller.php:241
+msgid "The last name of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:402
-msgid "Dismiss this notice"
+#: includes/class-wpinv-quotes-controller.php:247
+msgid "The company of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:403
-msgid ""
-"There are one or more required or recommended plugins to install, update or "
-"activate."
+#: includes/class-wpinv-quotes-controller.php:253
+msgid "The VAT number of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:404
-msgid "Please contact the administrator of this site for help."
+#: includes/class-wpinv-quotes-controller.php:259
+msgid "The VAT rate applied on the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:607
-msgid "This plugin needs to be updated to be compatible with your theme."
+#: includes/class-wpinv-quotes-controller.php:265
+msgid "The address of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2075
-#, php-format
-msgid "TGMPA v%s"
+#: includes/class-wpinv-quotes-controller.php:271
+msgid "The city of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2366
-msgid "Required"
+#: includes/class-wpinv-quotes-controller.php:277
+msgid "The country of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2369
-msgid "Recommended"
+#: includes/class-wpinv-quotes-controller.php:283
+msgid "The state of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2385
-msgid "WordPress Repository"
+#: includes/class-wpinv-quotes-controller.php:289
+msgid "The zip code of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2388
-msgid "External Source"
+#: includes/class-wpinv-quotes-controller.php:295
+msgid "The phone number of the quote recipient."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2391
-msgid "Pre-Packaged"
+#: includes/class-wpinv-quotes-controller.php:303
+msgid "Unique identifier for the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2408
-msgid "Not Installed"
+#: includes/class-wpinv-quotes-controller.php:310
+msgid "The quote number."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2412
-msgid "Installed But Not Activated"
+#: includes/class-wpinv-quotes-controller.php:317
+msgid "The total amount of the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2414
-msgid "Active"
+#: includes/class-wpinv-quotes-controller.php:324
+msgid "The discount applied to the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2420
-msgid "Required Update not Available"
+#: includes/class-wpinv-quotes-controller.php:331
+msgid "The discount code applied to the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2423
-msgid "Requires Update"
+#: includes/class-wpinv-quotes-controller.php:338
+msgid "The tax applied on the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2426
-msgid "Update recommended"
+#: includes/class-wpinv-quotes-controller.php:345
+msgid "The total fees of the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2435
-#, php-format
-msgid "%1$s, %2$s"
+#: includes/class-wpinv-quotes-controller.php:352
+msgid "The sub-total for the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2481
-#, php-format
-msgid "All <span class=\"count\">(%s)</span>"
-msgid_plural "All <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:2485
-#, php-format
-msgid "To Install <span class=\"count\">(%s)</span>"
-msgid_plural "To Install <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:2489
-#, php-format
-msgid "Update Available <span class=\"count\">(%s)</span>"
-msgid_plural "Update Available <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:2493
-#, php-format
-msgid "To Activate <span class=\"count\">(%s)</span>"
-msgid_plural "To Activate <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-tgm-plugin-activation.php:2575
-msgid "unknown"
+#: includes/class-wpinv-quotes-controller.php:359
+msgid "The currency used on the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2583
-msgid "Installed version:"
+#: includes/class-wpinv-quotes-controller.php:365
+msgid "The cart details for quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2591
-msgid "Minimum required version:"
+#: includes/class-wpinv-quotes-controller.php:372
+msgid "The date the quote was created, in the site's timezone."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2603
-msgid "Available version:"
+#: includes/class-wpinv-quotes-controller.php:379
+msgid "The date until which this quote is valid."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2640
-msgid "Plugin"
+#: includes/class-wpinv-quotes-controller.php:385
+msgid "URL to the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2641
-msgid "Source"
+#: includes/class-wpinv-quotes-controller.php:393
+msgid "An alphanumeric identifier for the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2642
-msgid "Type"
+#: includes/class-wpinv-quotes-controller.php:403
+msgid "A named status for the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2646
-msgid "Version"
+#: includes/class-wpinv-quotes-controller.php:411
+msgid "A human-readable status name for the quote."
 msgstr ""
 
-#: includes/class-tgm-plugin-activation.php:2696
-#, php-format
-msgid "Install %2$s"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2701
-#, php-format
-msgid "Update %2$s"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2707
-#, php-format
-msgid "Activate %2$s"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2810
-msgid "Install"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2816
-msgid "Update"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2819
-msgid "Activate"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2850
-msgid "No plugins were selected to be installed. No action taken."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2852
-msgid "No plugins were selected to be updated. No action taken."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2893
-msgid "No plugins are available to be installed at this time."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:2895
-msgid "No plugins are available to be updated at this time."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3251
-msgid "Plugin activation failed."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3591
-#, php-format
-msgid "Updating Plugin %1$s (%2$d/%3$d)"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3594
-#, php-format
-msgid "An error occurred while installing %1$s: <strong>%2$s</strong>."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3596
-#, php-format
-msgid "The installation of %1$s failed."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3600
-msgid ""
-"The installation and activation process is starting. This process may take a "
-"while on some hosts, so please be patient."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3602
-#, php-format
-msgid "%1$s installed and activated successfully."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3603
-msgid "All installations and activations have been completed."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3605
-#, php-format
-msgid "Installing and Activating Plugin %1$s (%2$d/%3$d)"
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3608
-msgid ""
-"The installation process is starting. This process may take a while on some "
-"hosts, so please be patient."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3611
-msgid "All installations have been completed."
-msgstr ""
-
-#: includes/class-tgm-plugin-activation.php:3613
-#, php-format
-msgid "Installing Plugin %1$s (%2$d/%3$d)"
+#: includes/class-wpinv-quotes-controller.php:418
+msgid "The post type for the quote."
 msgstr ""
 
 #: includes/class-wpinv-quotes-meta-boxes.php:35
@@ -1041,11 +836,6 @@ msgstr ""
 msgid "Security check failed."
 msgstr ""
 
-#: includes/class-wpinv-quotes-reports.php:179
-#: includes/class-wpinv-quotes-reports.php:232
-msgid "Filesystem ERROR: "
-msgstr ""
-
 #: includes/class-wpinv-quotes-reports.php:211
 msgid "No data found for export."
 msgstr ""
@@ -1070,10 +860,6 @@ msgstr ""
 
 #: includes/class-wpinv-quotes-reports.php:483
 msgid "Currency"
-msgstr ""
-
-#: includes/class-wpinv-quotes-reports.php:484
-msgid "Items"
 msgstr ""
 
 #: includes/class-wpinv-quotes-reports.php:485
@@ -1124,36 +910,16 @@ msgstr ""
 msgid "Transaction ID"
 msgstr ""
 
-#: includes/class-wpinv-quotes-shared.php:116
-msgid "Pending Payment"
+#: includes/class-wpinv-quotes-shared.php:53
+msgid "Pending"
 msgstr ""
 
-#: includes/class-wpinv-quotes-shared.php:117
-msgid "Paid"
+#: includes/class-wpinv-quotes-shared.php:54
+msgid "Accepted"
 msgstr ""
 
-#: includes/class-wpinv-quotes-shared.php:118
-msgid "Processing"
-msgstr ""
-
-#: includes/class-wpinv-quotes-shared.php:119
-msgid "On Hold"
-msgstr ""
-
-#: includes/class-wpinv-quotes-shared.php:120
-msgid "Refunded"
-msgstr ""
-
-#: includes/class-wpinv-quotes-shared.php:121
-msgid "Cancelled"
-msgstr ""
-
-#: includes/class-wpinv-quotes-shared.php:122
-msgid "Failed"
-msgstr ""
-
-#: includes/class-wpinv-quotes-shared.php:123
-msgid "Renewal Payment"
+#: includes/class-wpinv-quotes-shared.php:55
+msgid "Declined"
 msgstr ""
 
 #: includes/class-wpinv-quotes-shared.php:214
@@ -1229,6 +995,10 @@ msgstr ""
 msgid "Print Quote"
 msgstr ""
 
+#: public/class-wpinv-quotes-public.php:210
+msgid "Quote History"
+msgstr ""
+
 #: public/class-wpinv-quotes-public.php:305
 msgid "Are you sure you wish to delete this item?"
 msgstr ""
@@ -1238,6 +1008,7 @@ msgid "You are not allowed to access this section"
 msgstr ""
 
 #: templates/wpinv-quote-history.php:45
+msgctxt "hash before quote number"
 msgid "#"
 msgstr ""
 
@@ -1255,4 +1026,26 @@ msgstr ""
 
 #: templates/wpinv-quote-history.php:128
 msgid "No quotes found."
+msgstr ""
+
+#. Name of the plugin
+msgid "Invoicing - Quotes"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Create quotes for customers, if accepted it will convert to an invoice that "
+"can be paid."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wpinvoicing.com/"
+msgstr ""
+
+#. Author of the plugin
+msgid "AyeCode Ltd"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://wpinvoicing.com"
 msgstr ""

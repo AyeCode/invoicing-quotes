@@ -418,6 +418,9 @@ class Wpinv_Quotes_Admin
                 add_meta_box('wpinv-mb-resend-invoice', __('Resend Quote', 'wpinv-quotes'), 'WPInv_Meta_Box_Details::resend_invoice', 'wpi_quote', 'side', 'high');
                 add_meta_box('wpinv-mb-convert-quote', __('Convert Quote', 'wpinv-quotes'), 'WPInv_Quote_Meta_Box::quote_to_invoice_output', 'wpi_quote', 'side', 'high');
             }
+
+            // Remove Yoast SEO metabox from add/edit quote screen.
+	        remove_meta_box('wpseo_meta', 'wpi_quote', 'normal');
         }
     }
 
@@ -1732,4 +1735,15 @@ class Wpinv_Quotes_Admin
 
         return apply_filters('wpinv_user_quote_content', $output, $user_id);
     }
+
+    /**
+     * This function is only called if the user is running Invoicing version 1.0.15 and above.
+     * 
+     * @param WPInv_API $api
+     */
+    public function init_api( $api ) {
+        $api->quotes_controller = new WPInv_REST_Quotes_Controller( $api->api_namespace );
+        $api->quotes_controller->register_routes();
+    }
+
 }
