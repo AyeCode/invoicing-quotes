@@ -1,293 +1,566 @@
 <?php
-
 /**
- * The file that defines the core plugin class
- *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
+ * Contains the main plugin class.
  *
  * @link       https://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Wpinv_Quotes
- * @subpackage Wpinv_Quotes/includes
+ * @package    Invoicing
+ * @subpackage Quotes
  */
 
 /**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
+ * The main plugin class.
  *
  * @since      1.0.0
- * @package    Wpinv_Quotes
- * @subpackage Wpinv_Quotes/includes
+ * @package    Invoicing
+ * @subpackage Quotes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Wpinv_Quotes
-{
+class Wpinv_Quotes {
 
-    /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      Wpinv_Quotes_Loader $loader Maintains and registers all hooks for the plugin.
-     */
-    protected $loader;
+	/**
+	 * Admin class.
+	 *
+	 * @var WPInv_Quotes_Admin
+	 */
+	public $admin;
 
-    /**
-     * The unique identifier of this plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string $plugin_name The string used to uniquely identify this plugin.
-     */
-    protected $plugin_name = 'wpinv-quotes';
+	/**
+	 * Admin class.
+	 *
+	 * @var WPInv_Quotes_Settings
+	 */
+	public $settings;
 
-    /**
-     * The current version of the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string $version The current version of the plugin.
-     */
-    protected $version = WPINV_QUOTES_VERSION;
+	/**
+	 * Post types manager class.
+	 *
+	 * @var WPInv_Quotes_Post_Type
+	 */
+	public $post_types;
 
-    /**
-     * Define the core functionality of the plugin.
-     *
-     * Set the plugin name and the plugin version that can be used throughout the plugin.
-     * Load the dependencies, define the locale, and set the hooks for the admin area and
-     * the public-facing side of the site.
-     *
-     * @since    1.0.0
-     */
-    public function __construct()
-    {
+	/**
+	 * Class constructor.
+	 *
+	 * @since    1.0.0
+	 */
+	public function __construct() {
 
-        $this->load_dependencies();
-        $this->set_locale();
-        $this->define_admin_hooks();
-        $this->define_public_hooks();
+		$this->include_files();
+		$this->init_hooks();
 
-    }
+		$this->post_types = new WPInv_Quotes_Post_Type();
+		$this->admin    = new WPInv_Quotes_Admin();
+		$this->settings   = new WPInv_Quotes_Settings();
+	}
 
-    /**
-     * Load the required dependencies for this plugin.
-     *
-     * Include the following files that make up the plugin:
-     *
-     * - Wpinv_Quotes_Loader. Orchestrates the hooks of the plugin.
-     * - Wpinv_Quotes_i18n. Defines internationalization functionality.
-     * - Wpinv_Quotes_Admin. Defines all hooks for the admin area.
-     * - Wpinv_Quotes_Public. Defines all hooks for the public side of the site.
-     *
-     * Create an instance of the loader which will be used to register the hooks
-     * with WordPress.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function load_dependencies()
-    {
+	/**
+	 * Inits hooks.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 */
+	protected function init_hooks() {
 
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wpinv-quotes-loader.php';
+		add_filter( 'wpinv_statuses', array( $this, 'filter_invoice_statuses' ), 10, 2 );
+		add_filter( 'wpinv_post_name_prefix', array( $this, 'filter_post_name_prefix' ), 10, 2 );
+		add_filter( 'getpaid_invoice_type_prefix', array( $this, 'filter_quote_number_prefix' ), 10, 2 );
+		add_filter( 'getpaid_invoice_type_postfix', array( $this, 'filter_quote_number_postfix' ), 10, 2 );
+		add_filter( 'getpaid_widget_classes', array( $this, 'register_widget' ) );
+		add_action( 'wpinv_invoice_display_left_actions', array( $this, 'invoice_header_left' ) );
+		add_action( 'getpaid_unauthenticated_action_accept_quote', array( $this, 'user_accept_quote' ) );
+		add_action( 'getpaid_unauthenticated_action_decline_quote', array( $this, 'user_decline_quote' ) );
+		add_action( 'getpaid_unauthenticated_action_remove_quote_item', array( $this, 'user_remove_quote_item' ) );
+		add_action( 'getpaid-invoice-page-line-item-actions', array( $this, 'filter_invoice_line_item_actions' ), 10, 3 );
+		add_action( 'getpaid_rest_api_loaded', array( $this, 'init_api' ) );
+		add_action( 'template_redirect', array( $this, 'quote_to_invoice_redirect' ), 100 );
+		add_filter( 'getpaid_email_type_is_admin_email', array( $this, 'filter_admin_emails' ), 10, 2 );
+		add_filter( 'getpaid_notification_email_invoice_triggers', array( $this, 'filter_email_triggers' ) );
+		add_filter( 'getpaid_invoice_email_merge_tags', array( $this, 'filter_email_merge_tags' ), 10, 2 );
+		add_action( 'getpaid_invoice_init_email_type_hook', array( $this, 'init_quote_email_type_hook' ), 10, 2 );
+		add_action( 'getpaid_template_default_template_path', array( $this, 'maybe_filter_default_template_path' ), 10, 2 );
+		add_action( 'getpaid_invoice_meta_data', array( $this, 'filter_invoice_meta' ), 10, 2 );
+		add_filter( 'wpinv_user_invoices_columns', array( $this, 'filter_user_invoice_columns' ), 10, 2 );
+		add_filter( 'wpinv_user_invoices_actions', array( $this, 'filter_user_invoice_actions' ), 10, 3 );
 
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wpinv-quotes-i18n.php';
+	}
 
-        /**
-         * The class responsible for defining all actions that occur in the admin area.
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wpinv-quotes-admin.php';
-        require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-meta-boxes.php');
-        require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-reports.php');
-        require_once(WPINV_QUOTES_PATH . 'includes/shortcodes/class-wpinv-quote-shortcodes.php');
-        require_once(WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-shared.php');
-        require_once( WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-privacy.php' );
-        require_once( WPINV_QUOTES_PATH . 'includes/class-wpinv-quotes-controller.php' );
-        require_once( WPINV_QUOTES_PATH . 'includes/general-functions.php' );
+	/**
+	 * Filters invoice statuses.
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_invoice_statuses( $statuses, $invoice_type ) {
 
-        /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-wpinv-quotes-public.php';
+		if ( 'wpi_quote' == $invoice_type || 'quote' == $invoice_type ) {
 
-        $this->loader = new Wpinv_Quotes_Loader();
+			return apply_filters(
+				'wpinv_quote_statuses',
+				array(
+					'wpi-quote-pending'  => __( 'Pending Confirmation', 'wpinv-quotes' ),
+					'wpi-quote-accepted' => __( 'Accepted', 'wpinv-quotes' ),
+					'wpi-quote-declined' => __( 'Declined', 'wpinv-quotes' ),
+				)
+			);
 
-    }
+		}
 
-    /**
-     * Define the locale for this plugin for internationalization.
-     *
-     * Uses the Wpinv_Quotes_i18n class in order to set the domain and to register the hook
-     * with WordPress.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function set_locale()
-    {
+		return $statuses;
+	}
 
-        $plugin_i18n = new Wpinv_Quotes_i18n();
-        $plugin_i18n->set_domain($this->get_plugin_name());
-        $plugin_i18n->load_plugin_textdomain();
+	/**
+	 * Filters the post name prefix.
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_post_name_prefix( $prefix, $post_type ) {
 
-    }
+		if ( 'wpi_quote' == $post_type ) {
+			return 'quote-';
+		}
 
-    /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
-     */
-    public function get_plugin_name()
-    {
-        return $this->plugin_name;
-    }
+		return $prefix;
+	}
 
-    /**
-     * Register all of the hooks related to the admin area functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function define_admin_hooks()
-    {
+	/**
+	 * Filters the quote number prefix.
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_quote_number_prefix( $prefix, $post_type ) {
 
-        $plugin_admin = new Wpinv_Quotes_Admin($this->get_plugin_name(), $this->get_version());
+		if ( 'wpi_quote' == $post_type ) {
+			$prefix = wpinv_get_option( 'quote_number_prefix', '' );
+			return empty( $prefix ) ? 'QUOTE-' : $prefix;
+		}
 
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-        $this->loader->add_action('init', $plugin_admin, 'wpinv_quote_new_cpt', 1);
-        $this->loader->add_action('init', $plugin_admin, 'wpinv_quote_register_post_status', 10);
-        $this->loader->add_action('wpinv_quotes_loaded', $plugin_admin, 'wpinv_quote_on_activation', 10);
-        $this->loader->add_filter('manage_wpi_quote_posts_columns', $plugin_admin, 'wpinv_quote_columns', 10, 3);
-        $this->loader->add_filter('request', $plugin_admin, 'wpinv_quote_request', 10, 3);
-        $this->loader->add_filter('bulk_actions-edit-wpi_quote', $plugin_admin, 'wpinv_quote_bulk_actions', 10, 3);
-        $this->loader->add_filter('manage_wpi_quote_posts_custom_column', $plugin_admin, 'wpinv_quote_posts_custom_column', 10, 1);
-        $this->loader->add_filter('manage_edit-wpi_quote_sortable_columns', $plugin_admin, 'wpinv_quote_sortable_columns', 10, 3);
-        $this->loader->add_action('add_meta_boxes', $plugin_admin, 'wpinv_quoute_add_meta_boxes', 30, 2);
-        $this->loader->add_filter('wpinv_resend_invoice_metabox_text', $plugin_admin, 'wpinv_quote_resend_quote_metabox_text');
-        $this->loader->add_filter('wpinv_resend_invoice_email_actions', $plugin_admin, 'wpinv_quote_resend_quote_email_actions');
-        $this->loader->add_filter('wpinv_details_metabox_titles', $plugin_admin, 'wpinv_quote_detail_metabox_titles', 10, 2);
-        $this->loader->add_filter('wpinv_invoice_items_total_label', $plugin_admin, 'wpinv_quote_items_total_label', 10, 2);
-        $this->loader->add_filter('wpinv_metabox_mail_notice', $plugin_admin, 'wpinv_quote_metabox_mail_notice', 10, 2);
-        $this->loader->add_filter('post_row_actions', $plugin_admin, 'wpinv_quote_post_row_actions', 9999, 2);
-        $this->loader->add_action('wpinv_invoice_metabox_saved', $plugin_admin, 'wpinv_send_quote_after_save', 100, 1);
-        $this->loader->add_action('wpinv_should_update_invoice_status', $plugin_admin, 'wpinv_quote_should_update_quote_status', 100, 4);
-        $this->loader->add_action('wpinv_update_status', $plugin_admin, 'wpinv_quote_record_status_change', 100, 3);
-        $this->loader->add_filter('wpinv_send_quote', $plugin_admin, 'wpinv_send_customer_quote', 10, 1);
-        $this->loader->add_filter('wpinv_convert_quote_to_invoice', $plugin_admin, 'wpinv_convert_quote_to_invoice');
-        $this->loader->add_filter('admin_notices', $plugin_admin, 'wpinv_quote_admin_notices');
-        $this->loader->add_filter('wpinv_admin_js_localize', $plugin_admin, 'wpinv_quote_admin_js_localize', 10, 1);
-        $this->loader->add_filter('wpinv_settings_tabs', $plugin_admin, 'wpinv_quote_settings_tabs', 10, 1);
-        $this->loader->add_filter('wpinv_settings_sections', $plugin_admin, 'wpinv_quote_settings_sections', 10, 1);
-        $this->loader->add_filter('wpinv_registered_settings', $plugin_admin, 'wpinv_quote_registered_settings', 10, 1);
-        $this->loader->add_filter('wpinv_get_emails', $plugin_admin, 'wpinv_quote_mail_settings');
-        $this->loader->add_filter('wpinv_email_recipient', $plugin_admin, 'wpinv_quote_email_recipient', 10, 4);
-        $this->loader->add_filter('wpinv_email_details_title', $plugin_admin, 'wpinv_quote_email_details_title', 10, 2);
-        $this->loader->add_filter('wpinv_invoice_number_label', $plugin_admin, 'wpinv_quote_number_label', 10, 2);
-        $this->loader->add_filter('wpinv_invoice_date_label', $plugin_admin, 'wpinv_quote_date_label', 10, 2);
-        $this->loader->add_filter('wpinv_invoice_status_label', $plugin_admin, 'wpinv_quote_status_label', 10, 2);
-        $this->loader->add_filter('wpinv_invoice_user_vat_number_label', $plugin_admin, 'wpinv_quote_user_vat_number_label', 10, 3);
-        $this->loader->add_filter('wpinv_quote_action', $plugin_admin, 'wpinv_front_quote_actions', 10, 3);
-        $this->loader->add_filter('wpinv_pre_format_invoice_number', $plugin_admin, 'wpinv_pre_format_quote_number', 10, 3);
-        $this->loader->add_filter('wpinv_pre_check_sequential_number_active', $plugin_admin, 'wpinv_pre_check_sequential_number_active', 10, 2);
-        $this->loader->add_filter('wpinv_get_pre_next_invoice_number', $plugin_admin, 'wpinv_get_pre_next_quote_number', 10, 2);
-        $this->loader->add_filter('wpinv_pre_clean_invoice_number', $plugin_admin, 'wpinv_pre_clean_quote_number', 10, 3);
-        $this->loader->add_filter('wpinv_pre_update_invoice_number', $plugin_admin, 'wpinv_pre_update_quote_number', 10, 4);
-        $this->loader->add_filter('save_post_wpi_quote', $plugin_admin, 'wpinv_save_number_post_saved', 10, 3);
-        $this->loader->add_filter('post_updated', $plugin_admin, 'wpinv_save_number_post_updated', 10, 3);
-        $this->loader->add_filter('wpinv_post_name_prefix', $plugin_admin, 'wpinv_quote_post_name_prefix', 10, 2);
-        $this->loader->add_action('template_redirect', $plugin_admin, 'quote_to_invoice_redirect', 100);
-        $this->loader->add_filter('wpinv_email_format_text', $plugin_admin, 'wpinv_quote_email_format_text', 10, 3);
-        $this->loader->add_action('wpinv_meta_box_details_after_due_date', $plugin_admin, 'wpinv_meta_box_details_after_due_date', 10, 1);
-        $this->loader->add_action('wpinv_display_details_after_due_date', $plugin_admin, 'wpinv_display_details_after_due_date', 10, 1);
-        $this->loader->add_action('wpinv_email_invoice_details_after_due_date', $plugin_admin, 'wpinv_email_invoice_details_after_due_date', 10, 1);
-        $this->loader->add_filter('wpinv_settings_email_wildcards_description', $plugin_admin, 'wpinv_settings_email_wildcards_description', 10, 3);
-        $this->loader->add_filter('wpinv_invoice_items_actions_content', $plugin_admin, 'wpinv_quote_items_actions', 10, 3);
-        $this->loader->add_filter('wpinv_disable_apply_discount', $plugin_admin, 'wpinv_quote_disable_apply_discount', 10, 2);
-        $this->loader->add_filter('wpinv_user_invoice_content', $plugin_admin, 'wpinv_quote_user_invoice_content', 10, 2);
-        $this->loader->add_action('wpinv_register_rest_routes', $plugin_admin, 'init_api');
+		return $prefix;
+	}
 
-        add_action( 'wpinv_settings_tab_bottom_emails_user_quote', 'wpinv_settings_tab_bottom_emails', 10, 2 );
-        add_action( 'wpinv_settings_tab_bottom_emails_user_quote_accepted', 'wpinv_settings_tab_bottom_emails', 10, 2 );
-        add_action( 'wpinv_settings_tab_bottom_emails_user_quote_declined', 'wpinv_settings_tab_bottom_emails', 10, 2 );
+	/**
+	 * Filters the quote number postfix.
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_quote_number_postfix( $postfix, $post_type ) {
 
-        if ( is_admin() && get_option( 'activated_quotes' ) == 'wpinv-quotes' ) { // update wpinv_settings on activation
-            $this->loader->add_action('admin_init', $plugin_admin, 'wpinv_quote_update_settings', 99);
-        }
+		if ( 'wpi_quote' == $post_type ) {
+		   return wpinv_get_option( 'quote_number_postfix', '' );
+		}
 
-    }
+		return $postfix;
+	}
 
-    /**
-     * Retrieve the version number of the plugin.
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
-     */
-    public function get_version()
-    {
-        return $this->version;
-    }
+	/**
+	 * Registers the invoice history class.
+	 *
+	 * @since    1.0.0
+	 * @param array $classes
+	 */
+	public function register_widget( $classes ) {
 
-    /**
-     * Register all of the hooks related to the public-facing functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function define_public_hooks()
-    {
+		return array_merge(
+			$classes,
+			array(
+				'WPInv_Quotes_History_Widget'
+			)
+		);
 
-        $plugin_public = new Wpinv_Quotes_Public($this->get_plugin_name(), $this->get_version());
+	}
 
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
-        $this->loader->add_action('wpinv_invoice_display_left_actions', $plugin_public, 'wpinv_quote_display_left_actions');
-        $this->loader->add_action('wpinv_invoice_display_right_actions', $plugin_public, 'wpinv_quote_display_right_actions', 10, 1);
-        $this->loader->add_action('wpinv_invoice_print_head', $plugin_public, 'wpinv_quote_print_head_styles', 10, 1);
-        $this->loader->add_filter('pre_get_posts', $plugin_public, 'wpinv_quote_pre_get_posts');
-        $this->loader->add_action('wpinv_after_user_quotes', $plugin_public, 'wpinv_user_quotes_decline_box', 10, 1);
-        $this->loader->add_action('wpinv_display_line_item_action', $plugin_public, 'wpinv_quotes_display_line_item', 10, 3);
-        $this->loader->add_action('wpinv_loaded', $plugin_public, 'wpinv_quotes_handle_item');
-    }
+	/**
+	 * Loads plugin files.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 */
+	protected function include_files() {
 
-    /**
-     * Run the loader to execute all of the hooks with WordPress.
-     *
-     * @since    1.0.0
-     */
-    public function run()
-    {
-        $this->loader->run();
-    }
+		require_once WPINV_QUOTES_PATH . 'admin/class-wpinv-quotes-admin.php';
+		require_once WPINV_QUOTES_PATH . 'includes/general-functions.php';
 
-    /**
-     * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @since     1.0.0
-     * @return    Wpinv_Quotes_Loader    Orchestrates the hooks of the plugin.
-     */
-    public function get_loader()
-    {
-        return $this->loader;
-    }
+	}
+
+	/**
+	 * Displays the invoice header left.
+	 *
+	 * @since    1.0.0
+	 * @param WPInv_Invoice $invoice
+	 */
+	public function invoice_header_left( $invoice ) {
+
+		if ( ! $invoice->is_quote() ) {
+			return;
+		}
+
+		if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
+
+			printf(
+				'&nbsp;&nbsp;<a href="%s" class="btn btn-primary btn-sm" onclick="return confirm(\'%s\')">%s</a>',
+				esc_url( getpaid_get_authenticated_action_url( 'accept_quote', $invoice->get_view_url() ) ),
+				esc_attr__( 'Are you sure you want to accept this Quote?', 'wpinv-quotes' ),
+				__( 'Accept', 'wpinv-quotes' )
+			);
+
+			printf(
+				'&nbsp;&nbsp;<a href="%s" class="btn btn-danger btn-sm" onclick="return confirm(\'%s\')">%s</a>',
+				esc_url( getpaid_get_authenticated_action_url( 'decline_quote', $invoice->get_view_url() ) ),
+				esc_attr__( 'Are you sure you want to decline this Quote?', 'wpinv-quotes' ),
+				__( 'Decline', 'wpinv-quotes' )
+			);
+
+		}
+
+	}
+
+	/**
+	 * Fired when a user accepts a quote.
+	 *
+	 * @access      public
+	 * @since       1.0.0
+	 * @return      void
+	 */
+	public function user_accept_quote() {
+
+		$invoice = getpaid_get_current_invoice_id();
+
+		if ( empty( $invoice ) || ! wpinv_user_can_view_invoice( $invoice ) ) {
+			wpinv_set_error( 'invalid_quote', __( 'You do not have permission to accept this quote.', 'wpinv-quotes' ) );
+			return;
+		}
+
+		// Accept the quote.
+		$quote = new WPInv_Invoice( $invoice );
+		new Wpinv_Quotes_Converter( $quote, 'accept' );
+
+	}
+
+	/**
+	 * Fired when a user declines a quote.
+	 *
+	 * @access      public
+	 * @since       1.0.0
+	 * @return      void
+	 */
+	public function user_decline_quote() {
+
+		$invoice = getpaid_get_current_invoice_id();
+
+		if ( empty( $invoice ) || ! wpinv_user_can_view_invoice( $invoice ) ) {
+			wpinv_set_error( 'invalid_quote', __( 'You do not have permission to decline this quote.', 'wpinv-quotes' ) );
+			return;
+		}
+
+		// Decline the quote.
+		$quote = new WPInv_Invoice( $invoice );
+		new Wpinv_Quotes_Converter( $quote, 'decline' );
+
+	}
+
+	/**
+	 * Filters the invoice line items actions.
+	 *
+	 * @param array actions
+	 * @param WPInv_Item $item
+	 * @param WPInv_Invoice $invoice
+	 */
+	public function filter_invoice_line_item_actions( $actions, $item, $invoice ) {
+
+		if ( ! $invoice->is_quote() ) {
+			return $actions;
+		}
+
+		$url                = add_query_arg( 'item', $item->get_id(), $invoice->get_view_url() );
+		$url                = esc_url( getpaid_get_authenticated_action_url( 'remove_quote_item', $url ) );
+		$actions['quote']   = "<a href='$url' class='text-decoration-none text-danger'>" . __( 'Remove Item', 'wpinv-quotes' ) . '</a>';
+
+		return $actions;
+
+	}
+
+	/**
+	 * Fired when a user removes a quote item
+	 *
+	 * @access      public
+	 * @since       1.0.0
+	 * @return      void
+	 */
+	public function user_remove_quote_item( $data ) {
+
+		$invoice = getpaid_get_current_invoice_id();
+
+		if ( empty( $invoice ) || ! wpinv_user_can_view_invoice( $invoice ) ) {
+			wpinv_set_error( 'invalid_quote', __( 'You do not have permission to remove items from this quote.', 'wpinv-quotes' ) );
+			return;
+		}
+
+		$quote = new WPInv_Invoice( $invoice );
+
+		if ( $quote->is_quote() ) {
+
+			$quote->remove_item( (int) $data['item'] );
+			$quote->recalculate_total();
+			$quote->save();
+
+			wpinv_set_error( 'removed_item', __( 'You have successfully removed the item.', 'wpinv-quotes' ), 'info' );
+
+			wp_redirect( esc_url( $quote->get_view_url() ) );
+			exit;
+
+		}
+
+	}
+
+	/**
+	 * Loads the REST api.
+	 *
+	 * @access      public
+	 * @since       1.0.0
+	 * @return      void
+	 * @param       WPInv_API $api
+	 */
+	public function init_api( $api ) {
+		$api->quotes = new WPInv_REST_Quotes_Controller();
+	}
+
+	/**
+	 * Redirects accepted quotes to invoices.
+	 *
+	 * @since 1.0.0
+	 */
+	public function quote_to_invoice_redirect() {
+
+		$current_invoice = getpaid_get_current_invoice_id();
+		if ( ! empty( $current_invoice ) && is_404() && get_query_var( 'post_type' ) == 'wpi_quote' ) {
+
+			$invoice = new WPInv_Invoice( $current_invoice );
+			wp_redirect( $invoice->get_view_url(), 302 );
+			exit;
+
+		}
+
+	}
+
+	/**
+	 * Filters admin emails.
+	 *
+	 * @since 1.0.0
+	 */
+	public function filter_admin_emails( $is_admin_email, $email_type ) {
+
+		if ( in_array( $email_type, array( 'user_quote_accepted', 'user_quote_declined' ), true ) ) {
+			return true;
+		}
+
+		return $is_admin_email;
+
+	}
+
+	/**
+	 * Filters email triggers.
+	 *
+	 * @since 1.0.0
+	 */
+	public function filter_email_triggers( $triggers ) {
+
+		$triggers['getpaid_new_invoice']       = (array) $triggers['getpaid_new_invoice'] + array( 'user_quote' );
+		$triggers['wpinv_user_quote_accepted'] = array( 'user_quote_accepted' );
+		$triggers['wpinv_user_quote_declined'] = array( 'user_quote_declined' );
+
+		return $triggers;
+
+	}
+
+	/**
+	 * Filters email merge tags.
+	 *
+	 * @since 1.0.0
+	 */
+	public function filter_email_merge_tags( $email_tags, $invoice ) {
+
+		foreach ( $email_tags as $tag => $value ) {
+
+			if ( false === stripos( $tag, 'invoice' ) ) {
+				$new_tag = str_replace( 'invoice', 'quote', $tag );
+				$email_tags[ $new_tag ] = $value;
+			}
+
+		}
+
+		$email_tags['{valid_until}']          = getpaid_format_date_value( get_post_meta( $invoice->get_id(), 'wpinv_quote_valid_until', true ) );
+		$email_tags['{quote_decline_reason}'] = sanitize_text_field( get_post_meta( $invoice->get_id(), '_wpinv_quote_decline_reason', true ) );
+
+		return $email_tags;
+
+	}
+
+	/**
+	 * Inits quote email type hooks.
+	 *
+	 * @since 1.0.0
+	 */
+	public function init_quote_email_type_hook( $email_type, $hook ) {
+
+		if ( in_array( $email_type, array( 'user_quote_accepted', 'user_quote_declined', 'user_quote' ), true ) ) {
+
+			$email_type = "send_{$email_type}_email";
+			add_action( $hook, array( $this, $email_type ), 100, 2 );
+
+		}
+
+	}
+
+	/**
+	 * Sends the quote accepted email to the site admin.
+	 *
+	 * @since 1.0.0
+	 */
+	public function send_user_quote_accepted_email( $quote ) {
+
+		$email     = new GetPaid_Notification_Email( 'user_quote_accepted', $quote );
+		$recipient = $recipient = wpinv_get_admin_email();
+		$sender    = getpaid()->get( 'invoice_emails' );
+		return $sender->send_email( $quote, $email, 'user_quote_accepted', $recipient );
+
+	}
+
+	/**
+	 * Sends the quote declined email to the site admin.
+	 *
+	 * @since 1.0.0
+	 */
+	public function send_user_quote_declined_email( $quote ) {
+
+		$email     = new GetPaid_Notification_Email( 'user_quote_declined', $quote );
+		$recipient = wpinv_get_admin_email();
+		$sender    = getpaid()->get( 'invoice_emails' );
+		return $sender->send_email( $quote, $email, 'user_quote_declined', $recipient );
+
+	}
+
+	/**
+	 * Sends the new quote email to the client.
+	 *
+	 * @since 1.0.0
+	 */
+	public function send_user_quote_email( $quote ) {
+
+		$email     = new GetPaid_Notification_Email( 'user_quote', $quote );
+		$recipient = $quote->get_email();
+		$sender    = getpaid()->get( 'invoice_emails' );
+		return $sender->send_email( $quote, $email, 'user_quote', $recipient );
+
+	}
+
+	/**
+	 * Filters the default template paths.
+	 *
+	 * @since 1.0.0
+	 */
+	public function maybe_filter_default_template_path( $default_path, $template_name ) {
+
+		$our_emails = array(
+			'emails/wpinv-email-user_quote_accepted.php',
+			'emails/wpinv-email-user_quote_declined.php',
+			'emails/wpinv-email-user_quote.php'
+		);
+
+		if ( in_array( $template_name, $our_emails, true ) ) {
+			return WPINV_QUOTES_PATH . 'templates';
+		}
+
+		return $default_path;
+	}
+
+	/**
+	 * Filters invoice meta to display the Valid Until Date.
+	 *
+	 * @param array $meta
+	 * @param WPInv_Invoice $invoice
+	 */
+	public function filter_invoice_meta( $meta, $invoice ) {
+
+		if ( $invoice->is_quote() ) {
+
+			$first_array  = array_slice( $meta, 0, -1, true );
+			$second_array = array_slice( $meta, -1, 1, true );
+			$valid_untill = array(
+
+				'valid-until' => array(
+					'label'   => __( 'Valid Until', 'wpinv-quotes' ),
+					'value'   => getpaid_format_date_value( get_post_meta( $invoice->get_id(), 'wpinv_quote_valid_until', true) ),
+				)
+
+			);
+
+			$meta = array_merge( $first_array, $valid_untill, $second_array );
+		}
+
+		return $meta;
+	}
+
+	/**
+	 * Filters the user invoices table columns.
+	 *
+	 * @param array $columns
+	 * @param string $post_type
+	 */
+	public function filter_user_invoice_columns( $columns, $post_type ) {
+
+		if ( 'wpi_quote' != $post_type ) {
+			return $columns;
+		}
+
+		if ( isset( $columns['payment-date'] ) ) {
+			unset( $columns['payment-date'] );
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * Filters the user invoices table actions.
+	 *
+	 * @param array $actions
+	 * @param WPInv_Invoice $invoice
+	 * @param string $post_type
+	 */
+	public function filter_user_invoice_actions( $actions, $invoice, $post_type ) {
+
+		if ( 'wpi_quote' != $post_type ) {
+			return $actions;
+		}
+
+		if ( isset( $actions['pay'] ) ) {
+			unset( $actions['pay'] );
+		}
+
+		if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
+
+			$actions['accept'] = array(
+				'url'   => getpaid_get_authenticated_action_url( 'accept_quote', $invoice->get_view_url() ),
+				'name'  => __( 'Accept', 'wpinv-quotes' ),
+				'class' => 'btn-primary',
+				'attrs' => sprintf(
+					'onclick="return confirm(\'%s\')"',
+					esc_attr__( 'Are you sure you want to accept this Quote?', 'wpinv-quotes' )
+				)
+			);
+
+			$actions['decline'] = array(
+				'url'   => getpaid_get_authenticated_action_url( 'decline_quote', $invoice->get_view_url() ),
+				'name'  => __( 'Decline', 'wpinv-quotes' ),
+				'class' => 'btn-danger',
+				'attrs' => sprintf(
+					'onclick="return confirm(\'%s\')"',
+					esc_attr__( 'Are you sure you want to decline this Quote?', 'wpinv-quotes' )
+				)
+			);
+
+		}
+
+		return $actions;
+	}
+
 }

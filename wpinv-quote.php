@@ -10,13 +10,13 @@
  *
  * @link              https://wpinvoicing.com
  * @since             1.0.0
- * @package           Wpinv_Quotes
+ * @package           Invoicing
  *
  * @wordpress-plugin
  * Plugin Name:       Invoicing - Quotes
  * Plugin URI:        https://wpinvoicing.com/
  * Description:       Create quotes for customers, if accepted it will convert to an invoice that can be paid.
- * Version:           1.0.6
+ * Version:           1.0.7
  * Author:            AyeCode Ltd
  * Author URI:        https://wpinvoicing.com
  * License:           GPL-2.0+
@@ -30,114 +30,74 @@ if (!defined('WPINC')) {
     die;
 }
 
-define('WPINV_QUOTES_VERSION', '1.0.6');
-define('WPINV_QUOTES_PATH', plugin_dir_path(__FILE__));
-define('WPINV_QUOTES_URL', plugin_dir_url(__FILE__));
+define( 'WPINV_QUOTES_VERSION', '1.0.7' );
+define( 'WPINV_QUOTES_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WPINV_QUOTES_URL', plugin_dir_url( __FILE__ ) );
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-wpinv-quotes-activator.php
- */
-function activate_wpinv_quotes($network_wide = false)
-{
-    require_once plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes-activator.php';
-    Wpinv_Quotes_Activator::activate($network_wide);
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-wpinv-quotes-deactivator.php
- */
-function deactivate_wpinv_quotes()
-{
-    require_once plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes-deactivator.php';
-    Wpinv_Quotes_Deactivator::deactivate();
-}
-
-register_activation_hook(__FILE__, 'activate_wpinv_quotes');
-register_deactivation_hook(__FILE__, 'deactivate_wpinv_quotes');
-
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path(__FILE__) . 'includes/class-wpinv-quotes.php';
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-wpinv-quotes-deactivator.php
- */
-function wpinv_invoice_plugin_notice()
-{
-    echo '<div class="error"><p>Quote Plugin requires the <a href="https://wordpress.org/plugins/invoicing/" target="_blank">invoicing</a> plugin to be installed and active.</p></div>';
-}
-
-/**
- * Begins execution of the plugin.
+ * Displays a compatibility notice for users not who have not yet installed
+ * GetPaid.
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
+ * @since 1.0.0
+ * @return void
  */
-function run_wpinv_quotes()
-{
-    if ( is_admin() && current_user_can( 'activate_plugins' ) &&  !class_exists( 'WPInv_Plugin' ) ) {
-        /**
-         * The plugin activation class that will install and activate Invoicing if missing.
-         */
-        require plugin_dir_path(__FILE__) . 'includes/class-tgm-plugin-activation.php';
-        add_action( 'tgmpa_register', 'wpinv_quotes_register_required_plugins' );
+function wpinv_quotes_check_getpaid(){
 
-        /**
-         * Require the Invoicing plugin to be installed.
-         */
-        function wpinv_quotes_register_required_plugins() {
-
-            /*
-             * Array of plugin arrays. Required keys are name and slug.
-             * If the source is NOT from the .org repo, then source is also required.
-             */
-            $plugins = array(
-                array(
-                    'name'      => 'Invoicing',
-                    'slug'      => 'invoicing',
-                    'required'  => true,
-                    'force_activation'   => true
-                )
-            );
-
-            /*
-             * Array of configuration settings. Amend each line as needed.
-             *
-             * TGMPA will start providing localized text strings soon. If you already have translations of our standard
-             * strings available, please help us make TGMPA even better by giving us access to these translations or by
-             * sending in a pull-request with .po file(s) with the translations.
-             *
-             * Only uncomment the strings in the config array if you want to customize the strings.
-             */
-            $config = array(
-                'id'           => 'wpinv-quotes',                 // Unique ID for hashing notices for multiple instances of TGMPA.
-                'parent_slug'  => 'plugins.php',            // Parent menu slug.
-                'capability'   => 'manage_options',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
-                'has_notices'  => true,                    // Show admin notices or not.
-                'dismissable'  => false,                    // If false, a user cannot dismiss the nag message.
-                'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-                'is_automatic' => true,                   // Automatically activate plugins after installation or not.
-                'message'      => '',                      // Message to output right before the plugins table.
-
-            );
-
-            tgmpa( $plugins, $config );
-        }
-
-        add_action( 'admin_notices', 'wpinv_invoice_plugin_notice' ) ;
-        return;
+    if ( is_admin() && ! did_action( 'getpaid_init' ) ) {
+        ?>
+            <div class="notice notice-error">
+                <p><?php _e( '"Invoicing > Quotes" requires that you install the latest version of GetPaid|Invoicing first.', 'wpinv-quotes' ); ?></p>
+            </div>
+        <?php
     }
-    $plugin = new Wpinv_Quotes();
-    $plugin->run();
 
 }
+add_action( 'admin_notices', 'wpinv_quotes_check_getpaid' );
 
-add_action('plugins_loaded', 'run_wpinv_quotes'); // wait until 'plugins_loaded' hook fires, for WP Multisite compatibility
+
+/**
+ * Adds our path to the list of autoload locations.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function wpinv_quotes_autoload_locations( $locations ) {
+    $locations[] = plugin_dir_path( __FILE__ ) . 'includes';
+    $locations[] = plugin_dir_path( __FILE__ ) . 'admin';
+    return $locations;
+}
+add_filter( 'getpaid_autoload_locations', 'wpinv_quotes_autoload_locations' );
+
+
+/**
+ * Inits the plugin.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function wpinv_quotes_init() {
+    global $wpinv_quotes;
+
+    // Init the URL discounts manager
+    $wpinv_quotes = new WPInv_Quotes();
+
+}
+add_action( 'getpaid_actions', 'wpinv_quotes_init' );
+
+
+/**
+ * Load our textdomain.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function wpinv_quotes_load_plugin_textdomain() {
+
+	load_plugin_textdomain(
+		'wpinv-quotes',
+		false,
+		'invoicing-quotes/languages/'
+	);
+
+}
+add_action( 'plugins_loaded', 'wpinv_quotes_load_plugin_textdomain' );

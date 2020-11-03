@@ -22,32 +22,13 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 
-/**
- * Calls the class.
- */
-function wpinv_quote_call_shared_class()
-{
-    new Wpinv_Quotes_Shared();
-}
-
-add_action('wpinv_quotes_loaded', 'wpinv_quote_call_shared_class', 2);
-
 class Wpinv_Quotes_Shared
 {
-    /**
-     * @var  object  Instance of this class
-     */
-    protected static $instance;
 
     private static $quote_statuses = array();
 
     public function __construct()
     {
-
-        add_action('wpinv_statuses', array($this, 'wpinv_quote_statuses'), 99);
-        add_action('wpinv_get_status', array($this, 'wpinv_quote_get_status'), 99, 4);
-        add_action('wpinv_setup_invoice', array($this, 'wpinv_quote_setup_quote'), 10, 1);
-        add_action( 'init', array( 'Wpinv_Quote_Shortcodes', 'init' ) );
 
         self::$quote_statuses = apply_filters('wpinv_quote_statuses', array(
             'wpi-quote-pending' => __('Pending', 'wpinv-quotes'),
@@ -55,14 +36,6 @@ class Wpinv_Quotes_Shared
             'wpi-quote-declined' => __('Declined', 'wpinv-quotes'),
         ));
 
-    }
-
-    public static function get_instance()
-    {
-        if (!(self::$instance instanceof self)) {
-            self::$instance = new self();
-        }
-        return self::$instance;
     }
 
     /**
@@ -74,65 +47,6 @@ class Wpinv_Quotes_Shared
     public static function wpinv_get_quote_statuses()
     {
         return self::$quote_statuses;
-    }
-
-    /**
-     * Add statuses to the dropdown in quote details metabox
-     *
-     * @since    1.0.0
-     *
-     */
-    public static function wpinv_quote_statuses( $quote_statuses, $quote = array() ) {
-        global $wpinv_quote, $post;
-
-        if ( !empty( $quote ) && 'wpi_invoice' == $quote->post_type ) {
-            return $quote_statuses;
-        }
-
-        if ( ( !empty( $post->ID ) && 'wpi_quote' == $post->post_type ) || ( !empty( $wpinv_quote->ID ) && 'wpi_quote' == $wpinv_quote->post_type ) ) {
-            return self::$quote_statuses;
-        }
-
-        return $quote_statuses;
-    }
-
-    /**
-     * Add statuses to the dropdown in quote details metabox
-     *
-     * @since    1.0.0
-     *
-     */
-    public static function wpinv_quote_get_status($status, $nicename, $quote_id, $quote)
-    {
-        if (!empty($quote->ID) && 'wpi_quote' === $quote->post_type) {
-            if($nicename){
-                return self::wpinv_quote_status_nicename($status);
-            } else {
-                return $status;
-            }
-        }
-        if (!empty($quote->ID) && 'wpi_invoice' === $quote->post_type) {
-            $invoice_statuses = array(
-                'wpi-pending' => __( 'Pending Payment', 'invoicing' ),
-                'publish' => __( 'Paid', 'invoicing'),
-                'wpi-processing' => __( 'Processing', 'invoicing' ),
-                'wpi-onhold' => __( 'On Hold', 'invoicing' ),
-                'wpi-refunded' => __( 'Refunded', 'invoicing' ),
-                'wpi-cancelled' => __( 'Cancelled', 'invoicing' ),
-                'wpi-failed' => __( 'Failed', 'invoicing' ),
-                'wpi-renewal' => __( 'Renewal Payment', 'invoicing' )
-            );
-            if($nicename){
-                if(isset($invoice_statuses[$status]) && !empty($invoice_statuses[$status])){
-                    return $invoice_statuses[$status];
-                } else {
-                    return $status;
-                }
-            } else {
-                return $status;
-            }
-        }
-        return $status;
     }
 
     /**
@@ -148,21 +62,6 @@ class Wpinv_Quotes_Shared
         $status = isset($statuses[$status]) ? $statuses[$status] : __($status, 'wpinv-quotes');
 
         return $status;
-    }
-
-    /**
-     * set global variable to use in add-on
-     *
-     * @since    1.0.0
-     * @param object $quote quote object
-     */
-    public static function wpinv_quote_setup_quote($quote)
-    {
-        global $wpinv_quote;
-        $wpinv_quote = $quote;
-        if('wpi_quote' == $wpinv_quote->post_type){
-            $wpinv_quote->status_nicename = self::wpinv_quote_status_nicename( $wpinv_quote->post_status );
-        }
     }
 
     /**
@@ -381,145 +280,4 @@ class Wpinv_Quotes_Shared
         return apply_filters( 'wpinv_get_quote_page_uri', get_permalink( $page_id ) );
     }
 
-    /**
-     * Check sequential number or not for quote.
-     *
-     * @since    1.0.1
-     *
-     * @return   bool True if active else False.
-     */
-    public static function wpinv_sequential_number_active() {
-        return wpinv_get_option( 'sequential_quote_number' );
-    }
-
-    public static function wpinv_update_quote_number( $post_ID, $save_sequential = false ) {
-        global $wpdb;
-
-        if ( self::wpinv_sequential_number_active() ) {
-            $number = self::wpinv_get_next_quote_number();
-
-            if ( $save_sequential ) {
-                update_option( 'wpinv_last_quote_number', $number );
-            }
-        } else {
-            $number = $post_ID;
-        }
-
-        $number = self::wpinv_format_quote_number( $number );
-
-        update_post_meta( $post_ID, '_wpinv_number', $number );
-
-        $wpdb->update( $wpdb->posts, array( 'post_title' => $number ), array( 'ID' => $post_ID ) );
-
-        clean_post_cache( $post_ID );
-
-        return $number;
-    }
-
-    public static function wpinv_get_next_quote_number() {
-        if ( ! self::wpinv_sequential_number_active() ) {
-            return false;
-        }
-
-        $number = $last_number = get_option( 'wpinv_last_quote_number' );
-        $start  = wpinv_get_option( 'quote_sequence_start' );
-        if ( !absint( $start ) > 0 ) {
-            $start = 1;
-        }
-        $increment_number = true;
-        $save_number = false;
-
-        if ( !empty( $number ) && !is_numeric( $number ) && $number == self::wpinv_format_quote_number( $number ) ) {
-            $number = self::wpinv_clean_quote_number( $number );
-        }
-
-        if ( empty( $number ) ) {
-            if ( !( $last_number === 0 || $last_number === '0' ) ) {
-                $quote_statuses = array_keys( self::wpinv_get_quote_statuses() );
-                $quote_statuses[] = 'trash';
-                $last_quote = self::wpinv_get_quotes( array( 'limit' => 1, 'order' => 'DESC', 'orderby' => 'ID', 'return' => 'posts', 'fields' => 'ids', 'status' => $quote_statuses ) );
-
-                if ( !empty( $last_quote[0] ) && $quote_number = wpinv_get_invoice_number( $last_quote[0] ) ) {
-                    if ( is_numeric( $quote_number ) ) {
-                        $number = $quote_number;
-                    } else {
-                        $number = self::wpinv_clean_quote_number( $quote_number );
-                    }
-                }
-
-                if ( empty( $number ) ) {
-                    $increment_number = false;
-                    $number = $start;
-                    $save_number = ( $number - 1 );
-                } else {
-                    $save_number = $number;
-                }
-            }
-        }
-
-        if ( $start > $number ) {
-            $increment_number = false;
-            $number = $start;
-            $save_number = ( $number - 1 );
-        }
-
-        if ( $save_number !== false ) {
-            update_option( 'wpinv_last_quote_number', $save_number );
-        }
-
-        $increment_number = apply_filters( 'wpinv_increment_payment_quote_number', $increment_number, $number );
-
-        if ( $increment_number ) {
-            $number++;
-        }
-
-        return apply_filters( 'wpinv_get_next_quote_number', $number );
-    }
-
-    public static function wpinv_clean_quote_number( $number ) {
-        $prefix  = wpinv_get_option( 'quote_number_prefix' );
-        $postfix = wpinv_get_option( 'quote_number_postfix' );
-
-        $number = preg_replace( '/' . $prefix . '/', '', $number, 1 );
-
-        $length      = strlen( $number );
-        $postfix_pos = strrpos( $number, $postfix );
-
-        if ( false !== $postfix_pos ) {
-            $number      = substr_replace( $number, '', $postfix_pos, $length );
-        }
-
-        $number = intval( $number );
-
-        return apply_filters( 'wpinv_clean_quote_number', $number, $prefix, $postfix );
-    }
-
-    /**
-     * Send customer quote email notification if Send Quote is selected "yes"
-     *
-     * @since    1.0.0
-     * @param int $number quote id
-     * @return string $formatted_number change formatted number of quote
-     */
-    public static function wpinv_format_quote_number($number)
-    {
-        if ( !empty( $number ) && !is_numeric( $number ) ) {
-            return $number;
-        }
-
-        $padd  = wpinv_get_option( 'quote_number_padd' );
-        $prefix  = wpinv_get_option( 'quote_number_prefix' );
-        $postfix = wpinv_get_option( 'quote_number_postfix' );
-
-        $padd = absint( $padd );
-        $formatted_number = absint( $number );
-
-        if ( $padd > 0 ) {
-            $formatted_number = zeroise( $formatted_number, $padd );
-        }
-
-        $formatted_number = $prefix . $formatted_number . $postfix;
-
-        return apply_filters( 'wpinv_format_quote_number', $formatted_number, $number, $prefix, $postfix, $padd );
-    }
 }
