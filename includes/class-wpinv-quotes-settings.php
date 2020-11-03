@@ -109,7 +109,7 @@ class WPInv_Quotes_Settings {
 						'quote_history_page'           => array(
 							'id'          => 'quote_history_page',
 							'name'        => __( 'Quotes History Page', 'wpinv-quotes' ),
-							'desc'        => __( 'The <b>[wpinv_quotes]</b> short code should be on this page.', 'wpinv-quotes' ),
+							'desc'        => __( 'The <b>[wpinv_quote_history]</b> short code should be on this page.', 'wpinv-quotes' ),
 							'type'        => 'select',
 							'options'     => wpinv_get_pages( true ),
 							'chosen'      => true,

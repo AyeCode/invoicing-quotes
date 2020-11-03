@@ -60,11 +60,7 @@ class WPInv_Quotes_History_Widget extends WP_Super_Duper {
 	 * @return mixed|string|bool
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
-
-        do_action( 'wpinv_before_user_quote_history' );
-        wpinv_get_template( 'wpinv-quote-history.php', $args, 'invoicing-quotes', WPINV_QUOTES_PATH . 'templates' );
-        do_action( 'wpinv_after_user_quote_history' );
-
+        return getpaid_invoice_history( get_current_user_id(), 'wpi_quote' );
     }
 
 }

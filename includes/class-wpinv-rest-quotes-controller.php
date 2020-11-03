@@ -177,7 +177,7 @@ class WPInv_REST_Quotes_Controller extends GetPaid_REST_Posts_Controller {
 	 * @return array A list of registered item statuses.
 	 */
 	public function get_post_statuses() {
-		return array_keys( array_keys( Wpinv_Quotes_Shared::wpinv_get_quote_statuses() ) );
+		return array( 'wpi-quote-pending', 'wpi-quote-accepted', 'wpi-quote-declined' );
 	}
 
 	/**
@@ -208,10 +208,7 @@ class WPInv_REST_Quotes_Controller extends GetPaid_REST_Posts_Controller {
 			return $quote;
 		}
 
-		$admin = new Wpinv_Quotes_Admin();
-		$admin->process_quote_published( $quote->get_id() );
-
-		do_action( 'wpinv_rest_convert_quote_to_invoice', $quote->get_id() );
+		new Wpinv_Quotes_Converter( $quote, 'accept' );
 
 		return rest_ensure_response( true );
 
@@ -234,19 +231,11 @@ class WPInv_REST_Quotes_Controller extends GetPaid_REST_Posts_Controller {
 			return $quote;
 		}
 
-		// Prepare variables.
-		$old_status          = 'wpi-quote-pending';
-		$new_status          = 'wpi-quote-declined';
-		$reason              = ! empty( $request['reason'] ) ? wp_kses_post( $request['reason'] ) : '';
+		if ( ! empty( $request['reason'] ) ) {
+			update_post_meta( $quote->get_id(), '_wpinv_quote_decline_reason', wp_kses_post( $request['reason'] ) );
+		}
 
-		do_action( 'wpinv_rest_decline_quote_before_process', $quote->ID, $old_status, $new_status, $request );
-
-		// Process the request.
-		update_post_meta( $quote->ID, '_wpinv_quote_decline_reason', $reason );
-		$admin = new Wpinv_Quotes_Admin();
-		$admin->process_quote_declined( $quote->ID, $reason );
-
-		do_action( 'wpinv_rest_after_decline_quote', $quote->ID, $request );
+		new Wpinv_Quotes_Converter( $quote, 'decline' );
 
 		return rest_ensure_response( true );
 
