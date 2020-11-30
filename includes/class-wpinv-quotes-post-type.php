@@ -32,7 +32,7 @@ class WPInv_Quotes_Post_Type {
         add_filter( 'manage_wpi_quote_posts_columns', array( $this, 'filter_quote_columns' ), 100 );
         add_filter( 'manage_wpi_quote_posts_custom_column', array( $this, 'display_quote_columns' ), 100, 2 );
         add_filter( 'manage_edit-wpi_quote_sortable_columns', '__return_empty_array', 100 );
-		add_filter( 'post_row_actions', array( $this, 'filter_post_row_actions' ), 10, 2 );
+		add_filter( 'post_row_actions', array( $this, 'filter_post_row_actions' ), 95, 2 );
 		add_filter( 'bulk_actions-edit-wpi_quote', array( $this, 'remove_bulk_actions' ) );
 
     }
@@ -308,22 +308,9 @@ class WPInv_Quotes_Post_Type {
 
         if ( 'wpi_quote' == $post->post_type ) {
 
-			$actions = array();
 			$invoice = new WPInv_Invoice( $post );
 
-			$actions['edit'] =  sprintf(
-				'<a href="%1$s">%2$s</a>',
-				esc_url( get_edit_post_link( $invoice->get_id() ) ),
-				esc_html( __( 'Edit', 'wpinv_quotes' ) )
-			);
-
 			if ( ! $invoice->is_draft() ) {
-
-				$actions['view'] =  sprintf(
-					'<a href="%1$s">%2$s</a>',
-					esc_url( $invoice->get_view_url() ),
-					esc_html( __( 'View Quote', 'wpinv_quotes' ) )
-				);
 
 				$actions['send'] =  sprintf(
 					'<a href="%1$s">%2$s</a>',

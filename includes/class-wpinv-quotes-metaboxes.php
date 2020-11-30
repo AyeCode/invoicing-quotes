@@ -113,6 +113,7 @@ class WPInv_Quotes_Metaboxes {
             <p class="wpi-meta-row wpi-send-reminder"><a href="<?php echo $reminder_url; ?>" class="button button-secondary"><?php esc_attr_e( 'Send Quote to Customer', 'wpinv-quotes' ); ?></a></p>
 		<?php
 
+		do_action( 'getpaid_after_quote_actions_metabox', $invoice );
 	}
 
 	/**
