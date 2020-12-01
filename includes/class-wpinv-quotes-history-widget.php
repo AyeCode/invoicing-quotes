@@ -28,9 +28,9 @@ class WPInv_Quotes_History_Widget extends WP_Super_Duper {
             'block-keywords'=> "['invoicing','history','quotes']",
             'class_name'     => __CLASS__,
             'base_id'       => 'wpinv_quote_history',
-            'name'          => __('GetPaid > Quotes History','wpinv-quotes'),
+            'name'          => __('GetPaid > Quotes','wpinv-quotes'),
             'widget_ops'    => array(
-                'classname'   => 'wpinv-quotes-history-class bsui',
+                'classname'   => 'wpinv-quotes bsui',
                 'description' => esc_html__('Displays quote history.','wpinv-quotes'),
             ),
             'arguments'     => array(

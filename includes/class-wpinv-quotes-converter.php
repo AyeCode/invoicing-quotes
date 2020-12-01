@@ -47,16 +47,14 @@ class Wpinv_Quotes_Converter {
         if ( $quote->is_quote() ) {
 
             if ( $quote->has_status( 'wpi-quote-accepted' ) ) {
-                $type  = 'error';
                 $msg   = __( 'You have already accepted this quote.', 'wpinv-quotes' );
-                return $this->show_notice( $msg, $type );
+                return $this->show_notice( $msg, 'error' );
             }
 
             $msg   = wpinv_get_option( 'accepted_quote_message' );
-            $msg   = empty( $msg ) ? __( 'You have accepted this quote.', 'wpinv-quotes' ) : $msg;
-            $type  = 'info';
+            $msg   = empty( $msg ) ? __( 'You have accepted the quote.', 'wpinv-quotes' ) : $msg;
 
-            $this->show_notice( $msg, $type );
+            $this->show_notice( $msg, 'info' );
 
             $quote->set_status( 'wpi-quote-accepted' );
             $quote->save();
@@ -76,16 +74,14 @@ class Wpinv_Quotes_Converter {
         if ( $quote->is_quote() ) {
 
             if ( $quote->has_status( 'wpi-quote-declined' ) ) {
-                $type  = 'error';
                 $msg   = __( 'You have already declined this quote.', 'wpinv-quotes' );
-                return $this->show_notice( $msg, $type );
+                return $this->show_notice( $msg, 'error' );
             }
 
             $msg   = wpinv_get_option( 'declined_quote_message' );
             $msg   = empty( $msg ) ? __( 'You have declined this quote.', 'wpinv-quotes' ) : $msg;
-            $type  = 'info';
 
-            $this->show_notice( $msg, $type );
+            $this->show_notice( $msg, 'info' );
 
             $quote->set_status( 'wpi-quote-declined' );
             $quote->save();
@@ -101,7 +97,7 @@ class Wpinv_Quotes_Converter {
      * @param string $notice The notice to display
      * @param string $type Either error, info, notice or success
      */
-    public function show_notice( $notice, $type ) {
+    protected function show_notice( $notice, $type ) {
 
         $type = sanitize_key( $type );
 

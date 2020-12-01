@@ -83,7 +83,7 @@ class Wpinv_Quotes {
 		add_action( 'getpaid_invoice_meta_data', array( $this, 'filter_invoice_meta' ), 10, 2 );
 		add_filter( 'wpinv_user_invoices_columns', array( $this, 'filter_user_invoice_columns' ), 10, 2 );
 		add_filter( 'wpinv_user_invoices_actions', array( $this, 'filter_user_invoice_actions' ), 10, 3 );
-
+	
 	}
 
 	/**

@@ -13,7 +13,7 @@
  * @package           Invoicing
  *
  * @wordpress-plugin
- * Plugin Name:       Invoicing - Quotes
+ * Plugin Name:       GetPaid > Quotes
  * Plugin URI:        https://wpinvoicing.com/
  * Description:       Create quotes for customers, if accepted it will convert to an invoice that can be paid.
  * Version:           1.0.7
@@ -46,7 +46,7 @@ function wpinv_quotes_check_getpaid(){
     if ( is_admin() && ! did_action( 'getpaid_init' ) ) {
         ?>
             <div class="notice notice-error">
-                <p><?php _e( '"Invoicing > Quotes" requires that you install the latest version of GetPaid|Invoicing first.', 'wpinv-quotes' ); ?></p>
+                <p><?php _e( '"GetPaid > Quotes" requires that you install the latest version of GetPaid|Invoicing first.', 'wpinv-quotes' ); ?></p>
             </div>
         <?php
     }

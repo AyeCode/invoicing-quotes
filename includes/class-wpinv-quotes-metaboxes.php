@@ -99,7 +99,7 @@ class WPInv_Quotes_Metaboxes {
             wp_nonce_url(
                 add_query_arg(
                     array(
-                        'getpaid-admin-action' => 'send_quote_reminder',
+                        'getpaid-admin-action' => 'send_quote',
                         'invoice_id'           => $invoice->get_id()
                     )
                 ),

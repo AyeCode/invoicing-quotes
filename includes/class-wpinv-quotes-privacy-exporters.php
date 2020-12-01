@@ -34,9 +34,11 @@ class WPInv_Quotes_Privacy_Exporters {
             'limit'    => 30,
             'page'     => $page,
             'user'     => $user->ID,
+            'type'     => 'wpi_quote',
+            'status'   => array_keys( wpinv_get_invoice_statuses( false, false, 'wpi_quote' ) ),
         );
 
-        $quotes = Wpinv_Quotes_Shared::wpinv_get_quotes( $args );
+        $quotes = wpinv_get_invoices( $args );
 
         if ( 0 < count( $quotes ) ) {
             foreach ( $quotes as $quote ) {
