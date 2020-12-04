@@ -373,9 +373,9 @@ class Wpinv_Quotes {
 	 */
 	public function filter_email_triggers( $triggers ) {
 
-		$triggers['getpaid_new_invoice']       = (array) $triggers['getpaid_new_invoice'] + array( 'user_quote' );
-		$triggers['wpinv_user_quote_accepted'] = array( 'user_quote_accepted' );
-		$triggers['wpinv_user_quote_declined'] = array( 'user_quote_declined' );
+		$triggers['getpaid_new_invoice']                       = array_merge( $triggers['getpaid_new_invoice'], array( 'user_quote' ) );
+		$triggers['getpaid_invoice_status_wpi-quote-accepted'] = array( 'user_quote_accepted' );
+		$triggers['getpaid_invoice_status_wpi-quote-declined'] = array( 'user_quote_declined' );
 
 		return $triggers;
 
@@ -390,7 +390,7 @@ class Wpinv_Quotes {
 
 		foreach ( $email_tags as $tag => $value ) {
 
-			if ( false === stripos( $tag, 'invoice' ) ) {
+			if ( false !== stripos( $tag, 'invoice' ) ) {
 				$new_tag = str_replace( 'invoice', 'quote', $tag );
 				$email_tags[ $new_tag ] = $value;
 			}
@@ -455,10 +455,12 @@ class Wpinv_Quotes {
 	 */
 	public function send_user_quote_email( $quote ) {
 
-		$email     = new GetPaid_Notification_Email( 'user_quote', $quote );
-		$recipient = $quote->get_email();
-		$sender    = getpaid()->get( 'invoice_emails' );
-		return $sender->send_email( $quote, $email, 'user_quote', $recipient );
+		if ( $quote->is_quote() ) {
+			$email     = new GetPaid_Notification_Email( 'user_quote', $quote );
+			$recipient = $quote->get_email();
+			$sender    = getpaid()->get( 'invoice_emails' );
+			return $sender->send_email( $quote, $email, 'user_quote', $recipient );
+		}
 
 	}
 
