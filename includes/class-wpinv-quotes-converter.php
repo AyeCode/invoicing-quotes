@@ -54,7 +54,7 @@ class Wpinv_Quotes_Converter {
             $msg   = wpinv_get_option( 'accepted_quote_message' );
             $msg   = empty( $msg ) ? __( 'You have accepted the quote.', 'wpinv-quotes' ) : $msg;
 
-            $this->show_notice( $msg, 'info' );
+            $this->show_notice( $msg, 'success' );
 
             $quote->set_status( 'wpi-quote-accepted' );
             $quote->save();
