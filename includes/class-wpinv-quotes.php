@@ -83,6 +83,7 @@ class Wpinv_Quotes {
 		add_action( 'getpaid_invoice_meta_data', array( $this, 'filter_invoice_meta' ), 10, 2 );
 		add_filter( 'wpinv_user_invoices_columns', array( $this, 'filter_user_invoice_columns' ), 10, 2 );
 		add_filter( 'wpinv_user_invoices_actions', array( $this, 'filter_user_invoice_actions' ), 10, 3 );
+		add_filter( 'getpaid_invoice_status_wpi-quote-accepted', array( $this, 'handle_quote_accepted' ) );
 	
 	}
 
@@ -197,14 +198,14 @@ class Wpinv_Quotes {
 		if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
 
 			printf(
-				'&nbsp;&nbsp;<a href="%s" class="btn btn-primary btn-sm" onclick="return confirm(\'%s\')">%s</a>',
+				'<a href="%s" class="btn btn-primary m-1 d-inline-block btn-sm" onclick="return confirm(\'%s\')">%s</a>',
 				esc_url( getpaid_get_authenticated_action_url( 'accept_quote', $invoice->get_view_url() ) ),
 				esc_attr__( 'Are you sure you want to accept this Quote?', 'wpinv-quotes' ),
 				__( 'Accept', 'wpinv-quotes' )
 			);
 
 			printf(
-				'&nbsp;&nbsp;<a href="%s" class="btn btn-danger btn-sm" onclick="return confirm(\'%s\')">%s</a>',
+				'<a href="%s" class="btn btn-danger m-1 d-inline-block btn-sm" onclick="return confirm(\'%s\')">%s</a>',
 				esc_url( getpaid_get_authenticated_action_url( 'decline_quote', $invoice->get_view_url() ) ),
 				esc_attr__( 'Are you sure you want to decline this Quote?', 'wpinv-quotes' ),
 				__( 'Decline', 'wpinv-quotes' )
@@ -234,6 +235,8 @@ class Wpinv_Quotes {
 		$quote = new WPInv_Invoice( $invoice );
 		new Wpinv_Quotes_Converter( $quote, 'accept' );
 
+		wp_safe_redirect( esc_url( remove_query_arg( array( 'getpaid-action', 'getpaid-nonce' ) ) ) );
+		exit;
 	}
 
 	/**
@@ -256,6 +259,8 @@ class Wpinv_Quotes {
 		$quote = new WPInv_Invoice( $invoice );
 		new Wpinv_Quotes_Converter( $quote, 'decline' );
 
+		wp_safe_redirect( esc_url( remove_query_arg( array( 'getpaid-action', 'getpaid-nonce' ) ) ) );
+		exit;
 	}
 
 	/**
@@ -269,6 +274,10 @@ class Wpinv_Quotes {
 
 		if ( ! $invoice->is_quote() ) {
 			return $actions;
+		}
+
+		if ( ! $invoice->has_status( 'wpi-quote-pending' ) ) {
+			return array();
 		}
 
 		$url                = add_query_arg( 'item', $item->get_id(), $invoice->get_view_url() );
@@ -364,9 +373,9 @@ class Wpinv_Quotes {
 	 */
 	public function filter_email_triggers( $triggers ) {
 
-		$triggers['getpaid_new_invoice']       = (array) $triggers['getpaid_new_invoice'] + array( 'user_quote' );
-		$triggers['wpinv_user_quote_accepted'] = array( 'user_quote_accepted' );
-		$triggers['wpinv_user_quote_declined'] = array( 'user_quote_declined' );
+		$triggers['getpaid_new_invoice']                       = array_merge( $triggers['getpaid_new_invoice'], array( 'user_quote' ) );
+		$triggers['getpaid_invoice_status_wpi-quote-accepted'] = array( 'user_quote_accepted' );
+		$triggers['getpaid_invoice_status_wpi-quote-declined'] = array( 'user_quote_declined' );
 
 		return $triggers;
 
@@ -381,7 +390,7 @@ class Wpinv_Quotes {
 
 		foreach ( $email_tags as $tag => $value ) {
 
-			if ( false === stripos( $tag, 'invoice' ) ) {
+			if ( false !== stripos( $tag, 'invoice' ) ) {
 				$new_tag = str_replace( 'invoice', 'quote', $tag );
 				$email_tags[ $new_tag ] = $value;
 			}
@@ -446,10 +455,12 @@ class Wpinv_Quotes {
 	 */
 	public function send_user_quote_email( $quote ) {
 
-		$email     = new GetPaid_Notification_Email( 'user_quote', $quote );
-		$recipient = $quote->get_email();
-		$sender    = getpaid()->get( 'invoice_emails' );
-		return $sender->send_email( $quote, $email, 'user_quote', $recipient );
+		if ( $quote->is_quote() ) {
+			$email     = new GetPaid_Notification_Email( 'user_quote', $quote );
+			$recipient = $quote->get_email();
+			$sender    = getpaid()->get( 'invoice_emails' );
+			return $sender->send_email( $quote, $email, 'user_quote', $recipient );
+		}
 
 	}
 
@@ -561,6 +572,15 @@ class Wpinv_Quotes {
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Fired whenever a quote is accepted.
+	 *
+	 * @param WPInv_Invoice $quote
+	 */
+	public function handle_quote_accepted( $quote ) {
+		new Wpinv_Quotes_Accepted_Action( $quote );
 	}
 
 }
