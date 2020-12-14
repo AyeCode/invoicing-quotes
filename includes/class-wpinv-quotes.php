@@ -84,7 +84,8 @@ class Wpinv_Quotes {
 		add_filter( 'wpinv_user_invoices_columns', array( $this, 'filter_user_invoice_columns' ), 10, 2 );
 		add_filter( 'wpinv_user_invoices_actions', array( $this, 'filter_user_invoice_actions' ), 10, 3 );
 		add_filter( 'getpaid_invoice_status_wpi-quote-accepted', array( $this, 'handle_quote_accepted' ) );
-	
+		add_filter( 'getpaid_user_content_tabs', array( $this, 'register_quotes_tab' ) );
+
 	}
 
 	/**
@@ -572,6 +573,26 @@ class Wpinv_Quotes {
 		}
 
 		return $actions;
+	}
+
+	/**
+     * Registers the quotes tab.
+     *
+     * @param array $tabs
+     */
+    public function register_quotes_tab( $tabs ) {
+
+        return array_merge(
+            array(
+                'gp-quotes'     => array(
+                    'label'     => __( 'Quotes', 'wpinv-quotes' ),
+                    'content'   => '[wpinv_quote_history]',
+                    'icon'      => 'fas fa-quote-right',
+                )
+			),
+			$tabs
+        );
+
 	}
 
 	/**
