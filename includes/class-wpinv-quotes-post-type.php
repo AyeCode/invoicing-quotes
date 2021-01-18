@@ -232,9 +232,9 @@ class WPInv_Quotes_Post_Type {
 
 				// Invoice view status.
                 if ( wpinv_is_invoice_viewed( $invoice->get_id() ) ) {
-                    echo '&nbsp;&nbsp;<i class="fa fa-eye wpi-help-tip" title="'. esc_attr__( 'Viewed by Customer', 'invoicing' ).'"></i>';
+                    echo '&nbsp;&nbsp;<i class="fa fa-eye wpi-help-tip" title="'. esc_attr__( 'Viewed by Customer', 'wpinv-quotes' ).'"></i>';
                 } else {
-                    echo '&nbsp;&nbsp;<i class="fa fa-eye-slash wpi-help-tip" title="'. esc_attr__( 'Not Viewed by Customer', 'invoicing' ).'"></i>';
+                    echo '&nbsp;&nbsp;<i class="fa fa-eye-slash wpi-help-tip" title="'. esc_attr__( 'Not Viewed by Customer', 'wpinv-quotes' ).'"></i>';
                 }
 
 				break;
@@ -252,7 +252,7 @@ class WPInv_Quotes_Post_Type {
 
 				$edit_link       = esc_url( get_edit_post_link( $invoice->get_id() ) );
 				$invoice_number  = sanitize_text_field( $invoice->get_number() );
-				$invoice_details = esc_attr__( 'View Quote Details', 'invoicing' );
+				$invoice_details = esc_attr__( 'View Quote Details', 'wpinv-quotes' );
 
 				echo "<a href='$edit_link' title='$invoice_details'><strong>$invoice_number</strong></a>";
 
@@ -267,7 +267,7 @@ class WPInv_Quotes_Post_Type {
 				}
 	
 				if ( ! empty( $customer_name ) ) {
-					$customer_details = esc_attr__( 'View Customer Details', 'invoicing' );
+					$customer_details = esc_attr__( 'View Customer Details', 'wpinv-quotes' );
 					$view_link        = esc_url( add_query_arg( 'user_id', $invoice->get_user_id(), admin_url( 'user-edit.php' ) ) );
 					echo "<a href='$view_link' title='$customer_details'><span>$customer_name</span></a>";
 				} else {
@@ -326,7 +326,7 @@ class WPInv_Quotes_Post_Type {
 							'getpaid-nonce'
 						)
 					),
-					esc_html( __( 'Send to Customer', 'wpinv_quotes' ) )
+					esc_html( __( 'Send to Customer', 'wpinv-quotes' ) )
 				);
 
 				if ( $invoice->has_status( 'wpi-quote-pending' ) ) {
@@ -345,7 +345,7 @@ class WPInv_Quotes_Post_Type {
 								'getpaid-nonce'
 							)
 						),
-						esc_html( __( 'Convert to Invoice', 'wpinv_quotes' ) )
+						esc_html( __( 'Convert to Invoice', 'wpinv-quotes' ) )
 					);
 
 				}

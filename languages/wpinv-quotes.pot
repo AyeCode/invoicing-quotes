@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Invoicing - Quotes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 12:41+0000\n"
+"POT-Creation-Date: 2021-01-18 12:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -59,11 +59,11 @@ msgstr ""
 msgid "A prefix to prepend to all quote numbers. Ex: QUOTE-"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:203 includes/class-wpinv-quotes.php:543
+#: includes/class-wpinv-quotes.php:205 includes/class-wpinv-quotes.php:555
 msgid "Accept"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:102
+#: includes/class-wpinv-quotes.php:104
 msgid "Accepted"
 msgstr ""
 
@@ -104,11 +104,11 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:202 includes/class-wpinv-quotes.php:547
+#: includes/class-wpinv-quotes.php:204 includes/class-wpinv-quotes.php:559
 msgid "Are you sure you want to accept this Quote?"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:209 includes/class-wpinv-quotes.php:557
+#: includes/class-wpinv-quotes.php:211 includes/class-wpinv-quotes.php:569
 msgid "Are you sure you want to decline this Quote?"
 msgstr ""
 
@@ -138,6 +138,10 @@ msgstr ""
 msgid "Convert quote to invoice"
 msgstr ""
 
+#: includes/class-wpinv-quotes-post-type.php:348
+msgid "Convert to Invoice"
+msgstr ""
+
 #: includes/class-wpinv-quotes-accepted-action.php:71
 #, php-format
 msgid "Converted from Quote #%s to Invoice #%s."
@@ -153,8 +157,8 @@ msgstr ""
 
 #. Description of the plugin
 msgid ""
-"Create quotes for customers, if accepted it will convert to an invoice that "
-"can be paid."
+"Create quotes for customers, if accepted it will convert them to invoices "
+"that can be paid."
 msgstr ""
 
 #: includes/class-wpinv-quotes-post-type.php:179
@@ -173,11 +177,11 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:210 includes/class-wpinv-quotes.php:553
+#: includes/class-wpinv-quotes.php:212 includes/class-wpinv-quotes.php:565
 msgid "Decline"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:103
+#: includes/class-wpinv-quotes.php:105
 msgid "Declined"
 msgstr ""
 
@@ -269,7 +273,6 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
-#. Name of the plugin
 #: includes/class-wpinv-quotes-history-widget.php:31
 msgid "GetPaid > Quotes"
 msgstr ""
@@ -326,6 +329,10 @@ msgstr ""
 msgid "No quotes found in trash"
 msgstr ""
 
+#: includes/class-wpinv-quotes-post-type.php:237
+msgid "Not Viewed by Customer"
+msgstr ""
+
 #: admin/class-wpinv-quotes-admin.php:62
 msgctxt "Page slug"
 msgid "your-quotes"
@@ -340,7 +347,7 @@ msgstr ""
 msgid "Parent quotes"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:101
+#: includes/class-wpinv-quotes.php:103
 msgid "Pending Confirmation"
 msgstr ""
 
@@ -440,7 +447,12 @@ msgstr ""
 #: includes/class-wpinv-quotes-post-type.php:56
 #: includes/class-wpinv-quotes-privacy.php:17
 #: includes/class-wpinv-quotes-settings.php:48
+#: includes/class-wpinv-quotes.php:588
 msgid "Quotes"
+msgstr ""
+
+#. Name of the plugin
+msgid "Quotes Addon for GetPaid"
 msgstr ""
 
 #: includes/class-wpinv-quotes-privacy-exporters.php:47
@@ -467,7 +479,7 @@ msgstr ""
 msgid "Recurring"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:276
+#: includes/class-wpinv-quotes.php:286
 msgid "Remove Item"
 msgstr ""
 
@@ -485,6 +497,10 @@ msgstr ""
 
 #: includes/class-wpinv-quotes-metaboxes.php:113
 msgid "Send Quote to Customer"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:329
+msgid "Send to Customer"
 msgstr ""
 
 #: includes/class-wpinv-quotes-post-type.php:70
@@ -548,7 +564,7 @@ msgstr ""
 msgid "Use as quote image"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:491
+#: includes/class-wpinv-quotes.php:503
 msgid "Valid Until"
 msgstr ""
 
@@ -560,12 +576,24 @@ msgstr ""
 msgid "View available merge tags."
 msgstr ""
 
+#: includes/class-wpinv-quotes-post-type.php:270
+msgid "View Customer Details"
+msgstr ""
+
 #: includes/class-wpinv-quotes-post-type.php:63
 msgid "View quote"
 msgstr ""
 
+#: includes/class-wpinv-quotes-post-type.php:255
+msgid "View Quote Details"
+msgstr ""
+
 #: includes/class-wpinv-quotes-post-type.php:64
 msgid "View Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:235
+msgid "Viewed by Customer"
 msgstr ""
 
 #: includes/class-wpinv-quotes-settings.php:121
@@ -576,15 +604,15 @@ msgstr ""
 msgid "Widget title"
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:229
+#: includes/class-wpinv-quotes.php:231
 msgid "You do not have permission to accept this quote."
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:251
+#: includes/class-wpinv-quotes.php:255
 msgid "You do not have permission to decline this quote."
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:294
+#: includes/class-wpinv-quotes.php:304
 msgid "You do not have permission to remove items from this quote."
 msgstr ""
 
@@ -609,7 +637,7 @@ msgstr ""
 msgid "You have declined this quote."
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:306
+#: includes/class-wpinv-quotes.php:316
 msgid "You have successfully removed the item."
 msgstr ""
 
