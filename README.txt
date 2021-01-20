@@ -1,18 +1,18 @@
-=== Quotes add-on for the Invoicing plugin ===
+=== Quotes Addon for GetPaid ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpinvoicing.com
 Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
 Requires at least: 4.9
-Tested up to: 5.5
-Stable tag: 1.0.7
+Tested up to: 5.6
+Stable tag: 2.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Quotes add-on for the WordPress Invoicing plugin. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer.
+Quotes add-on for the WordPress GetPaid/Invoicing plugin. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer.
 
 == Description ==
 
-= Quotes add-on for the WordPress Invoicing plugin =
+= Quotes add-on for the WordPress GetPaid/Invoicing plugin =
 Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer. This plugin requires to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/)
 
 = Features =
@@ -61,6 +61,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 3. Quote view.
 
 == Changelog ==
+
+= 2.0.0 =
+* GetPaid compatibility - ADDED
 
 = 1.0.6 =
 * Ability to query and manage quotes via the REST API - ADDED
