@@ -8,12 +8,12 @@ Stable tag: 2.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Quotes add-on for the WordPress GetPaid/Invoicing plugin. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer.
+Quotes add-on for the WordPress payments plugin  GetPaid. Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer.
 
 == Description ==
 
-= Quotes add-on for the WordPress GetPaid/Invoicing plugin =
-Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer. This plugin requires to install the [Invoicing plugin](https://wordpress.org/plugins/invoicing/)
+= Quotes add-on for the GetPaid plugin =
+Allows you to create quotes, send them to clients and convert them to Invoices when accepted by the customer. This plugin requires to install the [GetPaid plugin](https://wordpress.org/plugins/invoicing/)
 
 = Features =
 
@@ -21,11 +21,11 @@ Allows you to create quotes, send them to clients and convert them to Invoices w
 * Quotes can be turned into invoices when accepted and client can pay online.
 
 = This plugin requires you to install =
-[Invoicing plugin](https://wordpress.org/plugins/invoicing/)
+[GetPaid  plugin](https://wordpress.org/plugins/invoicing/)
 
 = Support =
 
-Get timely and friendly support for both Core Plugin and add-ons at our official website, [Invoicing Support](https://wpinvoicing.com/support/)
+Get timely and friendly support for both Core Plugin and add-ons at our official website, [GetPaid Support](https://wpgetpaid.com/support/)
 
 == Installation ==
 
@@ -43,7 +43,7 @@ In the search field type Invoicing - Quotes and click Search Plugins. Once you'v
 
 = Manual installation =
 
-The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
+The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [GetPaid  basic installation](https://docs.wpgetpaid.com/article/380-installing-getpaid)
 
 = Updating =
 
@@ -51,7 +51,7 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Frequently Asked Questions ==
 
-[Invoicing FAQ](https://wpinvoicing.com/faq/).
+[Invoicing FAQ](https://wpgetpaid.com/faq/).
 
 == Screenshots ==
 
