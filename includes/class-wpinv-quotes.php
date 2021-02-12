@@ -82,7 +82,7 @@ class Wpinv_Quotes {
 		add_action( 'getpaid_template_default_template_path', array( $this, 'maybe_filter_default_template_path' ), 10, 2 );
 		add_action( 'getpaid_invoice_meta_data', array( $this, 'filter_invoice_meta' ), 10, 2 );
 		add_filter( 'wpinv_user_invoices_columns', array( $this, 'filter_user_invoice_columns' ), 10, 2 );
-		add_filter( 'wpinv_user_invoices_actions', array( $this, 'filter_user_invoice_actions' ), 10, 3 );
+		add_filter( 'wpinv_user_invoices_actions', array( $this, 'filter_user_invoice_actions' ), 10, 2 );
 		add_filter( 'getpaid_invoice_status_wpi-quote-accepted', array( $this, 'handle_quote_accepted' ) );
 		add_filter( 'getpaid_user_content_tabs', array( $this, 'register_quotes_tab' ) );
 
@@ -538,9 +538,9 @@ class Wpinv_Quotes {
 	 * @param WPInv_Invoice $invoice
 	 * @param string $post_type
 	 */
-	public function filter_user_invoice_actions( $actions, $invoice, $post_type ) {
+	public function filter_user_invoice_actions( $actions, $invoice ) {
 
-		if ( 'wpi_quote' != $post_type ) {
+		if ( ! $invoice->is_quote() ) {
 			return $actions;
 		}
 

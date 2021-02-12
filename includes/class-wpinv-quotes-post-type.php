@@ -90,13 +90,12 @@ class WPInv_Quotes_Post_Type {
 						'with_front'        => false,
 					),
 					'query_var'             => false,
-					'capability_type'       => 'wpi_quote',
 					'map_meta_cap'          => true,
 					'show_in_admin_bar'     => true,
 					'can_export'            => true,
 					'hierarchical'          => false,
 					'menu_position'         => null,
-					'menu_icon'             => 'dashicons-media-spreadsheet',
+					'menu_icon'             => 'dashicons-format-quote',
 				)
 			)
         );
