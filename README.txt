@@ -62,6 +62,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Changelog ==
 
+= 2.0.1 =
+* Quotes menu hidden on some sites - FIXED
+
 = 2.0.0 =
 * GetPaid compatibility - ADDED
 
