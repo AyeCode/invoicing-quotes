@@ -61,9 +61,9 @@ class Wpinv_Quotes_Accepted_Action {
         $number     = preg_replace( '/[^0-9]/','' , $quote->get_number() );
         $number     = wpinv_format_invoice_number( $number, 'wpi_invoice' );
         $quote->set_post_type( 'wpi_invoice' );
-        $quote->set_number( $number );
+        $quote->set_number( $quote->generate_number() );
         $quote->set_status( 'wpi-pending' );
-        $quote->set_title( $number );
+        $quote->set_title(  $quote->get_number()  );
         $quote->set_path( sanitize_title(  $quote->get_type() . '-' . $quote->get_id()  ) );
 
         $quote->add_note(

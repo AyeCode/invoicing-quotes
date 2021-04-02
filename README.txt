@@ -63,6 +63,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 == Changelog ==
 
 = 2.0.2 =
+* Some invoices share other invoice numbers when converted from quotes - FIXED
+
+= 2.0.2 =
 * WordPress 5.7 compatibility - FIXED
 
 = 2.0.1 =
