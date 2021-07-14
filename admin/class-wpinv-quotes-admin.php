@@ -74,21 +74,25 @@ class WPInv_Quotes_Admin {
      */
     public function activation_redirect() {
 
-        // Bail if we already redirected.
-        if ( get_option( 'wpinv_quotes_activation_redirect' ) || wp_doing_ajax() ) {
-            return;
-        }
+        $redirected = get_option( 'wpinv_quotes_activation_redirect' );
+
+        if ( ! empty( $redirected ) || wp_doing_ajax() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
         // Bail if activating from network, or bulk
 		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
 			return;
-        }
+		}
 
         // Prevent further redirects for this site.
         update_option( 'wpinv_quotes_activation_redirect', 1 );
 
-		wp_safe_redirect( admin_url( 'admin.php?page=wpinv-settings&tab=quote' ) );
-		exit;
+        if ( empty( $_GET['page'] ) || 'gp-setup' !== $_GET['page'] ) {
+            wp_safe_redirect( admin_url( 'admin.php?page=wpinv-settings&tab=quote' ) );
+            exit;
+        }
+
     }
 
     /**
