@@ -315,6 +315,11 @@ class Wpinv_Quotes {
 
 			wpinv_set_error( 'removed_item', __( 'You have successfully removed the item.', 'wpinv-quotes' ), 'info' );
 
+			// Decline the quote.
+			if ( 0 === count( $quote->get_items() ) ) {
+				new Wpinv_Quotes_Converter( $quote, 'decline' );
+			}
+
 			wp_redirect( esc_url( $quote->get_view_url() ) );
 			exit;
 
