@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpinvoicing.com
 Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
 Requires at least: 4.9
-Tested up to: 5.8
-Stable tag: 2.0.5
+Tested up to: 6.2
+Stable tag: 2.0.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 3. Quote view.
 
 == Changelog ==
+
+= 2.0.6 =
+* WordPress 6.2 compatibility check
 
 = 2.0.5 =
 * WordPress 5.8 compatibility check
