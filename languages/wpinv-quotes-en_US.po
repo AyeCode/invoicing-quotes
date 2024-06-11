@@ -1,341 +1,25 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quotes for Invoicing 1.0.5\n"
+"Project-Id-Version: Quotes Addon for GetPaid 2.0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-27 07:10+0000\n"
-"PO-Revision-Date: 2021-01-18 12:46+0000\n"
-"Last-Translator: Brian Mutende <mutendebrian@gmail.com>\n"
-"Language-Team: English (United States)\n"
+"POT-Creation-Date: 2024-06-11 17:02+0530\n"
+"PO-Revision-Date: 2024-06-11 17:02+0530\n"
+"Last-Translator: AyeCode Ltd <contact@ayecode.io>\n"
+"Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_n:1,2;_n_noop:1,2;_nx:1,"
-"2;_x;_ex;esc_attr_e;esc_attr__\n"
+"X-Poedit-KeywordsList: __;__ngettext:1,2;__ngettext_noop:1,2;_c;_e;_ex:1,2c;"
+"_n:1,2;_n_noop:1,2;_nc:4c,1,2;_nx:4c,1,2;_nx_noop:4c,1,2;_x:1,2c;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;gettext;"
+"gettext_noop\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Loco https://localise.biz/\n"
+"X-Generator: Poedit 3.0\n"
+"X-Loco-Version: 2.3.1; wp-5.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Loco-Version: 2.3.1; wp-5.3.2"
-
-#: wpinv-quote.php:49
-msgid ""
-"\"GetPaid > Quotes\" requires that you install the latest version of "
-"GetPaid|Invoicing first."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:268
-msgid "<p>Here are the quote details.</p>"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:220
-msgid ""
-"<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </p>"
-"<p>Click on the following link to view it online where you will be able to "
-"accept or decline the quote. <a class=\"btn btn-success\" href=\"{quote_link}"
-"\">View & Accept / Decline Quote</a></p>"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:316
-msgid "<p>{quote_decline_reason}</p><p>Here are the quote details.</p>"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:249
-msgid ""
-"[{site_title}] Congratulations. Quote {quote_number} has been accepted by "
-"the client."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:297
-msgid "[{site_title}] Quote {quote_number} has been declined by the client."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:201
-msgid "[{site_title}] Your quote from {quote_date}"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:103
-msgid "A postfix to append to all quote numbers."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:93
-msgid "A prefix to prepend to all quote numbers. Ex: QUOTE-"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:205 includes/class-wpinv-quotes.php:555
-msgid "Accept"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:104
-msgid "Accepted"
-msgstr ""
-
-#. %s: number of quotes
-#: includes/class-wpinv-quotes-post-type.php:136
-#, php-format
-msgid "Accepted <span class=\"count\">(%s)</span>"
-msgid_plural "Accepted <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-wpinv-quotes-settings.php:120
-msgid "Accepted Quote Action"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:133
-msgid "Accepted Quote Message"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:58
-msgid "Add New"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:59
-msgid "Add new quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:85
-msgid "Address"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:57
-msgctxt "Admin menu name"
-msgid "Quotes"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:181
-msgid "Amount"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:204 includes/class-wpinv-quotes.php:559
-msgid "Are you sure you want to accept this Quote?"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:211 includes/class-wpinv-quotes.php:569
-msgid "Are you sure you want to decline this Quote?"
-msgstr ""
-
-#. Author of the plugin
-msgid "AyeCode Ltd"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:190
-msgid ""
-"Check if you want to send a copy of this notification email to to the site "
-"admin."
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:86
-msgid "City"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:83
-msgid "Company"
-msgstr ""
-
-#: includes/class-wpinv-quotes-metaboxes.php:112
-msgid "Convert Quote to Invoice"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:125
-msgid "Convert quote to invoice"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:348
-msgid "Convert to Invoice"
-msgstr ""
-
-#: includes/class-wpinv-quotes-accepted-action.php:71
-#, php-format
-msgid "Converted from Quote #%s to Invoice #%s."
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:87
-msgid "Country"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:126
-msgid "Create invoice, but keep quote"
-msgstr ""
-
-#. Description of the plugin
-msgid ""
-"Create quotes for customers, if accepted it will convert them to invoices "
-"that can be paid."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:179
-msgid "Customer"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:174
-msgid "Customer Quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy.php:23
-msgid "Customer Quotes"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:180
-msgid "Date"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:212 includes/class-wpinv-quotes.php:565
-msgid "Decline"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:105
-msgid "Declined"
-msgstr ""
-
-#. %s: number of quotes
-#: includes/class-wpinv-quotes-post-type.php:146
-#, php-format
-msgid "Declined <span class=\"count\">(%s)</span>"
-msgid_plural "Declined <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-wpinv-quotes-settings.php:142
-msgid "Declined Quote Message"
-msgstr ""
-
-#: includes/class-wpinv-quotes-history-widget.php:34
-msgid "Displays quote history."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:127
-msgid "Do nothing"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:60
-msgid "Edit"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:61
-msgid "Edit quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:82
-msgid "Email Address"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:217
-#: includes/class-wpinv-quotes-settings.php:265
-#: includes/class-wpinv-quotes-settings.php:313
-msgid "Email Content"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:207
-#: includes/class-wpinv-quotes-settings.php:255
-#: includes/class-wpinv-quotes-settings.php:303
-msgid "Email Heading"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:189
-msgid "Enable Admin BCC"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:182
-#: includes/class-wpinv-quotes-settings.php:238
-#: includes/class-wpinv-quotes-settings.php:286
-msgid "Enable this email notification"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:181
-#: includes/class-wpinv-quotes-settings.php:237
-#: includes/class-wpinv-quotes-settings.php:285
-msgid "Enable/Disable"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:208
-#: includes/class-wpinv-quotes-settings.php:256
-#: includes/class-wpinv-quotes-settings.php:304
-msgid "Enter the main heading contained within the email notification."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:198
-#: includes/class-wpinv-quotes-settings.php:246
-#: includes/class-wpinv-quotes-settings.php:294
-msgid "Enter the subject line for this email."
-msgstr ""
-
-#: includes/class-wpinv-quotes-history-widget.php:39
-msgid "Enter widget title."
-msgstr ""
-
-#: includes/class-wpinv-rest-quotes-controller.php:109
-msgid "Exclude quotes to specific users."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:75
-msgid "Filter quotes"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:80
-msgid "First Name"
-msgstr ""
-
-#: includes/class-wpinv-quotes-history-widget.php:31
-msgid "GetPaid > Quotes"
-msgstr ""
-
-#. Author URI of the plugin
-msgid "https://wpinvoicing.com"
-msgstr ""
-
-#. URI of the plugin
-msgid "https://wpinvoicing.com/"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:73
-msgid "Insert into quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:90
-msgid "IP Address"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:81
-msgid "Last Name"
-msgstr ""
-
-#: includes/class-wpinv-rest-quotes-controller.php:129
-msgid "Limit result set to all items except those of a particular parent ID."
-msgstr ""
-
-#: includes/class-wpinv-rest-quotes-controller.php:99
-msgid "Limit result set to quotes for specific user ids."
-msgstr ""
-
-#: includes/class-wpinv-rest-quotes-controller.php:119
-msgid "Limit result set to those of particular parent IDs."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:134
-msgid "Message to display if a client accepts their quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:143
-msgid "Message to display if a client declines their quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:62
-msgid "New quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:66
-msgid "No quotes found"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:67
-msgid "No quotes found in trash"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:237
-msgid "Not Viewed by Customer"
-msgstr ""
 
 #: admin/class-wpinv-quotes-admin.php:62
 msgctxt "Page slug"
@@ -347,289 +31,21 @@ msgctxt "Page title"
 msgid "Your Quotes"
 msgstr ""
 
-#: includes/class-wpinv-quotes-post-type.php:68
-msgid "Parent quotes"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:103
-msgid "Pending Confirmation"
-msgstr ""
-
-#. %s: number of quotes
-#: includes/class-wpinv-quotes-post-type.php:126
-#, php-format
-msgid "Pending Confirmation <span class=\"count\">(%s)</span>"
-msgid_plural "Pending Confirmation <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:84
-msgid "Phone Number"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:55
-#: includes/class-wpinv-quotes-post-type.php:178
-msgid "Quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:230
-msgid "Quote Accepted"
-msgstr ""
-
-#: includes/class-wpinv-quotes-metaboxes.php:58
-msgid "Quote Actions"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:75
-msgid "Quote Date"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:278
-msgid "Quote Declined"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:69
-msgid "Quote image"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:79
-msgid "Quote Items"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:91
-msgid "Quote Link"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:74
-msgid "Quote Number"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:102
-msgid "Quote Number Postfix"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:92
-msgid "Quote Number Prefix"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:67
-msgid "Quote Settings"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:77
-msgid "Quote Status"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:130
-msgctxt "Quote status"
-msgid "Accepted"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:140
-msgctxt "Quote status"
-msgid "Declined"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:120
-msgctxt "Quote status"
-msgid "Pending Confirmation"
-msgstr ""
-
-#: admin/class-wpinv-quotes-admin.php:131
+#: admin/class-wpinv-quotes-admin.php:135
 msgid "Quote successfully converted to an invoice."
 msgstr ""
 
-#: includes/class-wpinv-quotes-privacy-exporters.php:78
-msgid "Quote Total"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:76
-msgid "Quote Valid Till"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:54
-#: includes/class-wpinv-quotes-post-type.php:56
-#: includes/class-wpinv-quotes-privacy.php:17
-#: includes/class-wpinv-quotes-settings.php:48
-#: includes/class-wpinv-quotes.php:588
-msgid "Quotes"
-msgstr ""
-
-#. Name of the plugin
-msgid "Quotes Addon for GetPaid"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:47
-msgid "Quotes Data"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:111
-msgid "Quotes History Page"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:77
-msgid "Quotes list"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:76
-msgid "Quotes navigation"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy.php:36
-msgid "Quotes uses the following privacy."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:182
-msgid "Recurring"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:286
-msgid "Remove Item"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:71
-msgid "Remove quote image"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:65
-msgid "Search Quotes"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:116
-msgid "Select a page"
-msgstr ""
-
-#: includes/class-wpinv-quotes-metaboxes.php:113
-msgid "Send Quote to Customer"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:329
-msgid "Send to Customer"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:70
-msgid "Set quote image"
-msgstr ""
-
-#: includes/class-wpinv-quotes-privacy-exporters.php:88
-msgid "State"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:183
-msgid "Status"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:197
-#: includes/class-wpinv-quotes-settings.php:245
-#: includes/class-wpinv-quotes-settings.php:293
-msgid "Subject"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:112
-msgid "The <b>[wpinv_quote_history]</b> short code should be on this page."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:341
-msgid "The content of the email (Merge Tags and HTML are allowed)."
-msgstr ""
-
-#: includes/class-wpinv-quotes-metaboxes.php:137
-msgid "The date until which this quote becomes invalid."
-msgstr ""
-
-#: includes/class-wpinv-rest-quotes-controller.php:73
-msgid "The reason for declining this quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:231
-msgid ""
-"These emails are sent to the admin whenever a customer accepts their quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:279
-msgid ""
-"These emails are sent to the admin whenever a customer declines their quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:175
-msgid ""
-"These emails are sent to the customer with information about their quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:79
-msgid "This is where quotes are stored."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:74
-msgid "Uploaded to this quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:72
-msgid "Use as quote image"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:503
-msgid "Valid Until"
-msgstr ""
-
-#: includes/class-wpinv-quotes-metaboxes.php:137
-msgid "Valid Until:"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:338
-msgid "View available merge tags."
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:270
-msgid "View Customer Details"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:63
-msgid "View quote"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:255
-msgid "View Quote Details"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:64
-msgid "View Quotes"
-msgstr ""
-
-#: includes/class-wpinv-quotes-post-type.php:235
-msgid "Viewed by Customer"
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:121
-msgid "What should happen after a client accepts a quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-history-widget.php:38
-msgid "Widget title"
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:231
-msgid "You do not have permission to accept this quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:255
-msgid "You do not have permission to decline this quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes.php:304
-msgid "You do not have permission to remove items from this quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-converter.php:55
-msgid "You have accepted the quote."
-msgstr ""
-
-#: includes/class-wpinv-quotes-settings.php:138
-msgid "You have accepted this quote."
+#: includes/class-wpinv-quotes-accepted-action.php:71
+#, php-format
+msgid "Converted from Quote #%s to Invoice #%s."
 msgstr ""
 
 #: includes/class-wpinv-quotes-converter.php:50
 msgid "You have already accepted this quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-converter.php:55
+msgid "You have accepted the quote."
 msgstr ""
 
 #: includes/class-wpinv-quotes-converter.php:77
@@ -641,22 +57,583 @@ msgstr ""
 msgid "You have declined this quote."
 msgstr ""
 
-#: includes/class-wpinv-quotes.php:316
-msgid "You have successfully removed the item."
+#: includes/class-wpinv-quotes-history-widget.php:31
+msgid "GetPaid > Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-history-widget.php:34
+msgid "Displays quote history."
+msgstr ""
+
+#: includes/class-wpinv-quotes-history-widget.php:38
+msgid "Widget title"
+msgstr ""
+
+#: includes/class-wpinv-quotes-history-widget.php:39
+msgid "Enter widget title."
+msgstr ""
+
+#: includes/class-wpinv-quotes-metaboxes.php:58
+msgid "Quote Actions"
+msgstr ""
+
+#: includes/class-wpinv-quotes-metaboxes.php:112
+msgid "Convert Quote to Invoice"
+msgstr ""
+
+#: includes/class-wpinv-quotes-metaboxes.php:113
+msgid "Send Quote to Customer"
+msgstr ""
+
+#: includes/class-wpinv-quotes-metaboxes.php:137
+msgid "Valid Until:"
+msgstr ""
+
+#: includes/class-wpinv-quotes-metaboxes.php:137
+msgid "The date until which this quote becomes invalid."
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:54
+#: includes/class-wpinv-quotes-post-type.php:56
+#: includes/class-wpinv-quotes-privacy.php:17
+#: includes/class-wpinv-quotes-settings.php:48
+#: includes/class-wpinv-quotes.php:593
+msgid "Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:55
+#: includes/class-wpinv-quotes-post-type.php:177
+msgid "Quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:57
+msgctxt "Admin menu name"
+msgid "Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:58
+msgid "Add New"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:59
+msgid "Add new quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:60
+msgid "Edit"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:61
+msgid "Edit quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:62
+msgid "New quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:63
+msgid "View quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:64
+msgid "View Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:65
+msgid "Search Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:66
+msgid "No quotes found"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:67
+msgid "No quotes found in trash"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:68
+msgid "Parent quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:69
+msgid "Quote image"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:70
+msgid "Set quote image"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:71
+msgid "Remove quote image"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:72
+msgid "Use as quote image"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:73
+msgid "Insert into quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:74
+msgid "Uploaded to this quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:75
+msgid "Filter quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:76
+msgid "Quotes navigation"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:77
+msgid "Quotes list"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:79
+msgid "This is where quotes are stored."
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:119
+msgctxt "Quote status"
+msgid "Pending Confirmation"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:125
+#, php-format
+msgid "Pending Confirmation <span class=\"count\">(%s)</span>"
+msgid_plural "Pending Confirmation <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-wpinv-quotes-post-type.php:129
+msgctxt "Quote status"
+msgid "Accepted"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:135
+#, php-format
+msgid "Accepted <span class=\"count\">(%s)</span>"
+msgid_plural "Accepted <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-wpinv-quotes-post-type.php:139
+msgctxt "Quote status"
+msgid "Declined"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:145
+#, php-format
+msgid "Declined <span class=\"count\">(%s)</span>"
+msgid_plural "Declined <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-wpinv-quotes-post-type.php:178
+msgid "Customer"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:179
+msgid "Date"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:180
+msgid "Amount"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:181
+msgid "Recurring"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:182
+msgid "Status"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:234
+msgid "Viewed by Customer"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:236
+msgid "Not Viewed by Customer"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:254
+msgid "View Quote Details"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:269
+msgid "View Customer Details"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:328
+msgid "Send to Customer"
+msgstr ""
+
+#: includes/class-wpinv-quotes-post-type.php:347
+msgid "Convert to Invoice"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:47
+msgid "Quotes Data"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:74
+msgid "Quote Number"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:75
+msgid "Quote Date"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:76
+msgid "Quote Valid Till"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:77
+msgid "Quote Status"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:78
+msgid "Quote Total"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:79
+msgid "Quote Items"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:80
+msgid "First Name"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:81
+msgid "Last Name"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:82
+msgid "Email Address"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:83
+msgid "Company"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:84
+msgid "Phone Number"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:85
+msgid "Address"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:86
+msgid "City"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:87
+msgid "Country"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:88
+msgid "State"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:89
+msgid "Zip Code"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:90
+msgid "IP Address"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy-exporters.php:91
+msgid "Quote Link"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy.php:23
+msgid "Customer Quotes"
+msgstr ""
+
+#: includes/class-wpinv-quotes-privacy.php:36
+msgid "Quotes uses the following privacy."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:67
+msgid "Quote Settings"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:92
+msgid "Quote Number Prefix"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:93
+msgid "A prefix to prepend to all quote numbers. Ex: QUOTE-"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:102
+msgid "Quote Number Postfix"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:103
+msgid "A postfix to append to all quote numbers."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:111
+msgid "Quotes History Page"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:112
+msgid "The <b>[wpinv_quote_history]</b> short code should be on this page."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:116
+msgid "Select a page"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:120
+msgid "Accepted Quote Action"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:121
+msgid "What should happen after a client accepts a quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:125
+msgid "Convert quote to invoice"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:126
+msgid "Create invoice, but keep quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:127
+msgid "Do nothing"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:133
+msgid "Accepted Quote Message"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:134
+msgid "Message to display if a client accepts their quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:138
+msgid "You have accepted this quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:142
+msgid "Declined Quote Message"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:143
+msgid "Message to display if a client declines their quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:174
+msgid "Customer Quote"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:175
+msgid ""
+"These emails are sent to the customer with information about their quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:181
+#: includes/class-wpinv-quotes-settings.php:237
+#: includes/class-wpinv-quotes-settings.php:285
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:182
+#: includes/class-wpinv-quotes-settings.php:238
+#: includes/class-wpinv-quotes-settings.php:286
+msgid "Enable this email notification"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:189
+msgid "Enable Admin BCC"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:190
+msgid ""
+"Check if you want to send a copy of this notification email to to the site "
+"admin."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:197
+#: includes/class-wpinv-quotes-settings.php:245
+#: includes/class-wpinv-quotes-settings.php:293
+msgid "Subject"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:198
+#: includes/class-wpinv-quotes-settings.php:246
+#: includes/class-wpinv-quotes-settings.php:294
+msgid "Enter the subject line for this email."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:201
+msgid "[{site_title}] Your quote from {quote_date}"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:207
+#: includes/class-wpinv-quotes-settings.php:255
+#: includes/class-wpinv-quotes-settings.php:303
+msgid "Email Heading"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:208
+#: includes/class-wpinv-quotes-settings.php:256
+#: includes/class-wpinv-quotes-settings.php:304
+msgid "Enter the main heading contained within the email notification."
 msgstr ""
 
 #: includes/class-wpinv-quotes-settings.php:211
 msgid "Your quote details"
 msgstr ""
 
+#: includes/class-wpinv-quotes-settings.php:217
+#: includes/class-wpinv-quotes-settings.php:265
+#: includes/class-wpinv-quotes-settings.php:313
+msgid "Email Content"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:220
+msgid ""
+"<p>Hi {name},</p><p>We have provided you with our quote on {site_title}. </"
+"p><p>Click on the following link to view it online where you will be able to "
+"accept or decline the quote. <a class=\"btn btn-success\" href="
+"\"{quote_link}\">View & Accept / Decline Quote</a></p>"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:230
+msgid "Quote Accepted"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:231
+msgid ""
+"These emails are sent to the admin whenever a customer accepts their quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:249
+msgid ""
+"[{site_title}] Congratulations. Quote {quote_number} has been accepted by "
+"the client."
+msgstr ""
+
 #: includes/class-wpinv-quotes-settings.php:259
 msgid "Your quote has been accepted"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:268
+msgid "<p>Here are the quote details.</p>"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:278
+msgid "Quote Declined"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:279
+msgid ""
+"These emails are sent to the admin whenever a customer declines their quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:297
+msgid "[{site_title}] Quote {quote_number} has been declined by the client."
 msgstr ""
 
 #: includes/class-wpinv-quotes-settings.php:307
 msgid "Your quote has been declined"
 msgstr ""
 
-#: includes/class-wpinv-quotes-privacy-exporters.php:89
-msgid "Zip Code"
+#: includes/class-wpinv-quotes-settings.php:316
+msgid "<p>{quote_decline_reason}</p><p>Here are the quote details.</p>"
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:338
+msgid "View available merge tags."
+msgstr ""
+
+#: includes/class-wpinv-quotes-settings.php:341
+msgid "The content of the email (Merge Tags and HTML are allowed)."
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:103
+msgid "Pending Confirmation"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:104
+msgid "Accepted"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:105
+msgid "Declined"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:204 includes/class-wpinv-quotes.php:564
+msgid "Are you sure you want to accept this Quote?"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:205 includes/class-wpinv-quotes.php:560
+msgid "Accept"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:211 includes/class-wpinv-quotes.php:574
+msgid "Are you sure you want to decline this Quote?"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:212 includes/class-wpinv-quotes.php:570
+msgid "Decline"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:231
+msgid "You do not have permission to accept this quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:255
+msgid "You do not have permission to decline this quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:286
+msgid "Remove Item"
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:304
+msgid "You do not have permission to remove items from this quote."
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:316
+msgid "You have successfully removed the item."
+msgstr ""
+
+#: includes/class-wpinv-quotes.php:508
+msgid "Valid Until"
+msgstr ""
+
+#: includes/class-wpinv-rest-quotes-controller.php:73
+msgid "The reason for declining this quote."
+msgstr ""
+
+#: includes/class-wpinv-rest-quotes-controller.php:99
+msgid "Limit result set to quotes for specific user ids."
+msgstr ""
+
+#: includes/class-wpinv-rest-quotes-controller.php:109
+msgid "Exclude quotes to specific users."
+msgstr ""
+
+#: includes/class-wpinv-rest-quotes-controller.php:119
+msgid "Limit result set to those of particular parent IDs."
+msgstr ""
+
+#: includes/class-wpinv-rest-quotes-controller.php:129
+msgid "Limit result set to all items except those of a particular parent ID."
+msgstr ""
+
+#: wpinv-quote.php:49
+msgid ""
+"\"GetPaid > Quotes\" requires that you install the latest version of GetPaid|"
+"Invoicing first."
 msgstr ""
