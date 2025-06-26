@@ -8,19 +8,20 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://wpinvoicing.com
+ * @link              https://wpgetpaid.com
  * @since             1.0.0
- * @package           Invoicing
+ * @package           GetPaid
  *
  * @wordpress-plugin
  * Plugin Name:       Quotes Addon for GetPaid
- * Plugin URI:        https://wpinvoicing.com/
+ * Plugin URI:        https://wpgetpaid.com/
  * Description:       Create quotes for customers, if accepted it will convert them to invoices that can be paid.
- * Version:           2.0.7
+ * Version:           2.0.8
  * Author:            AyeCode Ltd
- * Author URI:        https://wpinvoicing.com
+ * Author URI:        https://wpgetpaid.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Requires Plugins:  invoicing
  * Text Domain:       wpinv-quotes
  * Domain Path:       /languages
  */
@@ -30,7 +31,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-define( 'WPINV_QUOTES_VERSION', '2.0.7' );
+define( 'WPINV_QUOTES_VERSION', '2.0.8' );
 define( 'WPINV_QUOTES_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPINV_QUOTES_URL', plugin_dir_url( __FILE__ ) );
 
@@ -46,7 +47,7 @@ function wpinv_quotes_check_getpaid(){
     if ( is_admin() && ! did_action( 'getpaid_init' ) ) {
         ?>
             <div class="notice notice-error">
-                <p><?php _e( '"GetPaid > Quotes" requires that you install the latest version of GetPaid|Invoicing first.', 'wpinv-quotes' ); ?></p>
+                <p><?php _e( '"GetPaid > Quotes" requires that you install the latest version of GetPaid first.', 'wpinv-quotes' ); ?></p>
             </div>
         <?php
     }

@@ -1,6 +1,6 @@
 === Quotes Addon for GetPaid ===
 Contributors: stiofansisland, paoltaia, ayecode
-Donate link: https://wpinvoicing.com
+Donate link: https://wpgetpaid.com
 Tags:  invoice, invoicing, quote, estimates, quotes, recurring payments, paypal, VAT MOSS, HTML invoice, HTML quote, estimate, HTML estimate, billing, bills, bill clients, invoice clients, email invoice, invoice online, recurring invoice, recurring billing, invoice generator, invoice system, accounting, ecommerce, check out, shopping cart, stripe, 2check out, authorize.net, paypal pro, sagepay, payfast
 Requires at least: 4.9
 Tested up to: 6.5
@@ -37,13 +37,13 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 
 = Automatic installation =
 
-Automatic installation is the easiest option. To do an automatic install of Invoicing - Quotes, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
+Automatic installation is the easiest option. To do an automatic install of GetPaid Quotes, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
 
-In the search field type Invoicing - Quotes and click Search Plugins. Once you've found Invoicing - Quotes plugin you install it by simply clicking Install Now. [Invoicing  basic installation](http://wpinvoicing.com/docs/basic-installation/)
+In the search field type GetPaid Quotes and click Search Plugins. Once you've found GetPaid Quotes plugin you install it by simply clicking Install Now. [GetPaid Basic installation](https://wpgetpaid.com/docs/getting-started/basic-installation/)
 
 = Manual installation =
 
-The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [GetPaid  basic installation](https://docs.wpgetpaid.com/article/380-installing-getpaid)
+The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [GetPaid Basic installation](https://docs.wpgetpaid.com/article/380-installing-getpaid)
 
 = Updating =
 
@@ -51,7 +51,7 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Frequently Asked Questions ==
 
-[Invoicing FAQ](https://wpgetpaid.com/faq/).
+[GetPaid FAQ](https://wpgetpaid.com/faq/).
 
 == Screenshots ==
 
@@ -61,6 +61,9 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 3. Quote view.
 
 == Changelog ==
+
+= 2.0.8 - 2025-06-26 =
+* WordPress 6.8 compatibility check
 
 = 2.0.7 - 2024-06-11 =
 * WordPress 6.5 compatibility check
