@@ -16,7 +16,7 @@
  * Plugin Name:       Quotes Addon for GetPaid
  * Plugin URI:        https://wpgetpaid.com/
  * Description:       Create quotes for customers, if accepted it will convert them to invoices that can be paid.
- * Version:           2.0.8
+ * Version:           2.0.9
  * Author:            AyeCode Ltd
  * Author URI:        https://wpgetpaid.com/
  * License:           GPL-2.0+
@@ -31,7 +31,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-define( 'WPINV_QUOTES_VERSION', '2.0.8' );
+define( 'WPINV_QUOTES_VERSION', '2.0.9' );
 define( 'WPINV_QUOTES_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPINV_QUOTES_URL', plugin_dir_url( __FILE__ ) );
 
