@@ -68,6 +68,10 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Changelog ==
 
+= 2.0.11 - TBD =
+* Invoices created from accepted quotes with "Create invoice, but keep quote" were all numbered INV-00000 when sequential numbering was off - FIXED
+* Accepting, declining or removing a quote item sent the customer to the quotes list instead of back to the quote with plain permalinks - FIXED
+
 = 2.0.10 - 2026-06-04 =
 * WordPress 7.0 compatibility check - COMPATIBILITY
 

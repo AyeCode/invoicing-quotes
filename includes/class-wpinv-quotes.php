@@ -236,7 +236,7 @@ class Wpinv_Quotes {
 		$quote = new WPInv_Invoice( $invoice );
 		new Wpinv_Quotes_Converter( $quote, 'accept' );
 
-		wp_safe_redirect( esc_url( remove_query_arg( array( 'getpaid-action', 'getpaid-nonce' ) ) ) );
+		wp_safe_redirect( remove_query_arg( array( 'getpaid-action', 'getpaid-nonce' ) ) );
 		exit;
 	}
 
@@ -260,7 +260,7 @@ class Wpinv_Quotes {
 		$quote = new WPInv_Invoice( $invoice );
 		new Wpinv_Quotes_Converter( $quote, 'decline' );
 
-		wp_safe_redirect( esc_url( remove_query_arg( array( 'getpaid-action', 'getpaid-nonce' ) ) ) );
+		wp_safe_redirect( remove_query_arg( array( 'getpaid-action', 'getpaid-nonce' ) ) );
 		exit;
 	}
 
@@ -320,7 +320,7 @@ class Wpinv_Quotes {
 				new Wpinv_Quotes_Converter( $quote, 'decline' );
 			}
 
-			wp_redirect( esc_url( $quote->get_view_url() ) );
+			wp_safe_redirect( $quote->get_view_url() );
 			exit;
 
 		}

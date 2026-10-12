@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 do_action( 'wpinv_email_header', $email_heading, $invoice, $email_type, $sent_to_admin );
 
 // Generate the custom message body.
-echo $message_body;
+echo wp_kses_post( $message_body );
 
 // Before printing quote details (backwards compat).
 do_action( 'wpinv_email_before_quote_details', $invoice, $email_type, $sent_to_admin );
