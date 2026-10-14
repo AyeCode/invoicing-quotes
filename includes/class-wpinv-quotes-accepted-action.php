@@ -58,8 +58,6 @@ class Wpinv_Quotes_Accepted_Action {
     public function convert( $quote ) {
 
         $old_number = $quote->get_number();
-        $number     = preg_replace( '/[^0-9]/','' , $quote->get_number() );
-        $number     = wpinv_format_invoice_number( $number, 'wpi_invoice' );
         $quote->set_post_type( 'wpi_invoice' );
         $quote->set_number( $quote->generate_number() );
         $quote->set_status( 'wpi-pending' );
@@ -70,7 +68,7 @@ class Wpinv_Quotes_Accepted_Action {
             sprintf(
                 __( 'Converted from Quote #%s to Invoice #%s.', 'wpinv-quotes' ),
                 $old_number,
-                $number
+				$quote->get_number()
             ),
             false,
             false,
@@ -95,9 +93,15 @@ class Wpinv_Quotes_Accepted_Action {
         $invoice->set_parent_id( 0 );
         $invoice->set_post_type( 'wpi_invoice' );
         $invoice->set_status( 'wpi-pending' );
-        $invoice->set_number( $invoice->generate_number() );
-        $invoice->set_title( $invoice->get_number() );
+
+		// The copy has no id until it is saved, and saving gives it its number.
         $invoice->save();
+
+		if ( $invoice->get_title() !== $invoice->get_number() ) {
+			$invoice->set_title( $invoice->get_number() );
+			$invoice->save();
+		}
+
         $this->associated_invoice = $invoice->get_id();
 
     }

@@ -163,12 +163,12 @@ class WPInv_Quotes_Metaboxes {
 		if ( isset( $_POST['wpinv_quote_valid_until'] ) ) {
 
 			$raw_date = wpinv_clean( $_POST['wpinv_quote_valid_until'] );
-			$date     = date( 'Y-m-d H:i:s', strtotime( $raw_date ) );
+			$time     = empty( $raw_date ) ? false : strtotime( $raw_date );
 
-			if ( empty( $raw_date ) || empty( $date ) ) {
+			if ( false === $time ) {
 				delete_post_meta( $invoice->get_id(), 'wpinv_quote_valid_until' );
 			} else {
-				update_post_meta( $invoice->get_id(), 'wpinv_quote_valid_until', $date );
+				update_post_meta( $invoice->get_id(), 'wpinv_quote_valid_until', gmdate( 'Y-m-d H:i:s', $time ) );
 			}
 
 		}
