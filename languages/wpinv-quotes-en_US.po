@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quotes Addon for GetPaid 2.0.10\n"
+"Project-Id-Version: Quotes Addon for GetPaid 2.0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-04 18:01+0530\n"
-"PO-Revision-Date: 2026-06-04 18:01+0530\n"
+"POT-Creation-Date: 2026-10-28 19:29+0530\n"
+"PO-Revision-Date: 2026-10-28 19:29+0530\n"
 "Last-Translator: AyeCode Ltd <contact@ayecode.io>\n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Quote successfully converted to an invoice."
 msgstr ""
 
-#: includes/class-wpinv-quotes-accepted-action.php:71
+#: includes/class-wpinv-quotes-accepted-action.php:69
 #, php-format
 msgid "Converted from Quote #%s to Invoice #%s."
 msgstr ""
